@@ -1,0 +1,72 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package cataovo.fileHandler;
+
+import cataovo.entities.Frame;
+import cataovo.exceptions.ImageNotValidException;
+import java.io.File;
+import java.util.Collection;
+import java.util.LinkedList;
+
+/**
+ *
+ * @author bibil
+ * @param <T>
+ */
+public class MyFileListHandler<T> {
+
+    Collection<T> fileList;
+
+    public MyFileListHandler(Collection<T> fileList) {
+        this.fileList = fileList;
+    }
+
+    public MyFileListHandler() {
+    }
+
+    /**
+     *
+     * @param file array of files. Onlu PNG Files.
+     * @return
+     * @throws ImageNotValidException
+     */
+    public Collection<T> normalizeFilesOnAList(File[] file) throws ImageNotValidException {
+        fileList = new LinkedList<>();
+        for (File file1 : file) {
+            if (file1.exists()&& file1.isFile() && getFileExtension(file1).equalsIgnoreCase(FileExtension.PNG.toString().toLowerCase())) {
+                fileList.add((T) file1);
+            } else if (file1.isDirectory()) {
+                normalizeFilesOnAList(file1.listFiles());
+            }
+        }
+        return fileList;
+    }
+
+    /**
+     *
+     * @param f the File
+     * @return the file Extension
+     */
+    public final String getFileExtension(File f) {
+        String fileExtension;
+        // Verify which is the file extension.
+        if (f.getAbsolutePath().substring(f.getAbsolutePath().indexOf(".")) != null) {
+            fileExtension = f.getAbsolutePath().substring(f.getAbsolutePath().lastIndexOf(".") + 1);
+        } else {
+            fileExtension = "NONE";
+        }
+        return fileExtension;
+    }
+
+    public Collection<T> getFileList() {
+        return fileList;
+    }
+
+    public void setFileList(Collection<T> fileList) {
+        this.fileList = fileList;
+    }
+
+}
