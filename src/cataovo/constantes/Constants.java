@@ -13,5 +13,6 @@ public class Constants {
     
     public static final String ACTION_COMMAND_ABRIR_PASTA = "Abrir Pasta";
     public static final String ACTION_COMMAND_SELECIONAR_PASTA_DESTINO = "Selecionar Pasta Destino";
+    public static final String ACTION_COMMAND_SALVAR_ARQUIVO_FINAL = "Salvar Arquivo";
     
 }

@@ -5,8 +5,10 @@
  */
 package cataovo.resources;
 
+import cataovo.entities.Palette;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.fileChooserHandler.MyFileChooserUI;
+import cataovo.fileHandler.MyFileListHandler;
 import java.io.File;
 import java.util.logging.Level;
 import javax.swing.filechooser.FileSystemView;
@@ -20,16 +22,16 @@ public class MainPageResources {
     
     private static final Logger LOG = Logger.getLogger(MainPageResources.class.getName());
     private final MyFileChooserUI fileChooserUI;
-    private String filePath;
-    private File current;
-    private File destinyFolder;
+    private MyFileListHandler fileListHandler;
+    private String current;
+    private File savingFolder;
     private static volatile MainPageResources MAIN_PAGE_RESOURCES;
 
     public MainPageResources() throws DirectoryNotValidException {
-        current = new File(FileSystemView.getFileSystemView().getHomeDirectory().getPath());
-        fileChooserUI = new MyFileChooserUI(current);
-        filePath = current.getPath();
-        destinyFolder = getFileFolder(current);
+        current = FileSystemView.getFileSystemView().getHomeDirectory().getPath();
+        fileChooserUI = new MyFileChooserUI(new File(current));
+        savingFolder = getFileFolder(new File(current));
+        fileListHandler = new MyFileListHandler();
     }
     
     public static MainPageResources getInstance() throws DirectoryNotValidException{
@@ -45,42 +47,44 @@ public class MainPageResources {
         return PAGE_RESOURCES;
     }
 
-    public File getCurrent() {
+    public File getSavingFolder() {
+        return savingFolder;
+    }
+
+    public void setSavingFolder(File savingFolder) throws DirectoryNotValidException {
+        this.savingFolder = getFileFolder(savingFolder);
+    }
+
+    public String getCurrent() {
         return current;
     }
 
-    public void setCurrent(File current) {
+    public void setCurrent(String current) {
         this.current = current;
-    }
-
-    public File getDestinyFolder() {
-        return destinyFolder;
-    }
-
-    public void setDestinyFolder(File destinyFolder) throws DirectoryNotValidException {
-        this.destinyFolder = getFileFolder(destinyFolder);
-    }
-
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
     }
 
     public MyFileChooserUI getFileChooserUI() {
         return fileChooserUI;
     }
 
+    public MyFileListHandler getFileListHandler() {
+        return fileListHandler;
+    }
+
+    public void setFileListHandler(MyFileListHandler fileListHandler) {
+        this.fileListHandler = fileListHandler;
+    }
+
     public final File getFileFolder(File file) throws DirectoryNotValidException {
         if (!file.exists()) {
-            LOG.log(Level.SEVERE, "This method needs an existing file. The parameter cannot be null or inexistent: {0}", filePath);
+            LOG.log(Level.SEVERE, "This method needs an existing file. The parameter cannot be null or inexistent");
             throw new DirectoryNotValidException("This method needs an existing file. The parameter cannot be null or inexistent");
         } else {
             if (file.isDirectory()) {
+                LOG.log(Level.INFO, "Selecting a folder: {}", file);
                 return file;
             } else {
+                LOG.log(Level.INFO, "Selecting the folder: {}", file);
                 String selected = file.getAbsolutePath().substring(0, file.getAbsolutePath().lastIndexOf("\\") - 1);
                 return new File(selected);
             }

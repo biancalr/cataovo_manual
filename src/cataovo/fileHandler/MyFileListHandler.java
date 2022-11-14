@@ -5,7 +5,6 @@
  */
 package cataovo.fileHandler;
 
-import cataovo.entities.Frame;
 import cataovo.exceptions.ImageNotValidException;
 import java.io.File;
 import java.util.Collection;

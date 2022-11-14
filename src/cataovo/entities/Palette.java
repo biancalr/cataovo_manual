@@ -67,6 +67,22 @@ public class Palette {
             throw new DirectoryNotValidException("This file path does not represent a valid directory. Must choose another one");
         }
     }
+    
+    /**
+     *
+     * @param file
+     * @throws cataovo.exceptions.DirectoryNotValidException if the file is not
+     * a directory.
+     */
+    public Palette(File file) throws DirectoryNotValidException {
+        if (verifyPathIsDirectory(file.getAbsolutePath())) {
+            this.pathName = file.getAbsolutePath();
+            this.frames = new LinkedList<>();
+            this.directory = new File(file.getAbsolutePath());
+        } else {
+            throw new DirectoryNotValidException("This file path does not represent a valid directory. Must choose another one");
+        }
+    }
 
     /**
      *
@@ -176,6 +192,18 @@ public class Palette {
             total = frames.stream().map((frame) -> frame.getTotalNumberOfEggsFrame()).reduce(total, Integer::sum);
         }
         return total;
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    public int getPaletteSize(){
+        if (frames != null || !frames.isEmpty()) {
+            System.out.println("Size: " + frames.size());
+            return frames.size();
+        } 
+        return 0;
     }
 
     @Override
