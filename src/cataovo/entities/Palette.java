@@ -243,7 +243,6 @@ public class Palette {
      *
      * @param pathName
      * @return
-     * @throws DirectoryNotValidException
      */
     private boolean verifyPathIsDirectory(String pathName) {
         File f = new File(pathName);

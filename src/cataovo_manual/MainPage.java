@@ -213,6 +213,7 @@ public class MainPage extends javax.swing.JFrame {
         try {
             LOG.log(Level.INFO, evt.paramString());
             mainPageController.fileSelectionEvent(evt.getActionCommand(), jDesktopPane1, true);
+            mainPageController.showFilesOnScreen(jPanel1);
         } catch (DirectoryNotValidException | ImageNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
         }

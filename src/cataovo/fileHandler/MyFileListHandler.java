@@ -9,6 +9,8 @@ import cataovo.exceptions.ImageNotValidException;
 import java.io.File;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  *
@@ -18,6 +20,7 @@ import java.util.LinkedList;
 public class MyFileListHandler<T> {
 
     Collection<T> fileList;
+    private static final Logger LOG = Logger.getLogger(MyFileListHandler.class.getName());
 
     public MyFileListHandler(Collection<T> fileList) {
         this.fileList = fileList;
@@ -29,16 +32,18 @@ public class MyFileListHandler<T> {
     /**
      *
      * @param file array of files. Onlu PNG Files.
+     * @param fileExtension the supported FileExtesion
      * @return
      * @throws ImageNotValidException
      */
-    public Collection<T> normalizeFilesOnAList(File[] file) throws ImageNotValidException {
+    public Collection<T> normalizeFilesOnAList(File[] file, FileExtension fileExtension) throws ImageNotValidException {
         fileList = new LinkedList<>();
         for (File file1 : file) {
-            if (file1.exists()&& file1.isFile() && getFileExtension(file1).equalsIgnoreCase(FileExtension.PNG.toString().toLowerCase())) {
+            if (file1.exists()&& file1.isFile() && getFileExtension(file1).equalsIgnoreCase(fileExtension.toString().toLowerCase())) {
                 fileList.add((T) file1);
+                LOG.log(Level.INFO, "Adding following file: {}", file1.getName());
             } else if (file1.isDirectory()) {
-                normalizeFilesOnAList(file1.listFiles());
+                normalizeFilesOnAList(file1.listFiles(), fileExtension);
             }
         }
         return fileList;

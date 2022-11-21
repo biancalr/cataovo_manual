@@ -5,7 +5,6 @@
  */
 package cataovo.resources;
 
-import cataovo.entities.Palette;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.fileChooserHandler.MyFileChooserUI;
 import cataovo.fileHandler.MyFileListHandler;

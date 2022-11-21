@@ -11,7 +11,7 @@ package cataovo.fileHandler;
  */
 public enum FileExtension {
     
-    PNG(1), CSV(2);
+    PNG(1), CSV(2), JPG(3);
 
     private int extension;
     

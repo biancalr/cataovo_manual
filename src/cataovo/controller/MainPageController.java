@@ -5,21 +5,17 @@
  */
 package cataovo.controller;
 
-import cataovo.constantes.Constants;
+import cataovo.constants.Constants;
 import cataovo.entities.Frame;
 import cataovo.entities.Palette;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
 import cataovo.fileChooserHandler.MyFileChooserUI;
-import cataovo.fileHandler.MyFileListHandler;
+import cataovo.fileHandler.FileExtension;
 import cataovo.resources.MainPageResources;
-import cataovo_manual.MainPage;
 import java.awt.Component;
-import java.awt.HeadlessException;
 import java.io.File;
-import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.logging.Logger;
@@ -57,7 +53,6 @@ public class MainPageController {
                 if (optional.isPresent()) {
                     // Set the palette which represents the folder where the frames are contained
                     palette = setNewPalette(optional.get());
-                    showFilesOnScreen();
                 }
                 break;
             case Constants.ACTION_COMMAND_SELECIONAR_PASTA_DESTINO:
@@ -80,13 +75,15 @@ public class MainPageController {
     }
 
     /**
+     * Set the file to a Palette.
+     * Verify if the file is a valid one.
      * 
      * @param selectedFile
      * @return a new Palette to start the analisys
      * @throws DirectoryNotValidException 
      */
     private Palette setNewPalette(File selectedFile) throws DirectoryNotValidException, ImageNotValidException, NullPointerException {
-        LOG.log(Level.INFO,"Setting a new Palette.");
+        LOG.log(Level.INFO,"Setting a new Palette...");
         Palette pal = null;
         if (selectedFile.exists()) {
             MainPageResources.getInstance().setCurrent(selectedFile.getAbsolutePath());
@@ -104,17 +101,24 @@ public class MainPageController {
     }
 
     /**
+     * Set the Frames in a Palette.
+     * When a Palette is chosen, their frames must be presented as a Queue.
+     * If the chosen file is a directory, there might be nested directories. So
+     * these images must be normalized to a sigle queue.
+     * 
      * 
      * @param listFiles
      * @return 
      */
     private Queue<Frame> setPaletteFrames(File[] listFiles) throws DirectoryNotValidException, ImageNotValidException {
-        var frames = (Queue<Frame>) MainPageResources.getInstance().getFileListHandler().normalizeFilesOnAList(listFiles);
+        Queue<Frame> frames = (Queue<Frame>) MainPageResources.getInstance().getFileListHandler().normalizeFilesOnAList(listFiles, FileExtension.PNG);
         return frames;
     }
 
-    private void showFilesOnScreen() {
-        LOG.log(Level.INFO, "Presenting the palette Frames on screen");
+    public void showFilesOnScreen(Component parent) {
+        LOG.log(Level.INFO, "Presenting the images on screen...");
+        // transformar imagem em OpenCV.MAT
+        // adicionar ao componente
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
