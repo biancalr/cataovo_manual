@@ -80,7 +80,7 @@ public class MainPageResources {
             throw new DirectoryNotValidException("This method needs an existing file. The parameter cannot be null or inexistent");
         } else {
             if (file.isDirectory()) {
-                LOG.log(Level.INFO, "Selecting a folder: {}", file);
+                LOG.log(Level.INFO, "Selecting a folder: {0}", file);
                 return file;
             } else {
                 LOG.log(Level.INFO, "Selecting the folder: {}", file);

@@ -251,7 +251,7 @@ public class Frame {
      * @return the name tag chopped
      */
     private String chopName(String filePath) {
-        return filePath.substring(filePath.lastIndexOf("."));
+        return filePath.substring(filePath.lastIndexOf("\\") + 1, filePath.lastIndexOf("."));
     }
 
 }

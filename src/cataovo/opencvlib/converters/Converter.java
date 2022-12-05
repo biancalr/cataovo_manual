@@ -25,7 +25,7 @@ import org.opencv.imgcodecs.Imgcodecs;
  *
  * @author bibil
  */
-public class Converter {
+public final class Converter {
 
     private Frame frame;
     private MatWrapper mat;

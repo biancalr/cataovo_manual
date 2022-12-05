@@ -16,7 +16,7 @@ import java.util.Queue;
  *
  * @author bibil
  */
-public class Palette {
+public class Palette{
 
     /**
      * The path where the palette is localized.
@@ -31,7 +31,7 @@ public class Palette {
      * The the directory as a file;
      */
     private File directory;
-
+    
     /**
      *
      * @param pathName The path where the palette is localized. <strong>The file
@@ -200,7 +200,6 @@ public class Palette {
      */
     public int getPaletteSize(){
         if (frames != null || !frames.isEmpty()) {
-            System.out.println("Size: " + frames.size());
             return frames.size();
         } 
         return 0;

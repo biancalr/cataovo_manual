@@ -17,7 +17,7 @@ import java.util.logging.Level;
  * @author bibil
  * @param <T>
  */
-public class MyFileListHandler<T> {
+public final class MyFileListHandler<T> {
 
     Collection<T> fileList;
     private static final Logger LOG = Logger.getLogger(MyFileListHandler.class.getName());
@@ -41,7 +41,7 @@ public class MyFileListHandler<T> {
         for (File file1 : file) {
             if (file1.exists()&& file1.isFile() && getFileExtension(file1).equalsIgnoreCase(fileExtension.toString().toLowerCase())) {
                 fileList.add((T) file1);
-                LOG.log(Level.INFO, "Adding following file: {}", file1.getName());
+                LOG.log(Level.INFO, "Adding following file: {0}", file1.getName());
             } else if (file1.isDirectory()) {
                 normalizeFilesOnAList(file1.listFiles(), fileExtension);
             }

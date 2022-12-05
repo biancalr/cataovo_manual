@@ -12,15 +12,22 @@ import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
 import cataovo.fileChooserHandler.MyFileChooserUI;
 import cataovo.fileHandler.FileExtension;
+import cataovo.opencvlib.wrappers.MatWrapper;
 import cataovo.resources.MainPageResources;
+import java.awt.Color;
 import java.awt.Component;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 
 /**
  *
@@ -31,8 +38,13 @@ public class MainPageController {
     private static final Logger LOG = Logger.getLogger(MainPageController.class.getName());
     private Palette palette; 
     private File file;
-    private MyFileChooserUI fileChooser;
+    private MatWrapper matWrapper;
+    private final MyFileChooserUI fileChooser;
 
+    public MainPageController() throws DirectoryNotValidException {
+        fileChooser = MainPageResources.getInstance().getFileChooserUI();
+    }
+    
     /**
      * Selects an event and an action based on the parameters.
      *
@@ -43,9 +55,9 @@ public class MainPageController {
      * is a <code>FILES_AND_DIRECTORIES</code>
      * @throws cataovo.exceptions.DirectoryNotValidException
      * @throws cataovo.exceptions.ImageNotValidException
+     * @throws java.io.FileNotFoundException
      */
-    public void fileSelectionEvent(String actionCommand, Component parent, boolean isADirectoryOnly) throws DirectoryNotValidException, ImageNotValidException {
-        fileChooser = MainPageResources.getInstance().getFileChooserUI();
+    public void fileSelectionEvent(String actionCommand, Component parent, boolean isADirectoryOnly) throws DirectoryNotValidException, ImageNotValidException, FileNotFoundException {
         Optional<File> optional;
         switch (actionCommand) {
             case Constants.ACTION_COMMAND_ABRIR_PASTA:
@@ -73,6 +85,13 @@ public class MainPageController {
         }
 
     }
+    
+    public void controlFilesOnScreen(JLabel parentName,JLabel parent) throws ImageNotValidException{
+        Frame frame = palette.getFrames().poll();
+        showFrameOnScreen(parentName, parent, frame);
+        parent.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        parent.setVisible(true);
+    }
 
     /**
      * Set the file to a Palette.
@@ -82,20 +101,25 @@ public class MainPageController {
      * @return a new Palette to start the analisys
      * @throws DirectoryNotValidException 
      */
-    private Palette setNewPalette(File selectedFile) throws DirectoryNotValidException, ImageNotValidException, NullPointerException {
+    private Palette setNewPalette(File selectedFile) throws DirectoryNotValidException, ImageNotValidException, FileNotFoundException {
         LOG.log(Level.INFO,"Setting a new Palette...");
         Palette pal = null;
         if (selectedFile.exists()) {
             MainPageResources.getInstance().setCurrent(selectedFile.getAbsolutePath());
             if (selectedFile.isDirectory()) {
+                pal = new Palette(selectedFile);
                 pal.setFrames(setPaletteFrames(selectedFile.listFiles()));
             } else {
                 Frame frame = new Frame(selectedFile.getAbsolutePath());
                 Queue queue = new LinkedList<>();
                 queue.offer(frame);
+                pal = new Palette(MainPageResources.getInstance().getCurrent(), queue);
                 pal.setFrames(queue);
             }
-            LOG.log(Level.INFO,"A new Palette was created with the amount of frames: {}", pal.getFrames().size());
+            LOG.log(Level.INFO,"A new Palette was created with the amount of frames: {0}", pal.getFrames().size());
+        } else {
+            LOG.log(Level.WARNING,"The selected file doesn't exist. Please, select an existing file.");
+            throw new FileNotFoundException("The selected file doesn't exist. Please, select an existing file.");
         }
         return pal;
     }
@@ -111,15 +135,42 @@ public class MainPageController {
      * @return 
      */
     private Queue<Frame> setPaletteFrames(File[] listFiles) throws DirectoryNotValidException, ImageNotValidException {
-        Queue<Frame> frames = (Queue<Frame>) MainPageResources.getInstance().getFileListHandler().normalizeFilesOnAList(listFiles, FileExtension.PNG);
+        Queue<Frame> frames = new LinkedList<>();
+        Collection<File> colection = MainPageResources.getInstance().getFileListHandler().normalizeFilesOnAList(listFiles, FileExtension.PNG);
+        Frame frame = null;
+        for (File file1 : colection) {
+            frame = new Frame(file1.getPath());
+            frames.add(frame);
+            LOG.log(Level.INFO, "Adding following frame: {0}", frame.getName());
+        }
         return frames;
     }
 
-    public void showFilesOnScreen(Component parent) {
-        LOG.log(Level.INFO, "Presenting the images on screen...");
-        // transformar imagem em OpenCV.MAT
-        // adicionar ao componente
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    /**
+     * 
+     * @param parentName
+     * @param parent
+     * @param frame 
+     */
+    public void showFrameOnScreen(JLabel parentName, JLabel parent, Frame frame) {
+        LOG.log(Level.INFO, "Presenting the image {0} on screen...", frame.getName());
+        parent.setText(null);
+        if (frame.getPaletteFrame() instanceof File) {
+            File f = (File) frame.getPaletteFrame();
+            showImageFile(f);
+            parent.setIcon(showImageFile(f));
+            parentName.setText(frame.getName());
+        }
+        
+    }
+    
+    /**
+     * Receives a file and shows its image at jLabelImage.
+     *
+     * @param par the File image
+     */
+    private ImageIcon showImageFile(File file) {
+        return new ImageIcon(file.getPath());
     }
 
     private void saveFinalFile() {
@@ -147,8 +198,5 @@ public class MainPageController {
         return fileChooser;
     }
 
-    public void setFileChooser(MyFileChooserUI fileChooser) {
-        this.fileChooser = fileChooser;
-    }
     
 }
