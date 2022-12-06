@@ -12,7 +12,7 @@ import java.util.Objects;
  *
  * @author bibil
  */
-public class Point {
+public final class Point {
 
     /**
      * The X axis of the initial {@code Point}
@@ -39,6 +39,15 @@ public class Point {
     public Point() {
         this.x = 0.0;
         this.y = 0.0;
+    }
+
+    /**
+     * 
+     * @param point 
+     */
+    public Point(java.awt.Point point) {
+        this.x = point.getX();
+        this.y = point.getY();
     }
 
     /**

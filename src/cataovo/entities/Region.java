@@ -13,7 +13,7 @@ import java.util.Objects;
  *
  * @author bibil
  */
-public class Region {
+public final class Region {
 
     /**
      * The region's lenght

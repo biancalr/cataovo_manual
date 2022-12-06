@@ -8,52 +8,36 @@ package cataovo.controller;
 import cataovo.constants.Constants;
 import cataovo.entities.Frame;
 import cataovo.entities.Palette;
-import cataovo.entities.Point;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
 import cataovo.fileChooserHandler.MyFileChooserUI;
 import cataovo.fileHandler.FileExtension;
-import cataovo.opencvlib.converters.Converter;
-import cataovo.opencvlib.frameUtil.ImageFrameUtil;
-import cataovo.opencvlib.wrappers.MatWrapper;
 import cataovo.resources.MainPageResources;
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.Image;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Optional;
 import java.util.Queue;
-import java.util.logging.Logger;
 import java.util.logging.Level;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 
 /**
  *
  * @author bibil
  */
-public class MainPageController {
-
-    private static final Logger LOG = Logger.getLogger(MainPageController.class.getName());
-    private Palette palette;
-    private Frame currentFrame;
-    private cataovo.entities.Point beginPoint = null;
-
-    private MatWrapper matWrapper;
-
+public class FileSelectionController {
+    
+    private static final Logger LOG = Logger.getLogger(FileSelectionController.class.getName());
+    
     private final MyFileChooserUI fileChooser;
-    private final Converter converter = new Converter();
 
-    public MainPageController() throws DirectoryNotValidException {
+    public FileSelectionController() throws DirectoryNotValidException {
         fileChooser = MainPageResources.getInstance().getFileChooserUI();
     }
-
+    
     /**
      * Selects an event and an action based on the parameters.
      *
@@ -73,7 +57,7 @@ public class MainPageController {
                 optional = Optional.ofNullable(fileChooser.dialogs(JFileChooser.OPEN_DIALOG, isADirectoryOnly, parent));
                 if (optional.isPresent()) {
                     // Set the palette which represents the folder where the frames are contained
-                    palette = setNewPalette(optional.get());
+                    MainPageResources.getInstance().setPalette(setNewPalette(optional.get()));
                 }
                 break;
             case Constants.ACTION_COMMAND_SELECIONAR_PASTA_DESTINO:
@@ -94,14 +78,7 @@ public class MainPageController {
         }
 
     }
-
-    public void controlFilesOnScreen(JLabel parentName, JLabel parent) throws ImageNotValidException {
-        currentFrame = palette.getFrames().poll();
-        showFrameOnScreen(parentName, parent, currentFrame);
-        parent.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        parent.setVisible(true);
-    }
-
+    
     /**
      * Set the file to a Palette. Verify if the file is a valid one.
      *
@@ -131,7 +108,7 @@ public class MainPageController {
         }
         return pal;
     }
-
+    
     /**
      * Set the Frames in a Palette. When a Palette is chosen, their frames must
      * be presented as a Queue. If the chosen file is a directory, there might
@@ -153,83 +130,12 @@ public class MainPageController {
         }
         return frames;
     }
-
-    /**
-     *
-     * @param parentName
-     * @param parent
-     * @param frame
-     */
-    public void showFrameOnScreen(JLabel parentName, JLabel parent, Frame frame) {
-        LOG.log(Level.INFO, "Presenting the image {0} on screen...", frame.getName());
-        parent.setText(null);
-        File f = (File) frame.getPaletteFrame();
-        parent.setIcon(showImageFile(f));
-        parentName.setText(frame.getName());
-
-    }
-
-    public void showFrameOnScreen(JLabel parent, MatWrapper currentMat) throws ImageNotValidException {
-        parent.setIcon(showImageMat(currentMat));
-    }
-
-    /**
-     * Receives a file and shows its image at jLabelImage.
-     *
-     * @param par the File image
-     */
-    private ImageIcon showImageFile(File file) {
-        return new ImageIcon(file.getPath());
-    }
-
-    /**
-     * Receives a mat to show its image at jLabelImage.
-     *
-     * @param mat the Mat image
-     * @throws IOException
-     */
-    private ImageIcon showImageMat(MatWrapper mat) throws ImageNotValidException {
-        Optional<Image> convertMatToImg = converter.convertMatToImg(mat);
-        if (convertMatToImg.isPresent()) {
-            return new ImageIcon(convertMatToImg.get());
-        }
-        throw new ImageNotValidException("Erro ao converter imagem de OpenCV.Mat para " + FileExtension.JPG);
-    }
-
+    
     private void saveFinalFile() {
         LOG.log(Level.INFO, "Final file save: start");
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-    public MatWrapper prepareFramePainting(int numberOfClicks, Point point) throws ImageNotValidException, CloneNotSupportedException {
-        MatWrapper mw = null;
-        switch (numberOfClicks) {
-            case 1:
-                break;
-            case 2:
-                break;
-            default:
-                LOG.log(Level.SEVERE, "It is only valid 2 clicks to draw a region");
-                break;
-        }
-        return mw;
-    }
-
-    public Palette getPalette() {
-        return palette;
-    }
-
-    public void setPalette(Palette palette) {
-        this.palette = palette;
-    }
-
-    public MyFileChooserUI getFileChooser() {
-        return fileChooser;
-    }
-
-    public void controlFilesOnScreen(JLabel jLabel2, MatWrapper matImage) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-
+    
+    
+    
 }

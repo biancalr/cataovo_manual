@@ -4,12 +4,18 @@
  * and open the template in the editor.
  */
 package cataovo_manual;
+
+import cataovo.controller.FileSelectionController;
 import cataovo.controller.MainPageController;
+import cataovo.controller.PaintingController;
+import cataovo.entities.Point;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
+import cataovo.opencvlib.wrappers.MatWrapper;
 import java.io.FileNotFoundException;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+
 /**
  *
  * @author bibil
@@ -18,17 +24,21 @@ public class MainPage extends javax.swing.JFrame {
 
     private static final Logger LOG = Logger.getLogger(MainPage.class.getName());
     private MainPageController mainPageController = null;
-    
+    private FileSelectionController fileSelectionController;
+    private PaintingController paintingController;
+    private int numberOfClicks = 0;
+
     /**
      * Creates new form MainPage
      */
     public MainPage() {
-        initComponents();
         try {
             mainPageController = new MainPageController();
+            initComponents();
         } catch (DirectoryNotValidException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage());
+            Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
 
     /**
@@ -158,7 +168,7 @@ public class MainPage extends javax.swing.JFrame {
                 .addContainerGap(79, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("tab1", jDesktopPane1);
+        jTabbedPane1.addTab("Manual", jDesktopPane1);
 
         jMenu1.setText("File");
         jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -232,7 +242,7 @@ public class MainPage extends javax.swing.JFrame {
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         try {
             LOG.log(Level.INFO, evt.paramString());
-            mainPageController.fileSelectionEvent(evt.getActionCommand(), jDesktopPane1, true);
+            fileSelectionController.fileSelectionEvent(evt.getActionCommand(), jDesktopPane1, true);
             mainPageController.controlFilesOnScreen(jLabel1, jLabel2);
         } catch (DirectoryNotValidException | FileNotFoundException | ImageNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -242,7 +252,7 @@ public class MainPage extends javax.swing.JFrame {
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         try {
             LOG.log(Level.INFO, evt.paramString());
-            mainPageController.fileSelectionEvent(evt.getActionCommand(), jDesktopPane1, true);
+            fileSelectionController.fileSelectionEvent(evt.getActionCommand(), jDesktopPane1, true);
         } catch (DirectoryNotValidException | FileNotFoundException | ImageNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
@@ -257,7 +267,21 @@ public class MainPage extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
-        // TODO add your handling code here:
+        // TODO: Capturar o primeiro clique
+        try {
+            //recebe o primeiro clique
+            this.numberOfClicks++;
+            LOG.log(Level.INFO, "The image was clicked at the point {0}", evt.getPoint());
+            // captura o ponto do clique
+            Point point = new Point(evt.getPoint());
+            // Prepara a pintura da imagem
+            MatWrapper matImage = mainPageController.prepareFramePainting(numberOfClicks, point);
+            // demonstra na tela
+            mainPageController.controlFilesOnScreen(jLabel2, matImage);
+            this.numberOfClicks = 0;
+        } catch (ImageNotValidException | CloneNotSupportedException e) {
+            LOG.log(Level.SEVERE, e.getMessage());
+        }
     }//GEN-LAST:event_jLabel2MouseClicked
 
     /**
@@ -280,7 +304,7 @@ public class MainPage extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(MainPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
+
         //</editor-fold>
 
         /* Create and display the form */

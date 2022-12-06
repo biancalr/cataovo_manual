@@ -11,7 +11,7 @@ import org.opencv.core.Point;
  *
  * @author bibil
  */
-public class PointWrapper {
+public class PointWrapper implements Cloneable{
     
     private Point point;
 
@@ -51,6 +51,11 @@ public class PointWrapper {
      */
     public double dot(cataovo.entities.Point p){
         return point.dot(new Point(p.getX(), p.getY()));
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone(); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

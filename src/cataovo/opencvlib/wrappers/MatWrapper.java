@@ -11,13 +11,14 @@ import org.opencv.core.Mat;
  *
  * @author bibil
  */
-public class MatWrapper{
+public class MatWrapper implements Cloneable{
 
     private int n_rows;
     private int n_cols;
     private byte[] data;
     private int type;
     private Mat mat;
+    private String filePath;
     
     public MatWrapper() {
         n_rows = 0;
@@ -25,6 +26,7 @@ public class MatWrapper{
         data = new byte[0];
         type = 0;
         mat = new Mat();
+        filePath = null;
     }
 
     public MatWrapper(int row, int col, byte[] data) {
@@ -33,6 +35,7 @@ public class MatWrapper{
         this.data = data;
         type = 0;
         this.mat = new Mat();
+        filePath = null;
     }
     
     public MatWrapper(int row, int col, int type, Mat m) {
@@ -40,6 +43,7 @@ public class MatWrapper{
         this.n_cols = col;
         this.type = type;
         this.mat =  m;
+        filePath = null;
     }
 
     public int getN_rows() {
@@ -80,5 +84,18 @@ public class MatWrapper{
 
     public void setMat(Mat mat) {
         this.mat = mat;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+    @Override
+    public MatWrapper clone() throws CloneNotSupportedException {
+        return (MatWrapper) super.clone(); //To change body of generated methods, choose Tools | Templates.
     }
 }
