@@ -5,7 +5,6 @@
  */
 package cataovo.resources;
 
-import cataovo.entities.Palette;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.fileChooserHandler.MyFileChooserUI;
 import cataovo.fileHandler.MyFileListHandler;
@@ -18,13 +17,12 @@ import java.util.logging.Logger;
  *
  * @author bibil
  */
-public final class MainPageResources {
+public class MainPageResources {
     
     private static final Logger LOG = Logger.getLogger(MainPageResources.class.getName());
     private final MyFileChooserUI fileChooserUI;
     private MyFileListHandler fileListHandler;
     private String current;
-    private Palette palette;
     private File savingFolder;
     private static volatile MainPageResources MAIN_PAGE_RESOURCES;
 
@@ -74,14 +72,6 @@ public final class MainPageResources {
 
     public void setFileListHandler(MyFileListHandler fileListHandler) {
         this.fileListHandler = fileListHandler;
-    }
-
-    public Palette getPalette() {
-        return palette;
-    }
-
-    public void setPalette(Palette palette) {
-        this.palette = palette;
     }
 
     public final File getFileFolder(File file) throws DirectoryNotValidException {

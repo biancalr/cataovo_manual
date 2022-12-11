@@ -22,21 +22,23 @@ import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 
 /**
- * Makes conversions between image Types.
  *
  * @author bibil
  */
 public final class Converter {
 
     private Frame frame;
+    private MatWrapper mat;
     private static final Logger LOG = Logger.getLogger(Converter.class.getName());
 
     public Converter() {
         this.frame = new Frame();
+        this.mat = new MatWrapper();
     }
 
     public Converter(Frame frame) {
         this.frame = frame;
+        this.mat = new MatWrapper();
     }
 
     public Frame getFrame() {

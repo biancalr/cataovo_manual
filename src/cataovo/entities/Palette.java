@@ -16,7 +16,7 @@ import java.util.Queue;
  *
  * @author bibil
  */
-public final class Palette{
+public class Palette{
 
     /**
      * The path where the palette is localized.

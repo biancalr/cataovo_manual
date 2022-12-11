@@ -17,7 +17,7 @@ import java.util.Objects;
  *
  * @author bibil
  */
-public final class Frame implements Cloneable{
+public class Frame {
 
     /**
      * the frame identifier name
@@ -254,8 +254,4 @@ public final class Frame implements Cloneable{
         return filePath.substring(filePath.lastIndexOf("\\") + 1, filePath.lastIndexOf("."));
     }
 
-    @Override
-    public Frame clone() throws CloneNotSupportedException {
-        return (Frame) super.clone(); //To change body of generated methods, choose Tools | Templates.
-    }
 }
