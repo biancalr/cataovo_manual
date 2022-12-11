@@ -5,6 +5,8 @@
  */
 package cataovo.resources;
 
+import cataovo.entities.Frame;
+import cataovo.entities.Palette;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.fileChooserHandler.MyFileChooserUI;
 import cataovo.fileHandler.MyFileListHandler;
@@ -23,6 +25,8 @@ public class MainPageResources {
     private final MyFileChooserUI fileChooserUI;
     private MyFileListHandler fileListHandler;
     private String current;
+    private Palette palette;
+    private Frame currentFrame;
     private File savingFolder;
     private static volatile MainPageResources MAIN_PAGE_RESOURCES;
 
@@ -31,6 +35,7 @@ public class MainPageResources {
         fileChooserUI = new MyFileChooserUI(new File(current));
         savingFolder = getFileFolder(new File(current));
         fileListHandler = new MyFileListHandler();
+        palette = new Palette();
     }
     
     public static MainPageResources getInstance() throws DirectoryNotValidException{
@@ -74,6 +79,22 @@ public class MainPageResources {
         this.fileListHandler = fileListHandler;
     }
 
+    public Palette getPalette() {
+        return palette;
+    }
+
+    public void setPalette(Palette palette) {
+        this.palette = palette;
+    }
+
+    public Frame getCurrentFrame() {
+        return currentFrame;
+    }
+
+    public void setCurrentFrame(Frame currentFrame) {
+        this.currentFrame = currentFrame;
+    }
+    
     public final File getFileFolder(File file) throws DirectoryNotValidException {
         if (!file.exists()) {
             LOG.log(Level.SEVERE, "This method needs an existing file. The parameter cannot be null or inexistent");

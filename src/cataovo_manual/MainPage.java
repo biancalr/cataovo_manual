@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package cataovo_manual;
+import cataovo.controller.FileSelectionController;
 import cataovo.controller.MainPageController;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
@@ -17,6 +18,7 @@ import java.util.logging.Level;
 public class MainPage extends javax.swing.JFrame {
 
     private static final Logger LOG = Logger.getLogger(MainPage.class.getName());
+    private FileSelectionController fileSelectionController = null;
     private MainPageController mainPageController = null;
     
     /**
@@ -25,6 +27,7 @@ public class MainPage extends javax.swing.JFrame {
     public MainPage() {
         initComponents();
         try {
+            fileSelectionController = new FileSelectionController();
             mainPageController = new MainPageController();
         } catch (DirectoryNotValidException ex) {
             LOG.log(Level.SEVERE, ex.getMessage());
@@ -78,7 +81,7 @@ public class MainPage extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 11, Short.MAX_VALUE))
+                .addGap(0, 8, Short.MAX_VALUE))
         );
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -155,7 +158,7 @@ public class MainPage extends javax.swing.JFrame {
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(79, Short.MAX_VALUE))
+                .addContainerGap(82, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("tab1", jDesktopPane1);
@@ -232,8 +235,8 @@ public class MainPage extends javax.swing.JFrame {
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         try {
             LOG.log(Level.INFO, evt.paramString());
-            mainPageController.fileSelectionEvent(evt.getActionCommand(), jDesktopPane1, true);
-            mainPageController.controlFilesOnScreen(jLabel1, jLabel2);
+            fileSelectionController.fileSelectionEvent(evt.getActionCommand(), jDesktopPane1, true);
+            mainPageController.showFramesOnScreen(jLabel1, jLabel2);
         } catch (DirectoryNotValidException | FileNotFoundException | ImageNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
@@ -242,7 +245,7 @@ public class MainPage extends javax.swing.JFrame {
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         try {
             LOG.log(Level.INFO, evt.paramString());
-            mainPageController.fileSelectionEvent(evt.getActionCommand(), jDesktopPane1, true);
+            fileSelectionController.fileSelectionEvent(evt.getActionCommand(), jDesktopPane1, true);
         } catch (DirectoryNotValidException | FileNotFoundException | ImageNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
@@ -253,7 +256,11 @@ public class MainPage extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+        try {
+            mainPageController.onFrameFinished(jLabel1, jLabel2);
+        } catch (ImageNotValidException | DirectoryNotValidException ex) {
+            Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
