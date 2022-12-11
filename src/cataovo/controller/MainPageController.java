@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 /**
+ * Controls the navegation through the Palette Frames and showing images on screen.
  *
  * @author bibil
  */
@@ -25,6 +26,13 @@ public class MainPageController {
 
     private static final Logger LOG = Logger.getLogger(MainPageController.class.getName());
 
+    /**
+     * 
+     * @param parentName
+     * @param parent
+     * @throws ImageNotValidException
+     * @throws DirectoryNotValidException 
+     */
     public void showFramesOnScreen(JLabel parentName, JLabel parent) throws ImageNotValidException, DirectoryNotValidException {
         Frame frame = MainPageResources.getInstance().getPalette().getFrames().poll();
         MainPageResources.getInstance().setCurrentFrame(frame);
@@ -61,6 +69,7 @@ public class MainPageController {
     }
 
     /**
+     * When a Frame was finished its analysis, go to next Frame on Queue.
      *
      * @param jLabel1
      * @param jLabel2

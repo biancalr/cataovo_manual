@@ -14,6 +14,7 @@ import cataovo.fileChooserHandler.MyFileChooserUI;
 import cataovo.fileHandler.FileExtension;
 import cataovo.resources.MainPageResources;
 import java.awt.Component;
+import java.awt.HeadlessException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Collection;
@@ -25,6 +26,7 @@ import java.util.logging.Level;
 import javax.swing.JFileChooser;
 
 /**
+ * Controls the interactions with the files outside of the Application.
  *
  * @author bibil
  */
@@ -36,7 +38,7 @@ public class FileSelectionController {
     public FileSelectionController() throws DirectoryNotValidException {
         fileChooser = MainPageResources.getInstance().getFileChooserUI();
     }
-    
+
     /**
      * Selects an event and an action based on the parameters.
      *
@@ -45,49 +47,79 @@ public class FileSelectionController {
      * @param isADirectoryOnly <code>True</code> if the selection mode is a
      * <code>DIRECTORY_ONLY</code> or <code>False</code> if the selection mode
      * is a <code>FILES_AND_DIRECTORIES</code>
+     * @return
      * @throws cataovo.exceptions.DirectoryNotValidException
      * @throws cataovo.exceptions.ImageNotValidException
      * @throws java.io.FileNotFoundException
      */
-    public void fileSelectionEvent(String actionCommand, Component parent, boolean isADirectoryOnly) throws DirectoryNotValidException, ImageNotValidException, FileNotFoundException {
-        Optional<File> optional;
+    public boolean fileSelectionEvent(String actionCommand, Component parent, boolean isADirectoryOnly) throws DirectoryNotValidException, ImageNotValidException, FileNotFoundException {
         switch (actionCommand) {
             case Constants.ACTION_COMMAND_ABRIR_PASTA:
-                optional = Optional.ofNullable(fileChooser.dialogs(JFileChooser.OPEN_DIALOG, isADirectoryOnly, parent));
-                if (optional.isPresent()) {
-                    // Set the palette which represents the folder where the frames are contained
-                    MainPageResources.getInstance().setPalette(setNewPalette(optional.get()));
-                }
-                break;
+                return actionCommandOpenFolder(isADirectoryOnly, parent);
             case Constants.ACTION_COMMAND_SELECIONAR_PASTA_DESTINO:
-                LOG.log(Level.INFO,"Setting a new saving Folder.");
-                optional = Optional.ofNullable(fileChooser.dialogs(JFileChooser.OPEN_DIALOG, isADirectoryOnly, parent));
-                if (optional.isPresent()) {
-                    // Set the folder where the result will be saved.
-                    MainPageResources.getInstance().setSavingFolder(optional.get());
-                }
-                 LOG.log(Level.INFO,"A new saving Folder {}", optional.get());
-                break;
+                return actionCommandSetSavingFolder(isADirectoryOnly, parent);
             case Constants.ACTION_COMMAND_SALVAR_ARQUIVO_FINAL:
-                saveFinalFile();
-                break;
+                return actionCommandSaveFinalFile();
             default:
-                System.err.println("Not Suppoted Yet.");
-                break;
+                LOG.log(Level.WARNING, "Not implemented yet {0}", actionCommand);
+                return false;
         }
 
     }
 
     /**
-     * Set the file to a Palette.
-     * Verify if the file is a valid one.
+     * The behavior for the action ACTION_COMMAND_ABRIR_PASTA.
+     * Sets a Palette to work with.
      * 
-     * @param selectedFile
-     * @return a new Palette to start the analisys
+     * @param isADirectoryOnly
+     * @param parent
+     * @return
+     * @throws FileNotFoundException
+     * @throws DirectoryNotValidException
+     * @throws ImageNotValidException 
+     */
+    private boolean actionCommandOpenFolder(boolean isADirectoryOnly, Component parent) throws FileNotFoundException, DirectoryNotValidException, ImageNotValidException {
+        File file = fileChooser.dialogs(JFileChooser.OPEN_DIALOG, isADirectoryOnly, parent);
+        if (file != null && file.exists()) {
+            // Set the palette which represents the folder where the frames are contained
+            MainPageResources.getInstance().setPalette(setNewPalette(file));
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * The behavior for the action ACTION_COMMAND_SELECIONAR_PASTA_DESTINO.
+     * Sets a folder where the final report will be saved.
+     * 
+     * @param isADirectoryOnly
+     * @param parent
+     * @return
      * @throws DirectoryNotValidException 
      */
+    private boolean actionCommandSetSavingFolder(boolean isADirectoryOnly, Component parent) throws DirectoryNotValidException{
+        LOG.log(Level.INFO, "Setting a new saving Folder.");
+        File file = fileChooser.dialogs(JFileChooser.OPEN_DIALOG, isADirectoryOnly, parent);
+        if (file != null && file.exists()) {
+            // Set the folder where the result will be saved.
+            MainPageResources.getInstance().setSavingFolder(file);
+            LOG.log(Level.INFO, "A new saving Folder {0}", file);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Set the file to a Palette. Verify if the file is a valid one.
+     *
+     * @param selectedFile
+     * @return a new Palette to start the analisys
+     * @throws DirectoryNotValidException
+     */
     private Palette setNewPalette(File selectedFile) throws DirectoryNotValidException, ImageNotValidException, FileNotFoundException {
-        LOG.log(Level.INFO,"Setting a new Palette...");
+        LOG.log(Level.INFO, "Setting a new Palette...");
         Palette pal = null;
         if (selectedFile.exists()) {
             MainPageResources.getInstance().setCurrent(selectedFile.getAbsolutePath());
@@ -102,23 +134,23 @@ public class FileSelectionController {
                 pal = new Palette(MainPageResources.getInstance().getCurrent(), queue);
                 pal.setFrames(queue);
             }
-            LOG.log(Level.INFO,"A new Palette was created with the amount of frames: {0}", pal.getFrames().size());
+            LOG.log(Level.INFO, "A new Palette was created with the amount of frames: {0}", pal.getFrames().size());
         } else {
-            LOG.log(Level.WARNING,"The selected file doesn't exist. Please, select an existing file.");
+            LOG.log(Level.WARNING, "The selected file doesn't exist. Please, select an existing file.");
             throw new FileNotFoundException("The selected file doesn't exist. Please, select an existing file.");
         }
         return pal;
     }
 
     /**
-     * Set the Frames in a Palette.
-     * When a Palette is chosen, their frames must be presented as a Queue.
-     * If the chosen file is a directory, there might be nested directories. So
-     * these images must be normalized to a sigle queue.
-     * 
-     * 
+     * Set the Frames in a Palette. When a Palette is chosen, their frames must
+     * be presented as a Queue. If the chosen file is a directory, there might
+     * be nested directories. So these images must be normalized to a sigle
+     * queue.
+     *
+     *
      * @param listFiles
-     * @return 
+     * @return
      */
     private Queue<Frame> setPaletteFrames(File[] listFiles) throws DirectoryNotValidException, ImageNotValidException {
         Queue<Frame> frames = new LinkedList<>();
@@ -132,7 +164,7 @@ public class FileSelectionController {
         return frames;
     }
 
-    private void saveFinalFile() {
+    private boolean actionCommandSaveFinalFile() {
         LOG.log(Level.INFO, "Final file save: start");
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -141,5 +173,4 @@ public class FileSelectionController {
         return fileChooser;
     }
 
-    
 }

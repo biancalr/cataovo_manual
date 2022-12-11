@@ -161,7 +161,7 @@ public class MainPage extends javax.swing.JFrame {
                 .addContainerGap(82, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("tab1", jDesktopPane1);
+        jTabbedPane1.addTab("Manual", jDesktopPane1);
 
         jMenu1.setText("File");
         jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -235,8 +235,10 @@ public class MainPage extends javax.swing.JFrame {
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         try {
             LOG.log(Level.INFO, evt.paramString());
-            fileSelectionController.fileSelectionEvent(evt.getActionCommand(), jDesktopPane1, true);
-            mainPageController.showFramesOnScreen(jLabel1, jLabel2);
+            boolean wasFileSelected = fileSelectionController.fileSelectionEvent(evt.getActionCommand(), jDesktopPane1, true);
+            if (wasFileSelected) {
+                mainPageController.showFramesOnScreen(jLabel1, jLabel2);
+            }
         } catch (DirectoryNotValidException | FileNotFoundException | ImageNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
@@ -264,7 +266,8 @@ public class MainPage extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
-        // TODO add your handling code here:
+        LOG.log(Level.INFO, "Evento: {0}", evt.getPoint());
+        
     }//GEN-LAST:event_jLabel2MouseClicked
 
     /**
