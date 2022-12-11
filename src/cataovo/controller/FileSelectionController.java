@@ -14,12 +14,10 @@ import cataovo.fileChooserHandler.MyFileChooserUI;
 import cataovo.fileHandler.FileExtension;
 import cataovo.resources.MainPageResources;
 import java.awt.Component;
-import java.awt.HeadlessException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.Optional;
 import java.util.Queue;
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -127,7 +125,7 @@ public class FileSelectionController {
                 pal = new Palette(selectedFile);
                 pal.setFrames(setPaletteFrames(selectedFile.listFiles()));
                 MainPageResources.getInstance().setCurrentFrame(pal.getFrames().peek());
-            } else {
+            } else if (selectedFile.isFile()) {
                 Frame frame = new Frame(selectedFile.getAbsolutePath());
                 Queue queue = new LinkedList<>();
                 queue.offer(frame);

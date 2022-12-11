@@ -18,7 +18,8 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 /**
- * Controls the navegation through the Palette Frames and showing images on screen.
+ * Controls the navegation through the Palette Frames and showing images on
+ * screen.
  *
  * @author bibil
  */
@@ -27,27 +28,31 @@ public class MainPageController {
     private static final Logger LOG = Logger.getLogger(MainPageController.class.getName());
 
     /**
-     * 
+     * Demonstrate the frames on screen.
+     *
      * @param parentName
      * @param parent
      * @throws ImageNotValidException
-     * @throws DirectoryNotValidException 
+     * @throws DirectoryNotValidException
      */
     public void showFramesOnScreen(JLabel parentName, JLabel parent) throws ImageNotValidException, DirectoryNotValidException {
         Frame frame = MainPageResources.getInstance().getPalette().getFrames().poll();
         MainPageResources.getInstance().setCurrentFrame(frame);
-        showFrameOnScreen(parentName, parent, frame);
-        parent.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        parent.setVisible(true);
+        if (showFrameOnScreen(parentName, parent, frame)) {
+            parent.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            parent.setVisible(true);
+        }
     }
 
     /**
+     * Setts the icons related to each JLabel (image or name)
      *
      * @param parentName
      * @param parent
      * @param frame
+     * @return
      */
-    public void showFrameOnScreen(JLabel parentName, JLabel parent, Frame frame) {
+    public boolean showFrameOnScreen(JLabel parentName, JLabel parent, Frame frame) {
         LOG.log(Level.INFO, "Presenting the image {0} on screen...", frame.getName());
         parent.setText(null);
         if (frame.getPaletteFrame() instanceof File) {
@@ -55,8 +60,9 @@ public class MainPageController {
             showImageFile(f);
             parent.setIcon(showImageFile(f));
             parentName.setText(frame.getName());
+            return true;
         }
-
+        return false;
     }
 
     /**
