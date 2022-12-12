@@ -36,6 +36,7 @@ public class MainPageResources {
         savingFolder = getFileFolder(new File(current));
         fileListHandler = new MyFileListHandler();
         palette = new Palette();
+        currentFrame = new Frame();
     }
     
     public static MainPageResources getInstance() throws DirectoryNotValidException{

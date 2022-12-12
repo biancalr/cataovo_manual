@@ -28,16 +28,27 @@ public class MainPageController {
     private static final Logger LOG = Logger.getLogger(MainPageController.class.getName());
 
     /**
-     * Demonstrate the frames on screen.
+     * Set to the next frame
      *
      * @param parentName
      * @param parent
      * @throws ImageNotValidException
      * @throws DirectoryNotValidException
      */
-    public void showFramesOnScreen(JLabel parentName, JLabel parent) throws ImageNotValidException, DirectoryNotValidException {
+    public void toNextFrame(JLabel parentName, JLabel parent) throws ImageNotValidException, DirectoryNotValidException {
         Frame frame = MainPageResources.getInstance().getPalette().getFrames().poll();
         MainPageResources.getInstance().setCurrentFrame(frame);
+        showFramesOnScreen(parentName, parent, frame);
+    }
+
+    /**
+     * 
+     * @param parentName
+     * @param parent
+     * @param frame 
+     */
+    public void showFramesOnScreen(JLabel parentName, JLabel parent, Frame frame) {
+        LOG.log(Level.INFO, "Presenting the image {0} on screen...", frame.getName());
         if (showFrameOnScreen(parentName, parent, frame)) {
             parent.setBorder(BorderFactory.createLineBorder(Color.BLACK));
             parent.setVisible(true);
@@ -52,8 +63,7 @@ public class MainPageController {
      * @param frame
      * @return
      */
-    public boolean showFrameOnScreen(JLabel parentName, JLabel parent, Frame frame) {
-        LOG.log(Level.INFO, "Presenting the image {0} on screen...", frame.getName());
+    private boolean showFrameOnScreen(JLabel parentName, JLabel parent, Frame frame) {
         parent.setText(null);
         if (frame.getPaletteFrame() instanceof File) {
             File f = (File) frame.getPaletteFrame();
@@ -85,9 +95,9 @@ public class MainPageController {
     public void onFrameFinished(JLabel jLabel1, JLabel jLabel2) throws ImageNotValidException, DirectoryNotValidException {
         LOG.log(Level.INFO, "The frame was analysed. Charging next...");
         if (MainPageResources.getInstance().getPalette().getFrames().iterator().hasNext()) {
-            showFramesOnScreen(jLabel1, jLabel2);
+            toNextFrame(jLabel1, jLabel2);
         } else {
-            LOG.info("You've reached the end of the Queue");
+            LOG.info("You've reached the end of the Palette.");
         }
 
     }

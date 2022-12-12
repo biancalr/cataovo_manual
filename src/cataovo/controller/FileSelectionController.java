@@ -81,6 +81,7 @@ public class FileSelectionController {
         if (file != null && file.exists()) {
             // Set the palette which represents the folder where the frames are contained
             MainPageResources.getInstance().setPalette(setNewPalette(file));
+            MainPageResources.getInstance().getPalette().getFrames().poll();
             return true;
         } else {
             return false;
@@ -131,6 +132,7 @@ public class FileSelectionController {
                 queue.offer(frame);
                 pal = new Palette(MainPageResources.getInstance().getCurrent(), queue);
                 pal.setFrames(queue);
+                MainPageResources.getInstance().setCurrentFrame(pal.getFrames().peek());
             }
             LOG.log(Level.INFO, "A new Palette was created with the amount of frames: {0}", pal.getFrames().size());
         } else {

@@ -3,14 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo_manual;
+package cataovo;
+
 import cataovo.controller.FileSelectionController;
+import cataovo.controller.FramePainterController;
 import cataovo.controller.MainPageController;
+import cataovo.entities.Frame;
+import cataovo.entities.Point;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
+import cataovo.resources.MainPageResources;
 import java.io.FileNotFoundException;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+
 /**
  *
  * @author bibil
@@ -20,7 +26,8 @@ public class MainPage extends javax.swing.JFrame {
     private static final Logger LOG = Logger.getLogger(MainPage.class.getName());
     private FileSelectionController fileSelectionController = null;
     private MainPageController mainPageController = null;
-    
+    private FramePainterController framePainterController = null;
+
     /**
      * Creates new form MainPage
      */
@@ -29,6 +36,7 @@ public class MainPage extends javax.swing.JFrame {
         try {
             fileSelectionController = new FileSelectionController();
             mainPageController = new MainPageController();
+            framePainterController = new FramePainterController();
         } catch (DirectoryNotValidException ex) {
             LOG.log(Level.SEVERE, ex.getMessage());
         }
@@ -236,8 +244,8 @@ public class MainPage extends javax.swing.JFrame {
         try {
             LOG.log(Level.INFO, evt.paramString());
             boolean wasFileSelected = fileSelectionController.fileSelectionEvent(evt.getActionCommand(), jDesktopPane1, true);
-            if (wasFileSelected) {
-                mainPageController.showFramesOnScreen(jLabel1, jLabel2);
+            if (wasFileSelected && MainPageResources.getInstance().getCurrentFrame().getPaletteFrame().exists()) {
+                mainPageController.showFramesOnScreen(jLabel1, jLabel2, MainPageResources.getInstance().getCurrentFrame());
             }
         } catch (DirectoryNotValidException | FileNotFoundException | ImageNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -261,13 +269,14 @@ public class MainPage extends javax.swing.JFrame {
         try {
             mainPageController.onFrameFinished(jLabel1, jLabel2);
         } catch (ImageNotValidException | DirectoryNotValidException ex) {
-            Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
         LOG.log(Level.INFO, "Evento: {0}", evt.getPoint());
-        
+        Frame frame = framePainterController.paintPoint(new Point((double) evt.getX(), (double) evt.getY()));
+        mainPageController.showFramesOnScreen(jLabel1, jLabel2, frame);
     }//GEN-LAST:event_jLabel2MouseClicked
 
     /**
@@ -290,7 +299,7 @@ public class MainPage extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(MainPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
+
         //</editor-fold>
 
         /* Create and display the form */
