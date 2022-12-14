@@ -6,7 +6,7 @@
 package cataovo.entities;
 
 import cataovo.exceptions.ImageNotValidException;
-import cataovo.fileHandler.FileExtension;
+import cataovo.filechooser.handler.FileExtension;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.Objects;
  *
  * @author bibil
  */
-public class Frame {
+public final class Frame implements Cloneable{
 
     /**
      * the frame identifier name
@@ -94,7 +94,7 @@ public class Frame {
             this.paletteFrame = paletteFrame;
             this.name = chopName(paletteFrame.getAbsolutePath());
         }
-        
+
     }
 
     public Frame(String name, File paletteFrame) throws ImageNotValidException {
@@ -219,18 +219,19 @@ public class Frame {
     private boolean verifyFileIsAValidImage(String pathName) throws ImageNotValidException {
         File f = new File(pathName);
         String fileExtension;
-        
+
         fileExtension = getFileExtension(f);
         // Verify if this file exists, is a file and is a .png file type
-        if (f.exists() && f.isFile() && fileExtension.contains(FileExtension.PNG.toString().toLowerCase())) {
+        if (f.exists() && f.isFile() && (fileExtension.contains(FileExtension.PNG.toString().toLowerCase()) || fileExtension.contains(FileExtension.JPG.toString().toLowerCase()))) {
             return true;
         } else {
-            throw new ImageNotValidException("This file with extension " + fileExtension + " does not represent a valid image, wich should be " + FileExtension.PNG.toString().toLowerCase());
+            throw new ImageNotValidException("This file with extension " +
+                    " does not represent a valid image, wich should be " + fileExtension);
         }
     }
 
     /**
-     * 
+     *
      * @param f the File
      * @return the file Extension
      */
@@ -247,11 +248,17 @@ public class Frame {
 
     /**
      * Chopps the name to extract the image name.
+     *
      * @param filePath the file path to extract the name tag
      * @return the name tag chopped
      */
     private String chopName(String filePath) {
         return filePath.substring(filePath.lastIndexOf("\\") + 1, filePath.lastIndexOf("."));
+    }
+
+    @Override
+    public Frame clone() throws CloneNotSupportedException {
+        return (Frame) super.clone(); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

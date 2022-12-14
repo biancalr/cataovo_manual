@@ -14,6 +14,7 @@ import cataovo.exceptions.ImageNotValidException;
 import cataovo.opencvlib.wrappers.PointWrapper;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.opencv.imgcodecs.Imgcodecs;
 
 /**
  *

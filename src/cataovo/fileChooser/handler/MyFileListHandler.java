@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.fileHandler;
+package cataovo.filechooser.handler;
 
 import cataovo.exceptions.ImageNotValidException;
 import java.io.File;

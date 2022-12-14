@@ -6,8 +6,11 @@
 package cataovo.controller;
 
 import cataovo.entities.Frame;
+import cataovo.entities.Point;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
+import cataovo.opencvlib.imageFrameUtils.FrameUtils;
+import cataovo.opencvlib.wrappers.PointWrapper;
 import cataovo.resources.MainPageResources;
 import java.awt.Color;
 import java.io.File;
@@ -16,16 +19,17 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import javax.swing.Icon;
 
 /**
- * Controls the navegation through the Palette Frames and showing images on
- * screen.
+ * Controls the actions with the Frames
  *
  * @author bibil
  */
 public class MainPageController {
 
     private static final Logger LOG = Logger.getLogger(MainPageController.class.getName());
+    private FrameUtils frameUtils = null;
 
     /**
      * Set to the next frame
@@ -40,15 +44,28 @@ public class MainPageController {
         MainPageResources.getInstance().setCurrentFrame(frame);
         showFramesOnScreen(parentName, parent, frame);
     }
-
+    
     /**
      * 
+     * @param jLabel1
+     * @param jLabel2
+     * @param frame
+     * @throws ImageNotValidException 
+     */
+    public void showFramesOnScreen(JLabel jLabel1, JLabel jLabel2, Icon frame) throws ImageNotValidException {
+        showFrameOnScreen(jLabel1, jLabel2, frame);
+    }
+
+    /**
+     *
      * @param parentName
      * @param parent
-     * @param frame 
+     * @param frame
+     * @throws cataovo.exceptions.ImageNotValidException
      */
-    public void showFramesOnScreen(JLabel parentName, JLabel parent, Frame frame) {
+    public void showFramesOnScreen(JLabel parentName, JLabel parent, Frame frame) throws ImageNotValidException {
         LOG.log(Level.INFO, "Presenting the image {0} on screen...", frame.getName());
+        frameUtils = new FrameUtils(frame);
         if (showFrameOnScreen(parentName, parent, frame)) {
             parent.setBorder(BorderFactory.createLineBorder(Color.BLACK));
             parent.setVisible(true);
@@ -63,14 +80,22 @@ public class MainPageController {
      * @param frame
      * @return
      */
-    private boolean showFrameOnScreen(JLabel parentName, JLabel parent, Frame frame) {
+    private boolean showFrameOnScreen(JLabel parentName, JLabel parent, Object frame) throws ImageNotValidException {
         parent.setText(null);
-        if (frame.getPaletteFrame() instanceof File) {
-            File f = (File) frame.getPaletteFrame();
-            showImageFile(f);
-            parent.setIcon(showImageFile(f));
-            parentName.setText(frame.getName());
-            return true;
+        if (frame instanceof Frame) {
+            Frame fr = (Frame) frame;
+            if (fr.getPaletteFrame() != null && fr.getPaletteFrame().exists()) {
+                File f = (File) fr.getPaletteFrame();
+                showImageFile(f);
+                parent.setIcon(showImageFile(f));
+                parentName.setText(fr.getName());
+                return true;
+            }
+        } else if (frame instanceof Icon) {
+            Icon im = (Icon) frame;
+            parent.setIcon(im);
+        } else {
+            throw new ImageNotValidException("Image type not supported yet. Please try again under another format");
         }
         return false;
     }
@@ -100,6 +125,19 @@ public class MainPageController {
             LOG.info("You've reached the end of the Palette.");
         }
 
+    }
+
+    /**
+     *
+     * @param point
+     * @return
+     * @throws DirectoryNotValidException
+     * @throws CloneNotSupportedException
+     */
+    public Icon paintDotOnFrame(Point point) throws DirectoryNotValidException, CloneNotSupportedException {
+        Frame f = MainPageResources.getInstance().getCurrentFrame().clone();
+        PointWrapper pw = new PointWrapper(point);
+        return frameUtils.drawCircle(pw, f);
     }
 
 }

@@ -13,7 +13,7 @@ import java.util.Objects;
  *
  * @author bibil
  */
-public class Region {
+public final class Region implements Cloneable{
 
     /**
      * The region's lenght
@@ -128,5 +128,11 @@ public class Region {
         hash = 97 * hash + Objects.hashCode(this.initialPoint);
         return hash;
     }
+
+    @Override
+    public Region clone() throws CloneNotSupportedException {
+        return (Region) super.clone(); //To change body of generated methods, choose Tools | Templates.
+    }
+    
 
 }

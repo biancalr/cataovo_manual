@@ -6,16 +6,18 @@
 package cataovo;
 
 import cataovo.controller.FileSelectionController;
-import cataovo.controller.FramePainterController;
 import cataovo.controller.MainPageController;
 import cataovo.entities.Frame;
 import cataovo.entities.Point;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
 import cataovo.resources.MainPageResources;
+import java.awt.Image;
 import java.io.FileNotFoundException;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import javax.swing.Icon;
+import org.opencv.core.Core;
 
 /**
  *
@@ -26,7 +28,6 @@ public class MainPage extends javax.swing.JFrame {
     private static final Logger LOG = Logger.getLogger(MainPage.class.getName());
     private FileSelectionController fileSelectionController = null;
     private MainPageController mainPageController = null;
-    private FramePainterController framePainterController = null;
 
     /**
      * Creates new form MainPage
@@ -36,7 +37,6 @@ public class MainPage extends javax.swing.JFrame {
         try {
             fileSelectionController = new FileSelectionController();
             mainPageController = new MainPageController();
-            framePainterController = new FramePainterController();
         } catch (DirectoryNotValidException ex) {
             LOG.log(Level.SEVERE, ex.getMessage());
         }
@@ -274,9 +274,13 @@ public class MainPage extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
-        LOG.log(Level.INFO, "Evento: {0}", evt.getPoint());
-        Frame frame = framePainterController.paintPoint(new Point((double) evt.getX(), (double) evt.getY()));
-        mainPageController.showFramesOnScreen(jLabel1, jLabel2, frame);
+        try {
+            LOG.log(Level.INFO, "Evento: {0}", evt.getPoint());
+            Icon frame = mainPageController.paintDotOnFrame(new Point((double) evt.getX(), (double) evt.getY()));
+            mainPageController.showFramesOnScreen(jLabel1, jLabel2, frame);
+        } catch (DirectoryNotValidException | ImageNotValidException | CloneNotSupportedException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        } 
     }//GEN-LAST:event_jLabel2MouseClicked
 
     /**
@@ -304,6 +308,7 @@ public class MainPage extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
+            System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
             new MainPage().setVisible(true);
         });
     }

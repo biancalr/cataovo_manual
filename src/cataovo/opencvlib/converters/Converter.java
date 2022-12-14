@@ -6,7 +6,7 @@
 package cataovo.opencvlib.converters;
 
 import cataovo.entities.Frame;
-import cataovo.fileHandler.FileExtension;
+import cataovo.filechooser.handler.FileExtension;
 import cataovo.opencvlib.wrappers.MatOfBytesWrapper;
 import cataovo.opencvlib.wrappers.MatWrapper;
 import java.awt.Image;
@@ -18,6 +18,7 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 
@@ -27,26 +28,20 @@ import org.opencv.imgcodecs.Imgcodecs;
  */
 public final class Converter {
 
-    private Frame frame;
-    private MatWrapper mat;
     private static final Logger LOG = Logger.getLogger(Converter.class.getName());
-
-    public Converter() {
-        this.frame = new Frame();
-        this.mat = new MatWrapper();
-    }
-
-    public Converter(Frame frame) {
-        this.frame = frame;
-        this.mat = new MatWrapper();
-    }
-
-    public Frame getFrame() {
-        return frame;
-    }
-
-    public void setFrame(Frame frame) {
-        this.frame = frame;
+    private static volatile Converter CONVERTER;
+    
+    public static Converter getInstance() {
+        Converter FORMAT_CONVERTER = Converter.CONVERTER;
+        if (FORMAT_CONVERTER == null) {
+            synchronized (Converter.class){
+                FORMAT_CONVERTER = Converter.CONVERTER;
+                if (FORMAT_CONVERTER == null) {
+                    Converter.CONVERTER = FORMAT_CONVERTER = new Converter();
+                }
+            }
+        }
+        return FORMAT_CONVERTER;
     }
     
     /**
@@ -56,11 +51,10 @@ public final class Converter {
      * @return 
      */
     public MatWrapper convertImageFrameToMat(Frame current){
-        this.frame = current;
-        Mat m = null;
-        Optional<Mat> optional = Optional.ofNullable(Imgcodecs.imread(frame.getPaletteFrame().getAbsolutePath()).clone());
+        Mat m = new Mat();
+        Optional<Mat> optional = Optional.ofNullable(Imgcodecs.imread(current.getPaletteFrame().getPath()));
         optional.ifPresent((t) -> t.copyTo(m));
-        MatWrapper wrapper = new MatWrapper(m.rows(), m.cols(), m.type(), m.clone());
+        MatWrapper wrapper = new MatWrapper(m.rows(), m.cols(), m.type(), m.clone(), current.getPaletteFrame().getAbsolutePath());
         return wrapper;
         
     }
@@ -93,6 +87,7 @@ public final class Converter {
      * @return the image as given extension.
      */
     private BufferedImage matToBuffedImageConvert(MatWrapper current, FileExtension extension){
+        LOG.log(Level.INFO, "Error while converting a MAT to: {0}", extension.name());
         MatOfBytesWrapper ofBytesWrapper = new MatOfBytesWrapper();
         boolean codeOk = Imgcodecs.imencode("." + extension.toString().toLowerCase(), current.getMat(), ofBytesWrapper);
         BufferedImage output = null;

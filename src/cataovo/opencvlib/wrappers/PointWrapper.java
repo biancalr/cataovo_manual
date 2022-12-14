@@ -53,4 +53,7 @@ public class PointWrapper {
         return point.dot(new Point(p.getX(), p.getY()));
     }
     
+    public Point getOpencvPoint(){
+        return point;
+    }
 }

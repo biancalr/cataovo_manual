@@ -5,7 +5,9 @@
  */
 package cataovo.opencvlib.wrappers;
 
+import cataovo.entities.Frame;
 import org.opencv.core.Mat;
+import org.opencv.imgcodecs.Imgcodecs;
 
 /**
  *
@@ -15,31 +17,31 @@ public class MatWrapper{
 
     private int n_rows;
     private int n_cols;
-    private byte[] data;
     private int type;
     private Mat mat;
+    private String location;
     
     public MatWrapper() {
         n_rows = 0;
         n_cols = 0;
-        data = new byte[0];
         type = 0;
-        mat = new Mat();
-    }
-
-    public MatWrapper(int row, int col, byte[] data) {
-        this.n_rows = row;
-        this.n_cols = col;
-        this.data = data;
-        type = 0;
-        this.mat = new Mat();
+        location = null;
     }
     
-    public MatWrapper(int row, int col, int type, Mat m) {
+    public MatWrapper(int row, int col, int type, Mat m, String location) {
         this.n_rows = row;
         this.n_cols = col;
         this.type = type;
         this.mat =  m;
+        this.location = location;
+    }
+    
+    public MatWrapper(Frame frame){
+        this.location = frame.getPaletteFrame().getAbsolutePath();
+        this.mat = Imgcodecs.imread(frame.getPaletteFrame().getAbsolutePath()).clone();
+        this.n_rows = mat.rows();
+        this.n_cols = mat.cols();
+        this.type = mat.type();
     }
 
     public int getN_rows() {
@@ -58,20 +60,20 @@ public class MatWrapper{
         this.n_cols = n_cols;
     }
 
-    public byte[] getData() {
-        return data;
-    }
-
-    public void setData(byte[] data) {
-        this.data = data;
-    }
-
     public int getType() {
         return type;
     }
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public Mat getMat() {

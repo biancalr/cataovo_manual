@@ -3,10 +3,10 @@
  * To change this template directory, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.fileChooserHandler;
+package cataovo.fileChooser.UI;
 
-import cataovo.fileHandler.FileExtension;
-import cataovo.fileHandler.FileFilterExtensions;
+import cataovo.filechooser.handler.FileExtension;
+import cataovo.filechooser.handler.FileFilterExtensions;
 import java.awt.Component;
 import java.awt.HeadlessException;
 import java.io.File;

@@ -12,7 +12,7 @@ import java.util.Objects;
  *
  * @author bibil
  */
-public class Point {
+public final class Point implements Cloneable{
 
     /**
      * The X axis of the initial {@code Point}
@@ -100,4 +100,8 @@ public class Point {
         return hash;
     }
 
+    @Override
+    public Point clone() throws CloneNotSupportedException {
+        return (Point) super.clone(); //To change body of generated methods, choose Tools | Templates.
+    }
 }
