@@ -8,9 +8,9 @@ package cataovo.entities;
 import cataovo.exceptions.ImageNotValidException;
 import cataovo.filechooser.handler.FileExtension;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A frame represents a fraction of the various images that make up a palette.
@@ -28,7 +28,7 @@ public final class Frame implements Cloneable{
      * The list of the regions wich indicates an egg of mosquito. A demarked
      * region must contain an egg in it
      */
-    private List<Region> regionsContainingEggs;
+    private Set<Region> regionsContainingEggs;
 
     /**
      * The file of the frame;
@@ -41,7 +41,7 @@ public final class Frame implements Cloneable{
      * @param regionsWithEggs the regions containg eggs of mosquito
      * @throws cataovo.exceptions.ImageNotValidException
      */
-    public Frame(String filePath, List<Region> regionsWithEggs) throws ImageNotValidException {
+    public Frame(String filePath, Set<Region> regionsWithEggs) throws ImageNotValidException {
         if (verifyFileIsAValidImage(filePath)) {
             this.paletteFrame = new File(filePath);
             this.name = chopName(filePath);
@@ -59,7 +59,7 @@ public final class Frame implements Cloneable{
             this.paletteFrame = new File(filePath);
             this.name = chopName(filePath);
             if (this.regionsContainingEggs == null) {
-                this.regionsContainingEggs = new ArrayList<>();
+                this.regionsContainingEggs = new HashSet<>();
             }
         }
 
@@ -76,7 +76,7 @@ public final class Frame implements Cloneable{
             this.paletteFrame = new File(filePath);
             this.name = chopName(filePath);
             if (this.regionsContainingEggs == null) {
-                this.regionsContainingEggs = new ArrayList<>();
+                this.regionsContainingEggs = new HashSet<>();
             }
             this.regionsContainingEggs.add(region);
         }
@@ -88,7 +88,7 @@ public final class Frame implements Cloneable{
      * @param paletteFrame
      * @throws cataovo.exceptions.ImageNotValidException
      */
-    public Frame(List<Region> regionsContainingEggs, File paletteFrame) throws ImageNotValidException {
+    public Frame(Set<Region> regionsContainingEggs, File paletteFrame) throws ImageNotValidException {
         if (verifyFileIsAValidImage(paletteFrame.getAbsolutePath())) {
             this.regionsContainingEggs = regionsContainingEggs;
             this.paletteFrame = paletteFrame;
@@ -102,7 +102,7 @@ public final class Frame implements Cloneable{
             this.paletteFrame = paletteFrame;
             this.name = chopName(name);
             if (this.regionsContainingEggs == null) {
-                this.regionsContainingEggs = new ArrayList<>();
+                this.regionsContainingEggs = new HashSet<>();
             }
         }
     }
@@ -111,7 +111,7 @@ public final class Frame implements Cloneable{
      * Empty Constructor
      */
     public Frame() {
-        this.regionsContainingEggs = new ArrayList<>();
+        this.regionsContainingEggs = new HashSet<>();
         this.name = "";
     }
 
@@ -135,7 +135,7 @@ public final class Frame implements Cloneable{
      *
      * @return the regions with eggs in it
      */
-    public List<Region> getRegionsContainingEggs() {
+    public Set<Region> getRegionsContainingEggs() {
         return regionsContainingEggs;
     }
 
@@ -143,7 +143,7 @@ public final class Frame implements Cloneable{
      *
      * @param regionsContainingEggs regions with eggs in it.
      */
-    public void setRegionsContainingEggs(List<Region> regionsContainingEggs) {
+    public void setRegionsContainingEggs(Set<Region> regionsContainingEggs) {
         this.regionsContainingEggs = regionsContainingEggs;
     }
 
