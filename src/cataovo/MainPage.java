@@ -6,8 +6,10 @@
 package cataovo;
 
 import cataovo.controller.FileSelectionController;
+import cataovo.controller.FramePainterController;
 import cataovo.controller.MainPageController;
 import cataovo.controller.implement.FileSelectionControllerImplement;
+import cataovo.controller.implement.FramePainterControllerImplements;
 import cataovo.controller.implement.MainPageControllerImplements;
 import cataovo.entities.Point;
 import cataovo.exceptions.DirectoryNotValidException;
@@ -28,6 +30,7 @@ public class MainPage extends javax.swing.JFrame {
     private static final Logger LOG = Logger.getLogger(MainPage.class.getName());
     private FileSelectionController fileSelectionController = null;
     private MainPageController mainPageController = null;
+    private FramePainterController framePainterController = null;
 
     /**
      * Creates new form MainPage
@@ -37,6 +40,7 @@ public class MainPage extends javax.swing.JFrame {
         try {
             fileSelectionController = new FileSelectionControllerImplement();
             mainPageController = new MainPageControllerImplements();
+            framePainterController = new FramePainterControllerImplements();
         } catch (DirectoryNotValidException ex) {
             LOG.log(Level.SEVERE, ex.getMessage());
         }
@@ -251,7 +255,7 @@ public class MainPage extends javax.swing.JFrame {
         LOG.log(Level.INFO, "Evento: {0}", evt.getPoint());
         Icon frame;
         try {
-            frame = mainPageController.paintFormat(new Point(evt.getX(), evt.getY()));
+            frame = framePainterController.paintFormat(new Point(evt.getX(), evt.getY()));
             if (frame != null) {
                 mainPageController.showFramesOnScreen(jLabel1, jLabel2, frame);
                 LOG.log(Level.INFO, "Presenting frame on screen");

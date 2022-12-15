@@ -5,23 +5,8 @@
  */
 package cataovo.controller;
 
-import cataovo.controller.MainPageController;
-import cataovo.entities.Frame;
 import cataovo.entities.Point;
-import cataovo.entities.Region;
 import cataovo.exceptions.DirectoryNotValidException;
-import cataovo.exceptions.ImageNotValidException;
-import cataovo.opencvlib.imageFrameUtils.FramePrimaryUtils;
-import cataovo.opencvlib.wrappers.PointWrapper;
-import cataovo.opencvlib.wrappers.RectWrapper;
-import cataovo.resources.MainPageResources;
-import java.awt.Color;
-import java.io.File;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import java.util.logging.Logger;
-import java.util.logging.Level;
 import javax.swing.Icon;
 
 /**

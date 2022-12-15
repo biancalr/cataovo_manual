@@ -55,12 +55,4 @@ public interface MainPageController {
      */
     public void onFrameFinished(JLabel jLabel1, JLabel jLabel2) throws ImageNotValidException, DirectoryNotValidException;
     
-    /**
-     *
-     * @param point
-     * @return
-     * @throws DirectoryNotValidException
-     * @throws CloneNotSupportedException
-     */
-    public Icon paintFormat(Point point)throws DirectoryNotValidException, CloneNotSupportedException;
 }
