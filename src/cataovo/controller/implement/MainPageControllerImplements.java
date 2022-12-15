@@ -11,7 +11,7 @@ import cataovo.entities.Point;
 import cataovo.entities.Region;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
-import cataovo.opencvlib.imageFrameUtils.FrameUtils;
+import cataovo.opencvlib.imageFrameUtils.FramePrimaryUtils;
 import cataovo.opencvlib.wrappers.PointWrapper;
 import cataovo.opencvlib.wrappers.RectWrapper;
 import cataovo.resources.MainPageResources;
@@ -32,7 +32,7 @@ import javax.swing.Icon;
 public class MainPageControllerImplements implements MainPageController{
 
     private static final Logger LOG = Logger.getLogger(MainPageControllerImplements.class.getName());
-    private FrameUtils frameUtils = null;
+    private FramePrimaryUtils frameUtils = null;
     private Point initialPoint = null;
     private int clickCount = 0;
 
@@ -74,7 +74,7 @@ public class MainPageControllerImplements implements MainPageController{
     @Override
     public void showFramesOnScreen(JLabel parentName, JLabel parent, Frame frame) throws ImageNotValidException {
         LOG.log(Level.INFO, "Presenting the image {0} on screen...", frame.getName());
-        frameUtils = new FrameUtils(frame);
+        frameUtils = new FramePrimaryUtils(frame);
         if (showFrameOnScreen(parentName, parent, frame)) {
             parent.setBorder(BorderFactory.createLineBorder(Color.BLACK));
             parent.setVisible(true);
@@ -158,7 +158,7 @@ public class MainPageControllerImplements implements MainPageController{
      * @throws CloneNotSupportedException
      */
     private Icon paintDotOnFrame(Point point) throws DirectoryNotValidException, CloneNotSupportedException {
-        this.frameUtils = new FrameUtils(MainPageResources.getInstance().getCurrentFrame().clone());
+        this.frameUtils = new FramePrimaryUtils(MainPageResources.getInstance().getCurrentFrame().clone());
         PointWrapper pw = new PointWrapper(point);
         return frameUtils.drawCircle(pw);
     }
@@ -171,7 +171,7 @@ public class MainPageControllerImplements implements MainPageController{
      * @throws CloneNotSupportedException
      */
     private Icon paintGridOnFrame(Region region) throws DirectoryNotValidException, CloneNotSupportedException {
-        this.frameUtils = new FrameUtils(MainPageResources.getInstance().getCurrentFrame().clone());
+        this.frameUtils = new FramePrimaryUtils(MainPageResources.getInstance().getCurrentFrame().clone());
         RectWrapper rw = new RectWrapper(region);
         return frameUtils.drawRectangle(rw);
     }

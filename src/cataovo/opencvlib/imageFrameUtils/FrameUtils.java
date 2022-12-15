@@ -20,25 +20,28 @@ import javax.swing.ImageIcon;
  *
  * @author bibil
  */
-public class FrameUtils {
+public abstract class FrameUtils {
 
-    private static final Logger LOG = Logger.getLogger(FrameUtils.class.getName());
-    private PointWrapper pointWrapper;
-    private RectWrapper rectWrapper;
-    private MatWrapper matWrapper;
-    private Frame frame = null;
+    protected static final Logger LOG = Logger.getLogger(FrameUtils.class.getName());
+    protected PointWrapper pointWrapper;
+    protected RectWrapper rectWrapper;
+    protected MatWrapper matWrapper;
+    protected Frame frame = null;
+    protected ImageUtils imageUtils;
 
     public FrameUtils(Frame frame) {
         pointWrapper = new PointWrapper();
         rectWrapper = new RectWrapper();
         matWrapper = new MatWrapper();
         this.frame = frame;
+        this.imageUtils = new ImageUtilsImplements();
     }
 
     public FrameUtils() {
         pointWrapper = new PointWrapper();
         rectWrapper = new RectWrapper();
         matWrapper = new MatWrapper();
+        this.imageUtils = new ImageUtilsImplements();
     }
 
     public PointWrapper getPointWrapper() {
@@ -58,19 +61,23 @@ public class FrameUtils {
      * @param pw
      * @return
      */
-    public Icon drawCircle(PointWrapper pw) {
-        LOG.log(Level.INFO, "Starting..");
-        matWrapper = Converter.getInstance().convertImageFrameToMat(frame);
-        matWrapper.setOpencvMat(ImageUtils.getInstance().circle(pw.getOpencvPoint(), matWrapper.getOpencvMat()).clone());
-        return new ImageIcon(Converter.getInstance().convertMatToImg(matWrapper).get());
-    }
+    protected abstract Icon drawCircle(PointWrapper pw);
 
     /**
      *
      * @param rw
      * @return
      */
-    public Icon drawRectangle(RectWrapper rw) {
+    protected abstract Icon drawRectangle(RectWrapper rw);
+    
+    protected Icon dot(PointWrapper pw) {
+        LOG.log(Level.INFO, "Starting..");
+        matWrapper = Converter.getInstance().convertImageFrameToMat(frame);
+        matWrapper.setOpencvMat(imageUtils.circle(pw.getOpencvPoint(), matWrapper.getOpencvMat()).clone());
+        return new ImageIcon(Converter.getInstance().convertMatToImg(matWrapper).get());
+    }
+    
+    protected Icon square(RectWrapper rw) {
         LOG.log(Level.INFO, "Starting..");
         matWrapper = Converter.getInstance().convertImageFrameToMat(frame);
         pointWrapper = new PointWrapper(
@@ -79,7 +86,7 @@ public class FrameUtils {
         PointWrapper pw2 = new PointWrapper(new Point(
                 Math.abs(rw.getRegion().getInitialPoint().getX() - rw.getRegion().getWidth()),
                 Math.abs(rw.getRegion().getInitialPoint().getY() - rw.getRegion().getHeight())));
-        matWrapper.setOpencvMat(ImageUtils.getInstance().rectangle(
+        matWrapper.setOpencvMat(imageUtils.rectangle(
                 pointWrapper.getOpencvPoint(), pw2.getOpencvPoint(), matWrapper.getOpencvMat()));
         return new ImageIcon(Converter.getInstance().convertMatToImg(matWrapper).get());
     }
