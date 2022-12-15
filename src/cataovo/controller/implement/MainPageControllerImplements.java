@@ -36,6 +36,12 @@ public class MainPageControllerImplements implements MainPageController {
     private Point initialPoint = null;
     private int clickCount = 0;
 
+    public MainPageControllerImplements() {
+        this.clickCount = 0;
+        this.frameUtils = new FramePrimaryUtils();
+        this.initialPoint = new Point(0, 0);
+    }
+
     /**
      * Set to the next frame
      *

@@ -5,7 +5,6 @@
  */
 package cataovo.opencvlib.imageFrameUtils;
 
-import java.io.IOException;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
@@ -15,7 +14,7 @@ import org.opencv.core.Rect;
  * @author bibil
  */
 public interface ImageUtils {
-    
+
     /**
      * Paint the dot clicked in the image.
      *
@@ -24,6 +23,7 @@ public interface ImageUtils {
      * @return the image pointed
      */
     public Mat circle(Point point, Mat imagePointed);
+
     /**
      * Mark a grid made by two dots in the image
      *
@@ -33,15 +33,15 @@ public interface ImageUtils {
      * @return the clicked Grid Image
      */
     public Mat rectangle(Point beginPoint, Point endPoint, Mat imageGrid);
+
     /**
-     * Capture the Rect of the grid for identification. 
-     * Allows to capture the rect so it can be possible to indentify which 
-     * grid has a certain egg inside.
+     * Capture the Rect of the grid for identification.Allows to capture the
+     * rect so it can be possible to indentify which grid has a certain egg
+     * inside.
      *
      * @param beginGrid
      * @param endGrid
      * @return the area Rect of the clicked Grid
-     * @throws IOException
      */
-    public Rect captureGridMat(Point beginGrid, Point endGrid) throws IOException;
+    public Rect captureGridMat(Point beginGrid, Point endGrid);
 }

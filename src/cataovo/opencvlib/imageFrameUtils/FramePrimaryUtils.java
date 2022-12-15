@@ -6,13 +6,9 @@
 package cataovo.opencvlib.imageFrameUtils;
 
 import cataovo.entities.Frame;
-import cataovo.entities.Point;
-import cataovo.opencvlib.converters.Converter;
 import cataovo.opencvlib.wrappers.PointWrapper;
 import cataovo.opencvlib.wrappers.RectWrapper;
-import java.util.logging.Level;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 
 
 /**
@@ -29,6 +25,15 @@ public class FramePrimaryUtils extends FrameUtils{
         super();
     }
 
+    public Frame getFrame() {
+        return frame;
+    }
+
+    /**
+     *
+     * @param pw
+     * @return
+     */
     @Override
     public Icon drawCircle(PointWrapper pw) {
         return super.dot(pw);

@@ -22,7 +22,6 @@ import java.util.logging.Logger;
 public class ImageUtilsImplements implements ImageUtils{
 
     private static final Logger LOG = Logger.getLogger(ImageUtilsImplements.class.getName());
-    private static volatile ImageUtilsImplements IMAGE_UTILS;
     
     /**
      * Paint the dot clicked in the image.
@@ -62,23 +61,21 @@ public class ImageUtilsImplements implements ImageUtils{
     }
 
     /**
-     * Capture the Rect of the grid for identification. 
-     * Allows to capture the rect so it can be possible to indentify which 
-     * grid has a certain egg inside.
+     * Capture the Rect of the grid for identification.Allows to capture the rect so it can be possible to indentify which 
+ grid has a certain egg inside.
      *
      * @param beginGrid
      * @param endGrid
      * @return the area Rect of the clicked Grid
-     * @throws IOException
      */
     @Override
-    public Rect captureGridMat(Point beginGrid, Point endGrid) throws IOException {
+    public Rect captureGridMat(Point beginGrid, Point endGrid){
         LOG.log(Level.INFO, "Capture the Region...");
         Rect grid = new Rect();
         grid.x = (int) beginGrid.x;
         grid.y = (int) beginGrid.y;
-        grid.width = (int) (endGrid.x - beginGrid.x);
-        grid.height = (int) (endGrid.y - beginGrid.y);
+        grid.width = (int) (beginGrid.x - endGrid.x);
+        grid.height = (int) (beginGrid.y - endGrid.y);
         return grid;
 
     }
