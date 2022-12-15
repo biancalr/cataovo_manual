@@ -29,7 +29,7 @@ import javax.swing.Icon;
  *
  * @author bibil
  */
-public class MainPageControllerImplements implements MainPageController{
+public class MainPageControllerImplements implements MainPageController {
 
     private static final Logger LOG = Logger.getLogger(MainPageControllerImplements.class.getName());
     private FramePrimaryUtils frameUtils = null;
@@ -92,32 +92,14 @@ public class MainPageControllerImplements implements MainPageController{
     private boolean showFrameOnScreen(JLabel parentName, JLabel parent, Object frame) throws ImageNotValidException {
         parent.setText(null);
         if (frame instanceof Frame) {
-            return showObjectFrameHelper(frame, parent, parentName);
-        } else if (frame instanceof Icon) {
-            Icon im = (Icon) frame;
-            parent.setIcon(im);
-            return true;
-        } else {
-            throw new ImageNotValidException("Image type not supported yet. Please try again under another format.");
-        }
-        
-    }
-
-    /**
-     * 
-     * @param frame
-     * @param parent
-     * @param parentName
-     * @return 
-     */
-    private boolean showObjectFrameHelper(Object frame, JLabel parent, JLabel parentName) {
-        Frame fr = (Frame) frame;
-        if (fr.getPaletteFrame() != null && fr.getPaletteFrame().exists()) {
-            File f = (File) fr.getPaletteFrame();
-            showImageFile(f);
-            parent.setIcon(showImageFile(f));
-            parentName.setText(fr.getName());
-            return true;
+            Frame fr = (Frame) frame;
+            if (fr.getPaletteFrame() != null && fr.getPaletteFrame().exists()) {
+                File f = (File) fr.getPaletteFrame();
+                showImageFile(f);
+                parent.setIcon(showImageFile(f));
+                parentName.setText(fr.getName());
+                return true;
+            }
         }
         return false;
     }
