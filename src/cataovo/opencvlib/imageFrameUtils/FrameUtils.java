@@ -6,6 +6,7 @@
 package cataovo.opencvlib.imageFrameUtils;
 
 import cataovo.entities.Frame;
+import cataovo.entities.Point;
 import cataovo.opencvlib.converters.Converter;
 import cataovo.opencvlib.wrappers.MatWrapper;
 import cataovo.opencvlib.wrappers.PointWrapper;
@@ -15,22 +16,23 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-
 /**
  *
  * @author bibil
  */
 public class FrameUtils {
-    
+
     private static final Logger LOG = Logger.getLogger(FrameUtils.class.getName());
-    private PointWrapper pointWrapper = null;
-    private RectWrapper rectWrapper = null;
-    private MatWrapper matWrapper = null;
+    private PointWrapper pointWrapper;
+    private RectWrapper rectWrapper;
+    private MatWrapper matWrapper;
+    private Frame frame = null;
 
     public FrameUtils(Frame frame) {
         pointWrapper = new PointWrapper();
         rectWrapper = new RectWrapper();
         matWrapper = new MatWrapper();
+        this.frame = frame;
     }
 
     public FrameUtils() {
@@ -43,32 +45,43 @@ public class FrameUtils {
         return pointWrapper;
     }
 
-    public void setPointWrapper(PointWrapper pointWrapper) {
-        this.pointWrapper = pointWrapper;
-    }
-
     public RectWrapper getRectWrapper() {
         return rectWrapper;
-    }
-
-    public void setRectWrapper(RectWrapper rectWrapper) {
-        this.rectWrapper = rectWrapper;
     }
 
     public MatWrapper getMatWrapper() {
         return matWrapper;
     }
 
-    public void setMatWrapper(MatWrapper matWrapper) {
-        this.matWrapper = matWrapper;
+    /**
+     *
+     * @param pw
+     * @return
+     */
+    public Icon drawCircle(PointWrapper pw) {
+        LOG.log(Level.INFO, "Starting..");
+        matWrapper = Converter.getInstance().convertImageFrameToMat(frame);
+        matWrapper.setOpencvMat(ImageUtils.getInstance().circle(pw.getOpencvPoint(), matWrapper.getOpencvMat()).clone());
+        return new ImageIcon(Converter.getInstance().convertMatToImg(matWrapper).get());
     }
 
-    public Icon drawCircle(PointWrapper pw, Frame frame) {
+    /**
+     *
+     * @param rw
+     * @return
+     */
+    public Icon drawRectangle(RectWrapper rw) {
         LOG.log(Level.INFO, "Starting..");
-        MatWrapper wrapper = Converter.getInstance().convertImageFrameToMat(frame);
-        wrapper.setMat(ImageUtils.getInstance().circle(pw.getOpencvPoint(), wrapper.getMat()).clone());
-        return new ImageIcon(Converter.getInstance().convertMatToImg(wrapper).get());
+        matWrapper = Converter.getInstance().convertImageFrameToMat(frame);
+        pointWrapper = new PointWrapper(
+                           new Point(rw.getRegion().getInitialPoint().getX(), 
+                                   rw.getRegion().getInitialPoint().getY()));
+        PointWrapper pw2 = new PointWrapper(new Point(
+                Math.abs(rw.getRegion().getInitialPoint().getX() - rw.getRegion().getWidth()),
+                Math.abs(rw.getRegion().getInitialPoint().getY() - rw.getRegion().getHeight())));
+        matWrapper.setOpencvMat(ImageUtils.getInstance().rectangle(
+                pointWrapper.getOpencvPoint(), pw2.getOpencvPoint(), matWrapper.getOpencvMat()));
+        return new ImageIcon(Converter.getInstance().convertMatToImg(matWrapper).get());
     }
-    
-    
+
 }

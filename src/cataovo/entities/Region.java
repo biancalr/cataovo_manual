@@ -5,6 +5,7 @@
  */
 package cataovo.entities;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -13,16 +14,16 @@ import java.util.Objects;
  *
  * @author bibil
  */
-public final class Region implements Cloneable{
+public final class Region implements Cloneable, Serializable{
 
     /**
-     * The region's lenght
+     * The region's height
      */
-    private Double lenght;
+    private int height;
     /**
      * The region's width
      */
-    private Double width;
+    private int width;
     /**
      * The initial point that every Region begins to be calculated
      */
@@ -34,10 +35,16 @@ public final class Region implements Cloneable{
      * @param width
      * @param initialPoint
      */
-    public Region(Double length, Double width, Point initialPoint) {
-        this.lenght = length;
+    public Region(int length, int width, Point initialPoint) {
+        this.height = length;
         this.width = width;
         this.initialPoint = initialPoint;
+    }
+    
+    public Region (Point initialPoint, Point finalPoint){
+        this.initialPoint = initialPoint;
+        this.width = initialPoint.getX() - finalPoint.getX();
+        this.height = initialPoint.getY() - finalPoint.getY();
     }
 
     /**
@@ -45,31 +52,31 @@ public final class Region implements Cloneable{
      */
     public Region() {
         this.initialPoint = new Point();
-        this.lenght = 0.0;
-        this.width = 0.0;
+        this.height = 0;
+        this.width = 0;
     }
 
     /**
      * 
-     * @return the lenght
+     * @return the height
      */
-    public Double getLenght() {
-        return lenght;
+    public int getHeight() {
+        return height;
     }
 
     /**
      * 
-     * @param lenght a lenght to set
+     * @param height a height to set
      */
-    public void setLenght(Double lenght) {
-        this.lenght = lenght;
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     /**
      * 
      * @return the width
      */
-    public Double getWidth() {
+    public int getWidth() {
         return width;
     }
 
@@ -77,7 +84,7 @@ public final class Region implements Cloneable{
      * 
      * @param width a width to set
      */
-    public void setWidth(Double width) {
+    public void setWidth(int width) {
         this.width = width;
     }
 
@@ -101,7 +108,7 @@ public final class Region implements Cloneable{
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append(initialPoint.toString())
-                .append(",").append(lenght).append(",").append(width);
+                .append(",").append(height).append(",").append(width);
         return sb.toString();
     }
 
@@ -116,14 +123,14 @@ public final class Region implements Cloneable{
         }
         
         Region reg = (Region) obj;
-        return (Objects.equals(width, reg.width) && Objects.equals(lenght, reg.lenght)
+        return (Objects.equals(width, reg.width) && Objects.equals(height, reg.height)
                 && Objects.equals(initialPoint, reg.initialPoint));
     }
 
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 97 * hash + Objects.hashCode(this.lenght);
+        hash = 97 * hash + Objects.hashCode(this.height);
         hash = 97 * hash + Objects.hashCode(this.width);
         hash = 97 * hash + Objects.hashCode(this.initialPoint);
         return hash;

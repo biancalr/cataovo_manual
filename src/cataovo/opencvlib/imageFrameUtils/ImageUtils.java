@@ -38,7 +38,7 @@ public class ImageUtils {
     }
     
     /**
-     * Paint the point clicked in the image.
+     * Paint the dot clicked in the image.
      *
      * @param point axis to paint
      * @param imagePointed the image to draw a circule point
@@ -48,7 +48,7 @@ public class ImageUtils {
         //draw the circle
         LOG.log(Level.INFO, "Draw the circle...");
         Imgproc.circle(imagePointed, 
-                new org.opencv.core.Point(point.x, point.y),
+                point,
                 2,
                 new Scalar(255, 0, 255),
                 Core.FILLED);
@@ -56,7 +56,7 @@ public class ImageUtils {
     }
     
     /**
-     * Mark a grid.
+     * Mark a grid made by two dots in the image
      *
      * @param beginPoint
      * @param endPoint
@@ -73,8 +73,9 @@ public class ImageUtils {
     }
 
     /**
-     * Capture the Rect of the grid for identification. Allows to capture the
-     * rect so it can be possible to indentify which grid has eggs inside.
+     * Capture the Rect of the grid for identification. 
+     * Allows to capture the rect so it can be possible to indentify which 
+     * grid has a certain egg inside.
      *
      * @param beginGrid
      * @param endGrid

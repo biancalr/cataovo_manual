@@ -7,6 +7,7 @@ package cataovo.entities;
 
 import cataovo.exceptions.DirectoryNotValidException;
 import java.io.File;
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.Objects;
 import java.util.Queue;
@@ -16,7 +17,7 @@ import java.util.Queue;
  *
  * @author bibil
  */
-public final class Palette{
+public final class Palette implements Cloneable, Serializable{
 
     /**
      * The path where the palette is localized.
@@ -248,4 +249,9 @@ public final class Palette{
         return f.exists() && f.isDirectory();
     }
 
+    @Override
+    public Palette clone() throws CloneNotSupportedException {
+        return (Palette) super.clone(); //To change body of generated methods, choose Tools | Templates.
+    }
+    
 }
