@@ -100,6 +100,10 @@ public class MainPageControllerImplements implements MainPageController {
                 parentName.setText(fr.getName());
                 return true;
             }
+        } else if (frame instanceof Icon) {
+            Icon icon = (Icon) frame;
+            parent.setIcon(icon);
+            return true;
         }
         return false;
     }
