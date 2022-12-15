@@ -83,7 +83,7 @@ public abstract class FrameUtils {
         return new ImageIcon(Converter.getInstance().convertMatToImg(matWrapper).get());
     }
 
-    protected Icon square(RectWrapper rw) {
+    protected Icon rectangle(RectWrapper rw) {
         LOG.log(Level.INFO, "Starting..");
 //        mockRegionsInFrame();
         if (!this.frame.getRegionsContainingEggs().isEmpty()) {
@@ -112,6 +112,7 @@ public abstract class FrameUtils {
     }
 
     /**
+     * Draws dinamically each grid of the regions in the frame
      *
      * @return
      */

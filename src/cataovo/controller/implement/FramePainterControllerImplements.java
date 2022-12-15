@@ -68,7 +68,9 @@ public class FramePainterControllerImplements implements FramePainterController 
     private Icon paintGridOnFrame(Region region) throws DirectoryNotValidException, CloneNotSupportedException {
         this.frameUtils = new FramePrimaryUtils(MainPageResources.getInstance().getCurrentFrame().clone());
         RectWrapper rw = new RectWrapper(region);
-        return frameUtils.drawRectangle(rw);
+        Icon icon = frameUtils.drawRectangle(rw);
+        MainPageResources.getInstance().getCurrentFrame().getRegionsContainingEggs().addAll(frameUtils.getFrame().getRegionsContainingEggs());
+        return icon;
     }
     
     

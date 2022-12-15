@@ -26,6 +26,7 @@ public class MainPageResources {
     private MyFileListHandler fileListHandler;
     private String current;
     private Palette palette;
+    private Palette paletteToSave;
     private Frame currentFrame;
     private File savingFolder;
     private static volatile MainPageResources MAIN_PAGE_RESOURCES;
@@ -36,6 +37,7 @@ public class MainPageResources {
         savingFolder = getFileFolder(new File(current));
         fileListHandler = new MyFileListHandler();
         palette = new Palette();
+        paletteToSave = new Palette();
         currentFrame = new Frame();
     }
     
@@ -86,6 +88,14 @@ public class MainPageResources {
 
     public void setPalette(Palette palette) {
         this.palette = palette;
+    }
+
+    public Palette getPaletteToSave() {
+        return paletteToSave;
+    }
+
+    public void setPaletteToSave(Palette paletteToSave) {
+        this.paletteToSave = paletteToSave;
     }
 
     public Frame getCurrentFrame() {

@@ -46,7 +46,7 @@ public class FramePrimaryUtils extends FrameUtils{
      */
     @Override
     public Icon drawRectangle(RectWrapper rw) {
-        return super.square(rw);
+        return super.rectangle(rw);
     }
     
 }
