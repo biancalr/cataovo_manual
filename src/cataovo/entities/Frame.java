@@ -8,6 +8,7 @@ package cataovo.entities;
 import cataovo.exceptions.ImageNotValidException;
 import cataovo.filechooser.handler.FileExtension;
 import java.io.File;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -17,7 +18,7 @@ import java.util.Set;
  *
  * @author bibil
  */
-public final class Frame implements Cloneable{
+public final class Frame implements Cloneable, Serializable{
 
     /**
      * the frame identifier name

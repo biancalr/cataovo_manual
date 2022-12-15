@@ -30,8 +30,8 @@ public class cataovo {
             System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
             
             System.out.println("Realizando testes com as entidades");
-            Point p = new Point(1.0, 2.0);
-            Region r = new Region(3.0, 4.0, p);
+            Point p = new Point(1, 2);
+            Region r = new Region(3, 4, p);
             System.out.println(p.toString());
             System.out.println(r.toString());
             

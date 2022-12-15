@@ -32,7 +32,7 @@ public class PointWrapper {
      * @return a cataovo.entities.Point
      */
     public cataovo.entities.Point getPoint() {
-        return new cataovo.entities.Point(point.x, point.y);
+        return new cataovo.entities.Point((int)point.x, (int)point.y);
     }
 
     /**

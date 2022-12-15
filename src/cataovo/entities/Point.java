@@ -4,6 +4,7 @@
  */
 package cataovo.entities;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -12,23 +13,23 @@ import java.util.Objects;
  *
  * @author bibil
  */
-public final class Point implements Cloneable{
+public final class Point implements Cloneable, Serializable{
 
     /**
      * The X axis of the initial {@code Point}
      */
-    private Double x;
+    private int x;
     /**
      * The Y axis of the initial {@code Point}
      */
-    private Double y;
+    private int y;
 
     /**
      *
      * @param x a X axis to set
      * @param y a Y axis to set
      */
-    public Point(Double x, Double y) {
+    public Point(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -37,15 +38,15 @@ public final class Point implements Cloneable{
      * Empty constructor
      */
     public Point() {
-        this.x = 0.0;
-        this.y = 0.0;
+        this.x = 0;
+        this.y = 0;
     }
 
     /**
      *
      * @return the X axis
      */
-    public Double getX() {
+    public int getX() {
         return x;
     }
 
@@ -53,7 +54,7 @@ public final class Point implements Cloneable{
      *
      * @param x an X axis to set
      */
-    public void setX(Double x) {
+    public void setX(int x) {
         this.x = x;
     }
 
@@ -61,7 +62,7 @@ public final class Point implements Cloneable{
      *
      * @return the Y axis
      */
-    public Double getY() {
+    public int getY() {
         return y;
     }
 
@@ -69,7 +70,7 @@ public final class Point implements Cloneable{
      *
      * @param y a Y axis to set
      */
-    public void setY(Double y) {
+    public void setY(int y) {
         this.y = y;
     }
 

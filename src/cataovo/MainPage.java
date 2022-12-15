@@ -7,12 +7,12 @@ package cataovo;
 
 import cataovo.controller.FileSelectionController;
 import cataovo.controller.MainPageController;
-import cataovo.entities.Frame;
+import cataovo.controller.implement.FileSelectionControllerImplement;
+import cataovo.controller.implement.MainPageControllerImplements;
 import cataovo.entities.Point;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
 import cataovo.resources.MainPageResources;
-import java.awt.Image;
 import java.io.FileNotFoundException;
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -35,8 +35,8 @@ public class MainPage extends javax.swing.JFrame {
     public MainPage() {
         initComponents();
         try {
-            fileSelectionController = new FileSelectionController();
-            mainPageController = new MainPageController();
+            fileSelectionController = new FileSelectionControllerImplement();
+            mainPageController = new MainPageControllerImplements();
         } catch (DirectoryNotValidException ex) {
             LOG.log(Level.SEVERE, ex.getMessage());
         }
@@ -164,9 +164,9 @@ public class MainPage extends javax.swing.JFrame {
                         .addGap(52, 52, 52)
                         .addComponent(jButton3))
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                        .addContainerGap()
+                        .addGap(44, 44, 44)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(82, Short.MAX_VALUE))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Manual", jDesktopPane1);
@@ -214,15 +214,13 @@ public class MainPage extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 14, Short.MAX_VALUE))
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jTabbedPane1)
-                .addContainerGap())
+                .addGap(2, 2, 2))
         );
 
         pack();
@@ -274,10 +272,14 @@ public class MainPage extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
+        LOG.log(Level.INFO, "Evento: {0}", evt.getPoint());
+        Icon frame;
         try {
-            LOG.log(Level.INFO, "Evento: {0}", evt.getPoint());
-            Icon frame = mainPageController.paintDotOnFrame(new Point((double) evt.getX(), (double) evt.getY()));
-            mainPageController.showFramesOnScreen(jLabel1, jLabel2, frame);
+            frame = mainPageController.paintFormat(new Point(evt.getX(), evt.getY()));
+            if (frame != null) {
+                mainPageController.showFramesOnScreen(jLabel1, jLabel2, frame);
+                LOG.log(Level.INFO, "Presenting frame on screen");
+            }
         } catch (DirectoryNotValidException | ImageNotValidException | CloneNotSupportedException ex) {
             LOG.log(Level.SEVERE, null, ex);
         } 

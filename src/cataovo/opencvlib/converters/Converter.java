@@ -18,7 +18,6 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 
@@ -54,7 +53,7 @@ public final class Converter {
         Mat m = new Mat();
         Optional<Mat> optional = Optional.ofNullable(Imgcodecs.imread(current.getPaletteFrame().getPath()));
         optional.ifPresent((t) -> t.copyTo(m));
-        MatWrapper wrapper = new MatWrapper(m.rows(), m.cols(), m.type(), m.clone(), current.getPaletteFrame().getAbsolutePath());
+        MatWrapper wrapper = new MatWrapper(m.clone(), current.getPaletteFrame().getAbsolutePath());
         return wrapper;
         
     }
@@ -89,7 +88,20 @@ public final class Converter {
     private BufferedImage matToBuffedImageConvert(MatWrapper current, FileExtension extension){
         LOG.log(Level.INFO, "Error while converting a MAT to: {0}", extension.name());
         MatOfBytesWrapper ofBytesWrapper = new MatOfBytesWrapper();
-        boolean codeOk = Imgcodecs.imencode("." + extension.toString().toLowerCase(), current.getMat(), ofBytesWrapper);
+        boolean codeOk = Imgcodecs.imencode("." + extension.toString().toLowerCase(), current.getOpencvMat(), ofBytesWrapper);
+        BufferedImage output = makeConversion(codeOk, ofBytesWrapper, extension);
+        return output;
+        
+    }
+
+    /**
+     * 
+     * @param codeOk
+     * @param ofBytesWrapper
+     * @param extension
+     * @return 
+     */
+    private BufferedImage makeConversion(boolean codeOk, MatOfBytesWrapper ofBytesWrapper, FileExtension extension) {
         BufferedImage output = null;
         if (codeOk) {
             byte[] byteArray = ofBytesWrapper.toArray();
@@ -99,9 +111,10 @@ public final class Converter {
             } catch (IOException ex) {
                 LOG.log(Level.SEVERE, "Error while converting a MAT to: " + extension.toString(), ex);
             }
-            
-        } 
-        return output;
+            return output;
+        } else {
+            return null;
+        }
         
     }
     
