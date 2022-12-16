@@ -212,7 +212,7 @@ public final class Palette implements Cloneable, Serializable{
         sb.append(pathName)
                 .append(getTheTotalNumberOfEggsPalette())
                 .append(",")
-                .append(frames);
+                .append(frames.toString());
         return sb.toString();
     }
 

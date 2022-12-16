@@ -5,6 +5,7 @@
  */
 package cataovo;
 
+import cataovo.constants.Constants;
 import cataovo.controller.FileSelectionController;
 import cataovo.controller.FramePainterController;
 import cataovo.controller.MainPageController;
@@ -38,8 +39,15 @@ public class MainPage extends javax.swing.JFrame {
     public MainPage() {
         initComponents();
         try {
+            //<editor-fold defaultstate="collapsed" desc=" Modify the jMenuItens names to make ActionCommands easyer ">
             jButton3.setEnabled(false);
             jButton2.setEnabled(false);
+            jMenuItem1.setText(Constants.ACTION_COMMAND_ABRIR_PASTA);
+            jMenuItem5.setText(Constants.ACTION_COMMAND_SELECIONAR_PASTA_DESTINO);
+            //</editor-fold>
+            
+            //</editor-fold>
+            
             fileSelectionController = new FileSelectionControllerImplement();
             mainPageController = new MainPageControllerImplements();
             framePainterController = new FramePainterControllerImplements();
@@ -259,10 +267,15 @@ public class MainPage extends javax.swing.JFrame {
                 LOG.info("You've reached the end of the Palette.");
                 jButton3.setEnabled(false);
                 jButton2.setEnabled(false);
+                if (!fileSelectionController.fileSelectionEvent(Constants.ACTION_COMMAND_SALVAR_ARQUIVO_FINAL, jDesktopPane1, true)) {
+                    LOG.log(Level.WARNING, "It wasn't possible to seve the Palette on a file");
+                } else {
+                    LOG.log(Level.INFO, "The palette was saved successfully!");
+                }
             }
-        } catch (ImageNotValidException | DirectoryNotValidException ex) {
+        } catch (ImageNotValidException | DirectoryNotValidException | FileNotFoundException ex) {
             LOG.log(Level.SEVERE, null, ex);
-        }
+        } 
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked

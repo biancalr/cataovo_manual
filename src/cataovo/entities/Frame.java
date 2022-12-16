@@ -183,7 +183,7 @@ public final class Frame implements Cloneable, Serializable{
         StringBuffer sb = new StringBuffer();
         sb.append(name)
                 .append(",")
-                .append(regionsContainingEggs);
+                .append(regionsContainingEggs.toString());
         return sb.toString();
     }
 

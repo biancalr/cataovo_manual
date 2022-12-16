@@ -77,7 +77,7 @@ public final class Point implements Cloneable, Serializable{
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append(x).append(",").append(y);
+        sb.append(x).append(",").append(y).append(",");
         return sb.toString();
     }
 

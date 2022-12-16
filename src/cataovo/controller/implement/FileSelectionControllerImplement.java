@@ -14,6 +14,7 @@ import cataovo.exceptions.ImageNotValidException;
 import cataovo.fileChooser.UI.MyFileChooserUI;
 import cataovo.filechooser.handler.FileExtension;
 import cataovo.resources.MainPageResources;
+import cataovo.threads.ThreadCreateRelatories;
 import java.awt.Component;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -33,6 +34,7 @@ public class FileSelectionControllerImplement implements FileSelectionController
 
     private static final Logger LOG = Logger.getLogger(FileSelectionControllerImplement.class.getName());
     private final MyFileChooserUI fileChooser;
+    private ThreadCreateRelatories createRelatories;
 
     public FileSelectionControllerImplement() throws DirectoryNotValidException {
         fileChooser = MainPageResources.getInstance().getFileChooserUI();
@@ -83,6 +85,8 @@ public class FileSelectionControllerImplement implements FileSelectionController
         if (file != null && file.exists()) {
             // Set the palette which represents the folder where the frames are contained
             MainPageResources.getInstance().setPalette(setNewPalette(file));
+            MainPageResources.getInstance().setPaletteToSave(new Palette());
+            MainPageResources.getInstance().getPaletteToSave().setDirectory(MainPageResources.getInstance().getPalette().getDirectory());
             MainPageResources.getInstance().getPalette().getFrames().poll();
             return true;
         } else {
@@ -165,9 +169,19 @@ public class FileSelectionControllerImplement implements FileSelectionController
      * 
      * @return 
      */
-    private boolean actionCommandSaveFinalFile() {
-        LOG.log(Level.INFO, "Final file save: start");
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private boolean actionCommandSaveFinalFile() throws DirectoryNotValidException {
+        try {
+            LOG.log(Level.INFO, "Final file save: start");
+            this.createRelatories = new ThreadCreateRelatories(
+                    MainPageResources.getInstance().getPaletteToSave(),
+                    MainPageResources.getInstance().getSavingFolder().getPath());
+            createRelatories.start();
+            createRelatories.join();
+            return true;
+        } catch (InterruptedException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            return false;
+        }
     }
 
     public MyFileChooserUI getFileChooser() {
