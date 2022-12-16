@@ -6,7 +6,10 @@
 package cataovo.opencvlib.wrappers;
 
 import cataovo.entities.Frame;
+import cataovo.entities.Point;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 
 /**
@@ -15,11 +18,14 @@ import org.opencv.imgcodecs.Imgcodecs;
  */
 public class MatWrapper{
 
+    private static final int DEPTH = CvType.CV_8U;
+    private final Point finalFramePoint = new Point(640, 480);
     private Mat mat;
     private String location;
     
     public MatWrapper() {
         location = null;
+        mat = new Mat(new Size(finalFramePoint.getX(), finalFramePoint.getY()), DEPTH);
     }
     
     public MatWrapper(Mat m, String location) {
