@@ -9,11 +9,14 @@ import cataovo.controller.FramePainterController;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
 import cataovo.exceptions.DirectoryNotValidException;
+import cataovo.opencvlib.converters.Converter;
 import cataovo.opencvlib.imageFrameUtils.FramePrimaryUtils;
+import cataovo.opencvlib.wrappers.MatWrapper;
 import cataovo.opencvlib.wrappers.PointWrapper;
 import cataovo.opencvlib.wrappers.RectWrapper;
 import cataovo.resources.MainPageResources;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -77,10 +80,15 @@ public class FramePainterControllerImplements implements FramePainterController 
     /**
      *
      * @return
+     * @throws cataovo.exceptions.DirectoryNotValidException
      */
     @Override
-    public boolean removeLastRegion() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Icon removeLastRegion() throws DirectoryNotValidException{
+        int size = MainPageResources.getInstance().getCurrentFrame().getRegionsContainingEggs().size();
+        MainPageResources.getInstance().getCurrentFrame().getRegionsContainingEggs().remove(
+            (Region) MainPageResources.getInstance().getCurrentFrame().getRegionsContainingEggs().toArray()[size-1]
+        );
+        return new ImageIcon(Converter.getInstance().convertMatToImg(frameUtils.updateGridsOnFrame()).get());
     }
 
 }

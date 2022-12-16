@@ -6,6 +6,7 @@
 package cataovo.opencvlib.imageFrameUtils;
 
 import cataovo.entities.Frame;
+import cataovo.opencvlib.wrappers.MatWrapper;
 import cataovo.opencvlib.wrappers.PointWrapper;
 import cataovo.opencvlib.wrappers.RectWrapper;
 import javax.swing.Icon;
@@ -49,4 +50,11 @@ public class FramePrimaryUtils extends FrameUtils{
         return super.rectangle(rw);
     }
     
+    /**
+     * 
+     * @return 
+     */
+    public MatWrapper updateGridsOnFrame(){
+        return super.preprareGrids();
+    }
 }

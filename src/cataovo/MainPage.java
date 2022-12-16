@@ -39,6 +39,7 @@ public class MainPage extends javax.swing.JFrame {
         initComponents();
         try {
             jButton3.setEnabled(false);
+            jButton2.setEnabled(false);
             fileSelectionController = new FileSelectionControllerImplement();
             mainPageController = new MainPageControllerImplements();
             framePainterController = new FramePainterControllerImplements();
@@ -212,8 +213,10 @@ public class MainPage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        if (!framePainterController.removeLastRegion()){
-            LOG.log(Level.WARNING, "There was a problem when removing the region");
+        try {
+            mainPageController.showFramesOnScreen(jLabel1, jLabel2, framePainterController.removeLastRegion());
+        } catch (DirectoryNotValidException | ImageNotValidException ex) {
+            LOG.log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -231,6 +234,7 @@ public class MainPage extends javax.swing.JFrame {
             boolean wasFileSelected = fileSelectionController.fileSelectionEvent(evt.getActionCommand(), jDesktopPane1, true);
             if (wasFileSelected && MainPageResources.getInstance().getCurrentFrame().getPaletteFrame().exists()) {
                 jButton3.setEnabled(wasFileSelected);
+                jButton2.setEnabled(wasFileSelected);
                 mainPageController.showFramesOnScreen(jLabel1, jLabel2, MainPageResources.getInstance().getCurrentFrame());
             }
         } catch (DirectoryNotValidException | FileNotFoundException | ImageNotValidException ex) {
@@ -254,6 +258,7 @@ public class MainPage extends javax.swing.JFrame {
             } else {
                 LOG.info("You've reached the end of the Palette.");
                 jButton3.setEnabled(false);
+                jButton2.setEnabled(false);
             }
         } catch (ImageNotValidException | DirectoryNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);

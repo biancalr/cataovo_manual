@@ -25,6 +25,12 @@ public interface FramePainterController {
      */
     public Icon paintFormat(Point point) throws DirectoryNotValidException, CloneNotSupportedException;
 
-    public boolean removeLastRegion();
+    /**
+     * Removes the last demarked region
+     *
+     * @return the image updated
+     * @throws DirectoryNotValidException
+     */
+    public Icon removeLastRegion() throws DirectoryNotValidException;
     
 }
