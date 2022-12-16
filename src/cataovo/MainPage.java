@@ -222,6 +222,7 @@ public class MainPage extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
+            LOG.log(Level.INFO, "Removing last created region");
             mainPageController.showFramesOnScreen(jLabel1, jLabel2, framePainterController.removeLastRegion());
         } catch (DirectoryNotValidException | ImageNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);

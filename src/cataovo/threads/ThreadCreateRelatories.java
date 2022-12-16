@@ -8,6 +8,7 @@ package cataovo.threads;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import cataovo.entities.Palette;
+import cataovo.entities.Region;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -51,7 +52,7 @@ public class ThreadCreateRelatories extends Thread {
         }
         try (FileWriter csvWriter = new FileWriter(savingDirectory + "//relatories//" + dst + ".csv");
                 PrintWriter csvPrinter = new PrintWriter(csvWriter);) {
-            
+
             sb = createContent();
             csvPrinter.print(sb);
 
@@ -67,8 +68,29 @@ public class ThreadCreateRelatories extends Thread {
      * @return
      */
     private synchronized StringBuffer createContent() {
-        StringBuffer sb = new StringBuffer();
-        sb.append(palette.toString());
+        StringBuffer sb = new StringBuffer(palette.getDirectory().getPath());
+        sb.append("|");
+        sb.append(palette.getTheTotalNumberOfEggsPalette());
+        palette.getFrames().stream().forEachOrdered((f) -> {
+            sb.append("|");
+            sb.append(f.getName());
+            f.getRegionsContainingEggs().stream().map((r) -> {
+                sb.append(",");
+                sb.append(r.getInitialPoint().getX());
+                return r;
+            }).map((r) -> {
+                sb.append(",");
+                sb.append(r.getInitialPoint().getY());
+                return r;
+            }).map((r) -> {
+                sb.append(",");
+                sb.append(r.getWidth());
+                return r;
+            }).forEachOrdered((r) -> {
+                sb.append(",");
+                sb.append(r.getHeight());
+            });
+        });
         return sb;
     }
 
