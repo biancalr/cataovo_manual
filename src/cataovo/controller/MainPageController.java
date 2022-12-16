@@ -6,7 +6,6 @@
 package cataovo.controller;
 
 import cataovo.entities.Frame;
-import cataovo.entities.Point;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
 import javax.swing.Icon;
@@ -54,5 +53,5 @@ public interface MainPageController {
      * @throws cataovo.exceptions.DirectoryNotValidException
      */
     public void onFrameFinished(JLabel jLabel1, JLabel jLabel2) throws ImageNotValidException, DirectoryNotValidException;
-    
+
 }

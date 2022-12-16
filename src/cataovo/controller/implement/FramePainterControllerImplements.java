@@ -45,6 +45,7 @@ public class FramePainterControllerImplements implements FramePainterController 
                 return null;
         }
     }
+
     /**
      *
      * @param point
@@ -72,6 +73,14 @@ public class FramePainterControllerImplements implements FramePainterController 
         MainPageResources.getInstance().getCurrentFrame().getRegionsContainingEggs().addAll(frameUtils.getFrame().getRegionsContainingEggs());
         return icon;
     }
-    
-    
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public boolean removeLastRegion() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

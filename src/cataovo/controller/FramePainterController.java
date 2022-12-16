@@ -24,5 +24,7 @@ public interface FramePainterController {
      * @throws CloneNotSupportedException 
      */
     public Icon paintFormat(Point point) throws DirectoryNotValidException, CloneNotSupportedException;
+
+    public boolean removeLastRegion();
     
 }

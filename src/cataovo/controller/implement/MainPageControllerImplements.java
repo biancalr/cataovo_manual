@@ -27,9 +27,9 @@ import javax.swing.Icon;
 public class MainPageControllerImplements implements MainPageController {
 
     private static final Logger LOG = Logger.getLogger(MainPageControllerImplements.class.getName());
-    
+
     public MainPageControllerImplements() {
- 
+
     }
 
     /**
@@ -123,11 +123,9 @@ public class MainPageControllerImplements implements MainPageController {
     @Override
     public void onFrameFinished(JLabel jLabel1, JLabel jLabel2) throws ImageNotValidException, DirectoryNotValidException {
         LOG.log(Level.INFO, "The frame was analysed. Charging next...");
-        if (MainPageResources.getInstance().getPalette().getFrames().iterator().hasNext()) {
-            toNextFrame(jLabel1, jLabel2);
-        } else {
-            LOG.info("You've reached the end of the Palette.");
-        }
+        MainPageResources.getInstance().getPaletteToSave().getFrames()
+                .offer(MainPageResources.getInstance().getCurrentFrame());
+        toNextFrame(jLabel1, jLabel2);
     }
 
 }

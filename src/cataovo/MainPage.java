@@ -38,6 +38,7 @@ public class MainPage extends javax.swing.JFrame {
     public MainPage() {
         initComponents();
         try {
+            jButton3.setEnabled(false);
             fileSelectionController = new FileSelectionControllerImplement();
             mainPageController = new MainPageControllerImplements();
             framePainterController = new FramePainterControllerImplements();
@@ -211,7 +212,9 @@ public class MainPage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        if (!framePainterController.removeLastRegion()){
+            LOG.log(Level.WARNING, "There was a problem when removing the region");
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -227,6 +230,7 @@ public class MainPage extends javax.swing.JFrame {
             LOG.log(Level.INFO, evt.paramString());
             boolean wasFileSelected = fileSelectionController.fileSelectionEvent(evt.getActionCommand(), jDesktopPane1, true);
             if (wasFileSelected && MainPageResources.getInstance().getCurrentFrame().getPaletteFrame().exists()) {
+                jButton3.setEnabled(wasFileSelected);
                 mainPageController.showFramesOnScreen(jLabel1, jLabel2, MainPageResources.getInstance().getCurrentFrame());
             }
         } catch (DirectoryNotValidException | FileNotFoundException | ImageNotValidException ex) {
@@ -245,7 +249,12 @@ public class MainPage extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         try {
-            mainPageController.onFrameFinished(jLabel1, jLabel2);
+            if (MainPageResources.getInstance().getPalette().getFrames().iterator().hasNext()) {
+                mainPageController.onFrameFinished(jLabel1, jLabel2);
+            } else {
+                LOG.info("You've reached the end of the Palette.");
+                jButton3.setEnabled(false);
+            }
         } catch (ImageNotValidException | DirectoryNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
@@ -262,7 +271,7 @@ public class MainPage extends javax.swing.JFrame {
             }
         } catch (DirectoryNotValidException | ImageNotValidException | CloneNotSupportedException ex) {
             LOG.log(Level.SEVERE, null, ex);
-        } 
+        }
     }//GEN-LAST:event_jLabel2MouseClicked
 
     /**
