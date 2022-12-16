@@ -20,6 +20,7 @@ import java.io.FileNotFoundException;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import javax.swing.Icon;
+import javax.swing.JOptionPane;
 import org.opencv.core.Core;
 
 /**
@@ -222,10 +223,11 @@ public class MainPage extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
-            LOG.log(Level.INFO, "Removing last created region");
+            LOG.log(Level.INFO, "Removing the last created region");
             mainPageController.showFramesOnScreen(jLabel1, jLabel2, framePainterController.removeLastRegion());
         } catch (DirectoryNotValidException | ImageNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(jPanel1, ex);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -248,6 +250,7 @@ public class MainPage extends javax.swing.JFrame {
             }
         } catch (DirectoryNotValidException | FileNotFoundException | ImageNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(jPanel1, ex);
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
@@ -255,8 +258,10 @@ public class MainPage extends javax.swing.JFrame {
         try {
             LOG.log(Level.INFO, evt.paramString());
             fileSelectionController.fileSelectionEvent(evt.getActionCommand(), jDesktopPane1, true);
+            JOptionPane.showMessageDialog(jPanel1, "The diretory to save the relatory was changed successfully");
         } catch (DirectoryNotValidException | FileNotFoundException | ImageNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(jPanel1, ex);
         }
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
@@ -270,12 +275,15 @@ public class MainPage extends javax.swing.JFrame {
                 jButton2.setEnabled(false);
                 if (!fileSelectionController.fileSelectionEvent(Constants.ACTION_COMMAND_SALVAR_ARQUIVO_FINAL, jDesktopPane1, true)) {
                     LOG.log(Level.WARNING, "It wasn't possible to seve the Palette on a file");
+                    JOptionPane.showMessageDialog(jPanel1, "It wasn't possible to seve the Palette on a file");
                 } else {
                     LOG.log(Level.INFO, "The palette was saved successfully!");
+                    JOptionPane.showMessageDialog(jPanel1, "The palette was saved successfully!");
                 }
             }
         } catch (ImageNotValidException | DirectoryNotValidException | FileNotFoundException ex) {
             LOG.log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(jPanel1, ex);
         } 
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -290,6 +298,7 @@ public class MainPage extends javax.swing.JFrame {
             }
         } catch (DirectoryNotValidException | ImageNotValidException | CloneNotSupportedException ex) {
             LOG.log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(jPanel1, ex);
         }
     }//GEN-LAST:event_jLabel2MouseClicked
 

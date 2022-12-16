@@ -83,10 +83,14 @@ public class FramePainterControllerImplements implements FramePainterController 
     @Override
     public Icon removeLastRegion() throws DirectoryNotValidException {
         int size = MainPageResources.getInstance().getCurrentFrame().getRegionsContainingEggs().size();
-        MainPageResources.getInstance().getCurrentFrame().getRegionsContainingEggs().remove(
-                (Region) MainPageResources.getInstance().getCurrentFrame().getRegionsContainingEggs().toArray()[size - 1]
-        );
-        return new ImageIcon(Converter.getInstance().convertMatToImg(frameUtils.updateGridsOnFrame()).get());
+        if (size == 0) {
+            return new ImageIcon(Converter.getInstance().convertMatToImg(frameUtils.updateGridsOnFrame()).get());
+        } else {
+            MainPageResources.getInstance().getCurrentFrame().getRegionsContainingEggs().remove(
+                    (Region) MainPageResources.getInstance().getCurrentFrame().getRegionsContainingEggs().toArray()[size - 1]
+            );
+            return new ImageIcon(Converter.getInstance().convertMatToImg(frameUtils.updateGridsOnFrame()).get());
+        }
     }
 
 }
