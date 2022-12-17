@@ -14,7 +14,7 @@ import cataovo.exceptions.ImageNotValidException;
 import cataovo.fileChooser.UI.MyFileChooserUI;
 import cataovo.filechooser.handler.FileExtension;
 import cataovo.resources.MainPageResources;
-import cataovo.threads.ThreadCreateRelatories;
+import cataovo.threads.ThreadCreateRelatoryArchive;
 import java.awt.Component;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,7 +34,7 @@ public class FileSelectionControllerImplement implements FileSelectionController
 
     private static final Logger LOG = Logger.getLogger(FileSelectionControllerImplement.class.getName());
     private final MyFileChooserUI fileChooser;
-    private ThreadCreateRelatories createRelatories;
+    private ThreadCreateRelatoryArchive createRelatories;
 
     public FileSelectionControllerImplement() throws DirectoryNotValidException {
         fileChooser = MainPageResources.getInstance().getFileChooserUI();
@@ -172,9 +172,10 @@ public class FileSelectionControllerImplement implements FileSelectionController
     private boolean actionCommandSaveFinalFile() throws DirectoryNotValidException {
         try {
             LOG.log(Level.INFO, "Final file save: start");
-            this.createRelatories = new ThreadCreateRelatories(
+            this.createRelatories = new ThreadCreateRelatoryArchive(
                     MainPageResources.getInstance().getPaletteToSave(),
-                    MainPageResources.getInstance().getSavingFolder().getPath());
+                    MainPageResources.getInstance().getSavingFolder().getPath(),
+                    FileExtension.CSV);
             createRelatories.start();
             createRelatories.join();
             return true;

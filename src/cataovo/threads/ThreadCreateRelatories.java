@@ -8,7 +8,7 @@ package cataovo.threads;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import cataovo.entities.Palette;
-import cataovo.entities.Region;
+import cataovo.filechooser.handler.FileExtension;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -21,15 +21,17 @@ import javax.swing.JOptionPane;
  *
  * @author bibil
  */
-public class ThreadCreateRelatories extends Thread {
+public abstract class ThreadCreateRelatories extends Thread {
 
     private static final Logger LOG = Logger.getLogger(ThreadCreateRelatories.class.getName());
-    private Palette palette;
-    private String savingDirectory;
+    protected Palette palette;
+    protected String savingDirectory;
+    protected FileExtension fileExtension;
 
-    public ThreadCreateRelatories(Palette palette, String savingDirectory) {
+    public ThreadCreateRelatories(Palette palette, String savingDirectory, FileExtension extension) {
         this.palette = palette;
         this.savingDirectory = savingDirectory;
+        this.fileExtension = extension;
     }
 
     @Override
@@ -45,17 +47,17 @@ public class ThreadCreateRelatories extends Thread {
 
     private synchronized void createFile() {
         StringBuffer sb;
-        String dst = "Relatory_" + getDateTime("dd-MM-yyyy_HH-mm");
-        File directory = new File(savingDirectory + "//relatories");
+        String dstn = palette.getDirectory().getName() + "//" + "Relatory_" + getDateTime("dd-MM-yyyy_HH-mm");
+        File directory = new File(savingDirectory + "//relatories//" + palette.getDirectory().getName());
         if (!directory.exists()) {
             directory.mkdirs();
         }
-        try (FileWriter csvWriter = new FileWriter(savingDirectory + "//relatories//" + dst + ".csv");
+        try (FileWriter csvWriter = new FileWriter(savingDirectory + "//relatories//" + dstn + "." + this.fileExtension);
                 PrintWriter csvPrinter = new PrintWriter(csvWriter);) {
 
             sb = createContent();
             csvPrinter.print(sb);
-
+            LOG.log(Level.INFO, "The file will be saved under the name: {0}", dstn + "." + this.fileExtension);
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());
             JOptionPane.showMessageDialog(null, e.getMessage());
@@ -64,35 +66,9 @@ public class ThreadCreateRelatories extends Thread {
 
     /**
      *
-     * @param palette
-     * @return
+     * @return the content of the file;
      */
-    private synchronized StringBuffer createContent() {
-        StringBuffer sb = new StringBuffer(palette.getDirectory().getPath());
-        sb.append("|");
-        sb.append(palette.getTheTotalNumberOfEggsPalette());
-        palette.getFrames().stream().forEachOrdered((f) -> {
-            sb.append("|");
-            sb.append(f.getName());
-            f.getRegionsContainingEggs().stream().map((r) -> {
-                sb.append(",");
-                sb.append(r.getInitialPoint().getX());
-                return r;
-            }).map((r) -> {
-                sb.append(",");
-                sb.append(r.getInitialPoint().getY());
-                return r;
-            }).map((r) -> {
-                sb.append(",");
-                sb.append(r.getWidth());
-                return r;
-            }).forEachOrdered((r) -> {
-                sb.append(",");
-                sb.append(r.getHeight());
-            });
-        });
-        return sb;
-    }
+    protected abstract StringBuffer createContent(); 
 
     /**
      * Calculates the date and the time.
