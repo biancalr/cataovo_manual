@@ -166,8 +166,9 @@ public class FileSelectionControllerImplement implements FileSelectionController
     }
 
     /**
+     * Save the final relatories in the computer.
      * 
-     * @return 
+     * @return <code>True</code> in case of success. <code> False </code> otherwise.
      */
     private boolean actionCommandSaveFinalFile() throws DirectoryNotValidException {
         try {
