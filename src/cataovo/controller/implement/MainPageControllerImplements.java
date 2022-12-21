@@ -13,6 +13,7 @@ import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
 import cataovo.resources.MainPageResources;
 import java.awt.Color;
+import java.awt.Component;
 import java.io.File;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -20,6 +21,7 @@ import javax.swing.JLabel;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import javax.swing.Icon;
+import javax.swing.JTabbedPane;
 
 /**
  * Controls the actions with the Frames
@@ -29,10 +31,9 @@ import javax.swing.Icon;
 public class MainPageControllerImplements implements MainPageController {
 
     private static final Logger LOG = Logger.getLogger(MainPageControllerImplements.class.getName());
-    private MainPanelTabHelper tabControllerHelper = null;
 
     public MainPageControllerImplements() {
-        this.tabControllerHelper = new MainPanelTabHelper(false, 0, "Manual");
+
     }
 
     /**
@@ -47,36 +48,7 @@ public class MainPageControllerImplements implements MainPageController {
     public void toNextFrame(JLabel parentName, JLabel parent) throws ImageNotValidException, DirectoryNotValidException {
         Frame frame = MainPageResources.getInstance().getPalette().getFrames().poll();
         MainPageResources.getInstance().setCurrentFrame(frame);
-        showFramesOnScreen(parentName, parent, frame);
-    }
-
-    /**
-     *
-     * @param jLabel1
-     * @param jLabel2
-     * @param frame
-     * @return
-     * @throws ImageNotValidException
-     */
-    @Override
-    public boolean showFramesOnScreen(JLabel jLabel1, JLabel jLabel2, Icon frame) throws ImageNotValidException {
-        return showFrameOnScreen(jLabel1, jLabel2, frame);
-    }
-
-    /**
-     *
-     * @param parentName
-     * @param parent
-     * @param frame
-     * @throws cataovo.exceptions.ImageNotValidException
-     */
-    @Override
-    public void showFramesOnScreen(JLabel parentName, JLabel parent, Frame frame) throws ImageNotValidException {
-        LOG.log(Level.INFO, "Presenting the image {0} on screen...", frame.getName());
-        if (showFrameOnScreen(parentName, parent, frame)) {
-            parent.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-            parent.setVisible(true);
-        }
+        showFrameOnScreen(parentName, parent, frame);
     }
 
     /**
@@ -89,8 +61,11 @@ public class MainPageControllerImplements implements MainPageController {
      */
     private boolean showFrameOnScreen(JLabel parentName, JLabel parent, Object frame) throws ImageNotValidException {
         parent.setText(null);
+        parent.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        parent.setVisible(true);
         if (frame instanceof Frame) {
             Frame fr = (Frame) frame;
+            LOG.log(Level.INFO, "Presenting the image {0} on screen...", fr.getName());
             if (fr.getPaletteFrame() != null && fr.getPaletteFrame().exists()) {
                 File f = (File) fr.getPaletteFrame();
                 showImageFile(f);
@@ -129,6 +104,30 @@ public class MainPageControllerImplements implements MainPageController {
         MainPageResources.getInstance().getPaletteToSave().getFrames()
                 .offer(MainPageResources.getInstance().getCurrentFrame());
         toNextFrame(jLabel1, jLabel2);
+    }
+
+    /**
+     * From a given tab, it shows the frames selected
+     * @param tabComponent
+     * @param parentNameLabel
+     * @param parentLabel
+     * @throws ImageNotValidException
+     * @throws DirectoryNotValidException
+     */
+    @Override
+    public void showFramesOnSelectedTabScreen(Component tabComponent, JLabel parentNameLabel, JLabel parentLabel, Object frame) throws ImageNotValidException, DirectoryNotValidException {
+        if (tabComponent instanceof JTabbedPane jTabbedPane) { // if the component is another type of component just add another conditional
+            switch (jTabbedPane.getSelectedIndex()) {
+                case 0:
+                    showFrameOnScreen(parentNameLabel, parentLabel, frame);
+                    break;
+                case 1:
+                    showFrameOnScreen(parentNameLabel, parentLabel, frame);
+                    break;
+                default:
+                    throw new AssertionError();
+            }
+        }
     }
 
 }

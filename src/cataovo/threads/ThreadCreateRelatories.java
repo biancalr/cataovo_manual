@@ -52,12 +52,12 @@ public abstract class ThreadCreateRelatories extends Thread {
         if (!directory.exists()) {
             directory.mkdirs();
         }
-        try (FileWriter csvWriter = new FileWriter(savingDirectory + "//relatories//" + dstn + "." + this.fileExtension);
+        try (FileWriter csvWriter = new FileWriter(savingDirectory + "//relatories//" + dstn + "." + this.fileExtension.toString().toLowerCase());
                 PrintWriter csvPrinter = new PrintWriter(csvWriter);) {
 
             sb = createContent();
             csvPrinter.print(sb);
-            LOG.log(Level.INFO, "The file will be saved under the name: {0}", dstn + "." + this.fileExtension);
+            LOG.log(Level.INFO, "The file will be saved under the name: {0}", savingDirectory + "//relatories//" + dstn + "." + this.fileExtension.toString().toLowerCase());
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());
             JOptionPane.showMessageDialog(null, e.getMessage());

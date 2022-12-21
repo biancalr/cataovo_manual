@@ -21,7 +21,9 @@ import java.util.Locale;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import javax.swing.Icon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTabbedPane;
 import org.opencv.core.Core;
 
 /**
@@ -204,7 +206,7 @@ public class MainPage extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 640, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 18, Short.MAX_VALUE))
+                .addGap(0, 6, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -223,7 +225,7 @@ public class MainPage extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 640, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 18, Short.MAX_VALUE))
+                .addGap(0, 6, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -242,7 +244,7 @@ public class MainPage extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 640, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 18, Short.MAX_VALUE))
+                .addGap(0, 6, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -261,7 +263,7 @@ public class MainPage extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 640, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 18, Short.MAX_VALUE))
+                .addGap(0, 6, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -280,7 +282,7 @@ public class MainPage extends javax.swing.JFrame {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 640, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 18, Short.MAX_VALUE))
+                .addGap(0, 6, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -331,22 +333,22 @@ public class MainPage extends javax.swing.JFrame {
             jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jDesktopPane2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 663, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 646, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jDesktopPane2Layout.createSequentialGroup()
-                        .addGap(9, 9, 9)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane2Layout.createSequentialGroup()
-                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane2Layout.createSequentialGroup()
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(66, 66, 66)))))
-                .addGap(998, 998, 998))
+                        .addGap(30, 30, 30)
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 19, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jDesktopPane2Layout.createSequentialGroup()
+                        .addGap(88, 88, 88)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jDesktopPane2Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
         jDesktopPane2Layout.setVerticalGroup(
             jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -356,13 +358,13 @@ public class MainPage extends javax.swing.JFrame {
                         .addGap(23, 23, 23)
                         .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 521, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jDesktopPane2Layout.createSequentialGroup()
-                        .addGap(102, 102, 102)
+                        .addGap(103, 103, 103)
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(124, 124, 124)
+                        .addGap(123, 123, 123)
                         .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton4)
                             .addComponent(jButton5))
-                        .addGap(52, 52, 52)
+                        .addGap(92, 92, 92)
                         .addComponent(jButton1)))
                 .addContainerGap(35, Short.MAX_VALUE))
         );
@@ -418,7 +420,7 @@ public class MainPage extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
             LOG.log(Level.INFO, "Removing the last created region: {0}", evt.getActionCommand());
-            mainPageController.showFramesOnScreen(jLabel1, jLabel2, framePainterController.removeLastRegion());
+            mainPageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel1, jLabel2, framePainterController.removeLastRegion());
         } catch (DirectoryNotValidException | ImageNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
@@ -436,7 +438,11 @@ public class MainPage extends javax.swing.JFrame {
             if (wasFileSelected && MainPageResources.getInstance().getCurrentFrame().getPaletteFrame().exists()) {
                 jButton3.setEnabled(wasFileSelected);
                 jButton2.setEnabled(wasFileSelected);
-                mainPageController.showFramesOnScreen(jLabel1, jLabel2, MainPageResources.getInstance().getCurrentFrame());
+                mainPageController.showFramesOnSelectedTabScreen(
+                                        jTabbedPane1, 
+                                        jTabbedPane1.getSelectedIndex() == 0 ? jLabel1: jLabel4, // the label name
+                                        jTabbedPane1.getSelectedIndex() == 0 ? jLabel2: jLabel3, // the frame label
+                                        MainPageResources.getInstance().getCurrentFrame());
             }
         } catch (DirectoryNotValidException | FileNotFoundException | ImageNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -485,12 +491,12 @@ public class MainPage extends javax.swing.JFrame {
         try {
             frame = framePainterController.paintFormat(new Point(evt.getX(), evt.getY()));
             if (frame != null) {
-                mainPageController.showFramesOnScreen(jLabel1, jLabel2, frame);
+                mainPageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel1, jLabel2, frame);
                 LOG.log(Level.INFO, "Presenting frame on screen");
             }
         } catch (DirectoryNotValidException | ImageNotValidException | CloneNotSupportedException ex) {
             LOG.log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
+
         }
     }//GEN-LAST:event_jLabel2MouseClicked
 
@@ -504,6 +510,17 @@ public class MainPage extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         LOG.log(Level.INFO, evt.getActionCommand());
+        jButton4.setEnabled(false);
+        jButton5.setEnabled(false);
+        // Ao final do processamento, liberar os botões e a mudança de tab
+        jButton4.setEnabled(true);
+        jButton5.setEnabled(true);
+        try {
+            MainPageResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
+        } catch (DirectoryNotValidException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
