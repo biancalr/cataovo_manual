@@ -10,6 +10,7 @@ import cataovo.exceptions.ImageNotValidException;
 import java.awt.Component;
 import javax.swing.JLabel;
 /**
+ * Controls how the frames are demonstrated on screen
  *
  * @author bibil
  */

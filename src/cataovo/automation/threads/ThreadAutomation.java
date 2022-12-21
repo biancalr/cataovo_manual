@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.threads;
+package cataovo.automation.threads;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -21,14 +21,14 @@ import javax.swing.JOptionPane;
  *
  * @author bibil
  */
-public abstract class ThreadCreateRelatories extends Thread {
+public abstract class ThreadAutomation extends Thread {
 
-    private static final Logger LOG = Logger.getLogger(ThreadCreateRelatories.class.getName());
+    private static final Logger LOG = Logger.getLogger(ThreadAutomation.class.getName());
     protected Palette palette;
     protected String savingDirectory;
     protected FileExtension fileExtension;
 
-    public ThreadCreateRelatories(Palette palette, String savingDirectory, FileExtension extension) {
+    public ThreadAutomation(Palette palette, String savingDirectory, FileExtension extension) {
         this.palette = palette;
         this.savingDirectory = savingDirectory;
         this.fileExtension = extension;

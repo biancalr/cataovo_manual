@@ -9,6 +9,7 @@ import cataovo.constants.Constants;
 import cataovo.controller.FileSelectionController;
 import cataovo.controller.FramePainterController;
 import cataovo.controller.MainPageController;
+import cataovo.controller.implement.AutomaticProcess;
 import cataovo.controller.implement.FileSelectionControllerImplement;
 import cataovo.controller.implement.FramePainterControllerImplements;
 import cataovo.controller.implement.MainPageControllerImplements;
@@ -21,10 +22,9 @@ import java.util.Locale;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import javax.swing.Icon;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTabbedPane;
 import org.opencv.core.Core;
+import cataovo.controller.AutomaticProcessController;
 
 /**
  *
@@ -36,6 +36,7 @@ public class MainPage extends javax.swing.JFrame {
     private FileSelectionController fileSelectionController = null;
     private MainPageController mainPageController = null;
     private FramePainterController framePainterController = null;
+    private AutomaticProcessController autoRegionFinderController = null;
 
     /**
      * Creates new form MainPage
@@ -59,6 +60,7 @@ public class MainPage extends javax.swing.JFrame {
             fileSelectionController = new FileSelectionControllerImplement();
             mainPageController = new MainPageControllerImplements();
             framePainterController = new FramePainterControllerImplements();
+            autoRegionFinderController = new AutomaticProcess();
         } catch (DirectoryNotValidException ex) {
             LOG.log(Level.SEVERE, ex.getMessage());
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
@@ -436,13 +438,17 @@ public class MainPage extends javax.swing.JFrame {
             LOG.log(Level.INFO, evt.getActionCommand());
             boolean wasFileSelected = fileSelectionController.fileSelectionEvent(evt.getActionCommand(), jTabbedPane1, true);
             if (wasFileSelected && MainPageResources.getInstance().getCurrentFrame().getPaletteFrame().exists()) {
-                jButton3.setEnabled(wasFileSelected);
-                jButton2.setEnabled(wasFileSelected);
+                jButton3.setEnabled(wasFileSelected && jTabbedPane1.getSelectedIndex() == 0);
+                jButton2.setEnabled(wasFileSelected && jTabbedPane1.getSelectedIndex() == 0);
+                jButton1.setEnabled(wasFileSelected && jTabbedPane1.getSelectedIndex() == 1);
+                jButton4.setEnabled(wasFileSelected && jTabbedPane1.getSelectedIndex() == 1);
+                jButton5.setEnabled(wasFileSelected && jTabbedPane1.getSelectedIndex() == 1);
+
                 mainPageController.showFramesOnSelectedTabScreen(
-                                        jTabbedPane1, 
-                                        jTabbedPane1.getSelectedIndex() == 0 ? jLabel1: jLabel4, // the label name
-                                        jTabbedPane1.getSelectedIndex() == 0 ? jLabel2: jLabel3, // the frame label
-                                        MainPageResources.getInstance().getCurrentFrame());
+                        jTabbedPane1,
+                        jTabbedPane1.getSelectedIndex() == 0 ? jLabel1 : jLabel4, // the label name
+                        jTabbedPane1.getSelectedIndex() == 0 ? jLabel2 : jLabel3, // the frame label
+                        MainPageResources.getInstance().getCurrentFrame());
             }
         } catch (DirectoryNotValidException | FileNotFoundException | ImageNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -505,17 +511,30 @@ public class MainPage extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        LOG.log(Level.INFO, evt.getActionCommand());
+        try {
+            LOG.log(Level.INFO, evt.getActionCommand());
+            mainPageController.toNextFrame(jLabel4, jLabel3);
+        } catch (ImageNotValidException | DirectoryNotValidException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
+        }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         LOG.log(Level.INFO, evt.getActionCommand());
-        jButton4.setEnabled(false);
-        jButton5.setEnabled(false);
-        // Ao final do processamento, liberar os botões e a mudança de tab
+        // Iniciar processamento
+        do{
+            jButton4.setEnabled(false);
+            jButton5.setEnabled(false);
+            jButton1.setEnabled(false);
+        } while (autoRegionFinderController.isOnProcessPalette(jLabel4, jLabel3));
+        
         jButton4.setEnabled(true);
         jButton5.setEnabled(true);
+        jButton1.setEnabled(true);
+        
         try {
+            // Ao final do processamento, liberar os botões e a mudança de tab
             MainPageResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
         } catch (DirectoryNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);

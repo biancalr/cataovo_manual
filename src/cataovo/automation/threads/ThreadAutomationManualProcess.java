@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.threads;
+package cataovo.automation.threads;
 
 import cataovo.entities.Palette;
 import cataovo.filechooser.handler.FileExtension;
@@ -12,9 +12,9 @@ import cataovo.filechooser.handler.FileExtension;
  *
  * @author bibil
  */
-public class ThreadCreateRelatoryArchive extends ThreadCreateRelatories{
+public class ThreadAutomationManualProcess extends ThreadAutomation{
 
-    public ThreadCreateRelatoryArchive(Palette palette, String savingDirectory, FileExtension extension) {
+    public ThreadAutomationManualProcess(Palette palette, String savingDirectory, FileExtension extension) {
         super(palette, savingDirectory, extension);
     }
 
