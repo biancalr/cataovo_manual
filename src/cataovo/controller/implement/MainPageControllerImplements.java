@@ -7,7 +7,7 @@
 package cataovo.controller.implement;
 
 import cataovo.controller.MainPageController;
-import cataovo.helper.MainPanelTabHelper;
+import cataovo.resources.MainPanelTabHelper;
 import cataovo.entities.Frame;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;

@@ -10,7 +10,6 @@ import cataovo.entities.Palette;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.fileChooser.UI.MyFileChooserUI;
 import cataovo.filechooser.handler.MyFileListHandler;
-import cataovo.helper.MainPanelTabHelper;
 import java.io.File;
 import java.util.logging.Level;
 import javax.swing.filechooser.FileSystemView;
