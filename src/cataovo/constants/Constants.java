@@ -15,4 +15,7 @@ public class Constants {
     public static final String ACTION_COMMAND_SELECIONAR_PASTA_DESTINO = "Selecionar Pasta Destino";
     public static final String ACTION_COMMAND_SALVAR_ARQUIVO_FINAL = "Salvar Arquivo";
     
+    public static final String TAB_NAME_MANUAL = "Manual";
+    public static final String TAB_NAME_AUTOMATICO = "Automático";
+    
 }

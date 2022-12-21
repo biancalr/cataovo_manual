@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -6,6 +7,7 @@
 package cataovo.controller.implement;
 
 import cataovo.controller.MainPageController;
+import cataovo.helper.MainPanelTabHelper;
 import cataovo.entities.Frame;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
@@ -27,9 +29,10 @@ import javax.swing.Icon;
 public class MainPageControllerImplements implements MainPageController {
 
     private static final Logger LOG = Logger.getLogger(MainPageControllerImplements.class.getName());
+    private MainPanelTabHelper tabControllerHelper = null;
 
     public MainPageControllerImplements() {
-
+        this.tabControllerHelper = new MainPanelTabHelper(false, 0, "Manual");
     }
 
     /**

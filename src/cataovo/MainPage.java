@@ -17,6 +17,7 @@ import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
 import cataovo.resources.MainPageResources;
 import java.io.FileNotFoundException;
+import java.util.Locale;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import javax.swing.Icon;
@@ -40,20 +41,25 @@ public class MainPage extends javax.swing.JFrame {
     public MainPage() {
         initComponents();
         try {
-            //<editor-fold defaultstate="collapsed" desc=" Modify the jMenuItens names to make ActionCommands easyer ">
+            //<editor-fold defaultstate="collapsed" desc=" Modify the names of Buttons and actionItens to make ActionCommands and methods easyer ">
+            jButton1.setEnabled(false);
             jButton3.setEnabled(false);
             jButton2.setEnabled(false);
+            jButton4.setEnabled(false);
+            jButton5.setEnabled(false);
             jMenuItem1.setText(Constants.ACTION_COMMAND_ABRIR_PASTA);
             jMenuItem5.setText(Constants.ACTION_COMMAND_SELECIONAR_PASTA_DESTINO);
+            jTabbedPane1.setTitleAt(0, Constants.TAB_NAME_MANUAL);
+            jTabbedPane1.setTitleAt(1, Constants.TAB_NAME_AUTOMATICO);
             //</editor-fold>
-            
+
             //</editor-fold>
-            
             fileSelectionController = new FileSelectionControllerImplement();
             mainPageController = new MainPageControllerImplements();
             framePainterController = new FramePainterControllerImplements();
         } catch (DirectoryNotValidException ex) {
             LOG.log(Level.SEVERE, ex.getMessage());
+            JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
         }
     }
 
@@ -97,6 +103,12 @@ public class MainPage extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jTabbedPane1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jTabbedPane1StateChanged(evt);
+            }
+        });
+
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         jLabel2.setText("jLabel2");
@@ -122,12 +134,11 @@ public class MainPage extends javax.swing.JFrame {
         );
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Escolha uma pasta");
 
         jButton2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jButton2.setText("Remover Última");
+        jButton2.setText("Remover");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -281,7 +292,6 @@ public class MainPage extends javax.swing.JFrame {
         jTabbedPane2.addTab("Pré-processamento", jPanel6);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("Escolha uma pasta");
 
@@ -407,22 +417,22 @@ public class MainPage extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
-            LOG.log(Level.INFO, "Removing the last created region");
+            LOG.log(Level.INFO, "Removing the last created region: {0}", evt.getActionCommand());
             mainPageController.showFramesOnScreen(jLabel1, jLabel2, framePainterController.removeLastRegion());
         } catch (DirectoryNotValidException | ImageNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(jPanel1, ex);
+            JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jMenu1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu1MouseClicked
-        // TODO add your handling code here:
+        LOG.log(Level.INFO, evt.paramString());
     }//GEN-LAST:event_jMenu1MouseClicked
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         try {
-            LOG.log(Level.INFO, evt.paramString());
-            boolean wasFileSelected = fileSelectionController.fileSelectionEvent(evt.getActionCommand(), jDesktopPane1, true);
+            LOG.log(Level.INFO, evt.getActionCommand());
+            boolean wasFileSelected = fileSelectionController.fileSelectionEvent(evt.getActionCommand(), jTabbedPane1, true);
             if (wasFileSelected && MainPageResources.getInstance().getCurrentFrame().getPaletteFrame().exists()) {
                 jButton3.setEnabled(wasFileSelected);
                 jButton2.setEnabled(wasFileSelected);
@@ -430,30 +440,32 @@ public class MainPage extends javax.swing.JFrame {
             }
         } catch (DirectoryNotValidException | FileNotFoundException | ImageNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(jPanel1, ex);
+            JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         try {
             LOG.log(Level.INFO, evt.paramString());
-            fileSelectionController.fileSelectionEvent(evt.getActionCommand(), jDesktopPane1, true);
+            fileSelectionController.fileSelectionEvent(evt.getActionCommand(), jTabbedPane1, true);
             JOptionPane.showMessageDialog(jPanel1, "The diretory to save the relatory was changed successfully");
         } catch (DirectoryNotValidException | FileNotFoundException | ImageNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(jPanel1, ex);
+            JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
         }
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         try {
+            LOG.log(Level.INFO, evt.getActionCommand());
             if (MainPageResources.getInstance().getPalette().getFrames().iterator().hasNext()) {
                 mainPageController.onFrameFinished(jLabel1, jLabel2);
             } else {
                 LOG.info("You've reached the end of the Palette.");
                 jButton3.setEnabled(false);
                 jButton2.setEnabled(false);
-                if (!fileSelectionController.fileSelectionEvent(Constants.ACTION_COMMAND_SALVAR_ARQUIVO_FINAL, jDesktopPane1, true)) {
+                MainPageResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
+                if (!fileSelectionController.fileSelectionEvent(Constants.ACTION_COMMAND_SALVAR_ARQUIVO_FINAL, jTabbedPane1, true)) {
                     LOG.log(Level.WARNING, "It wasn't possible to seve the Palette on a file");
                     JOptionPane.showMessageDialog(jPanel1, "It wasn't possible to seve the Palette on a file");
                 } else {
@@ -463,8 +475,8 @@ public class MainPage extends javax.swing.JFrame {
             }
         } catch (ImageNotValidException | DirectoryNotValidException | FileNotFoundException ex) {
             LOG.log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(jPanel1, ex);
-        } 
+            JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
@@ -478,21 +490,36 @@ public class MainPage extends javax.swing.JFrame {
             }
         } catch (DirectoryNotValidException | ImageNotValidException | CloneNotSupportedException ex) {
             LOG.log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(jPanel1, ex);
+            JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
         }
     }//GEN-LAST:event_jLabel2MouseClicked
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
+        LOG.log(Level.INFO, evt.getActionCommand());
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
+        LOG.log(Level.INFO, evt.getActionCommand());
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        LOG.log(Level.INFO, evt.getActionCommand());
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
+        System.out.println(jTabbedPane1.getSelectedIndex());
+        try {
+            if (MainPageResources.getInstance().getPanelTabHelper().isIsActualTabProcessing()) {
+                LOG.log(Level.WARNING, "Can''t change to Tab {0} {1} while {2} {3} is still processing", new Object[]{jTabbedPane1.getSelectedIndex(), jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()), MainPageResources.getInstance().getPanelTabHelper().getTabIndex(), MainPageResources.getInstance().getPanelTabHelper().getTabName()});
+                jTabbedPane1.setSelectedIndex(MainPageResources.getInstance().getPanelTabHelper().getTabIndex());
+            } else {
+                MainPageResources.getInstance().adjustPanelTab(jTabbedPane1, false);
+            }
+        } catch (DirectoryNotValidException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
+        }
+    }//GEN-LAST:event_jTabbedPane1StateChanged
 
     /**
      * @param args the command line arguments
@@ -520,6 +547,7 @@ public class MainPage extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
             System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+            Locale.setDefault(new Locale.Builder().setLanguage("pt").setRegion("BR").build());
             new MainPage().setVisible(true);
         });
     }

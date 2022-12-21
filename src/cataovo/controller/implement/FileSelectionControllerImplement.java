@@ -14,6 +14,7 @@ import cataovo.exceptions.ImageNotValidException;
 import cataovo.fileChooser.UI.MyFileChooserUI;
 import cataovo.filechooser.handler.FileExtension;
 import cataovo.resources.MainPageResources;
+import cataovo.threads.ThreadCreateRelatories;
 import cataovo.threads.ThreadCreateRelatoryArchive;
 import java.awt.Component;
 import java.io.File;
@@ -24,17 +25,18 @@ import java.util.Queue;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import javax.swing.JFileChooser;
+import javax.swing.JTabbedPane;
 
 /**
  * Controls the interactions with the files outside of the Application.
  *
  * @author bibil
  */
-public class FileSelectionControllerImplement implements FileSelectionController{
+public class FileSelectionControllerImplement implements FileSelectionController {
 
     private static final Logger LOG = Logger.getLogger(FileSelectionControllerImplement.class.getName());
     private final MyFileChooserUI fileChooser;
-    private ThreadCreateRelatoryArchive createRelatories;
+    private ThreadCreateRelatories createRelatories;
 
     public FileSelectionControllerImplement() throws DirectoryNotValidException {
         fileChooser = MainPageResources.getInstance().getFileChooserUI();
@@ -55,55 +57,59 @@ public class FileSelectionControllerImplement implements FileSelectionController
      */
     @Override
     public boolean fileSelectionEvent(String actionCommand, Component parent, boolean isADirectoryOnly) throws DirectoryNotValidException, ImageNotValidException, FileNotFoundException {
-        switch (actionCommand) {
-            case Constants.ACTION_COMMAND_ABRIR_PASTA:
-                return actionCommandOpenFolder(isADirectoryOnly, parent);
-            case Constants.ACTION_COMMAND_SELECIONAR_PASTA_DESTINO:
-                return actionCommandSetSavingFolder(isADirectoryOnly, parent);
-            case Constants.ACTION_COMMAND_SALVAR_ARQUIVO_FINAL:
-                return actionCommandSaveFinalFile();
-            default:
-                LOG.log(Level.WARNING, "Not implemented yet {0}", actionCommand);
-                return false;
-        }
+        if (!MainPageResources.getInstance().getPanelTabHelper().isIsActualTabProcessing()) {
+            switch (actionCommand) {
+                case Constants.ACTION_COMMAND_ABRIR_PASTA:
+                    return actionCommandOpenFolder(isADirectoryOnly, parent);
+                case Constants.ACTION_COMMAND_SELECIONAR_PASTA_DESTINO:
+                    return actionCommandSetSavingFolder(isADirectoryOnly, parent);
+                case Constants.ACTION_COMMAND_SALVAR_ARQUIVO_FINAL:
+                    return actionCommandSaveFinalFile();
+                default:
+                    LOG.log(Level.WARNING, "Not implemented yet {0}", actionCommand);
+                    return false;
+            }
 
+        }
+        return false;
     }
 
     /**
-     * The behavior for the action ACTION_COMMAND_ABRIR_PASTA.
-     * Sets a Palette to work with.
-     * 
+     * The behavior for the action ACTION_COMMAND_ABRIR_PASTA. Sets a Palette to
+     * work with.
+     *
      * @param isADirectoryOnly
      * @param parent
      * @return
      * @throws FileNotFoundException
      * @throws DirectoryNotValidException
-     * @throws ImageNotValidException 
+     * @throws ImageNotValidException
      */
     private boolean actionCommandOpenFolder(boolean isADirectoryOnly, Component parent) throws FileNotFoundException, DirectoryNotValidException, ImageNotValidException {
         File file = fileChooser.dialogs(JFileChooser.OPEN_DIALOG, isADirectoryOnly, parent);
         if (file != null && file.exists()) {
             // Set the palette which represents the folder where the frames are contained
+
             MainPageResources.getInstance().setPalette(setNewPalette(file));
             MainPageResources.getInstance().setPaletteToSave(new Palette());
             MainPageResources.getInstance().getPaletteToSave().setDirectory(MainPageResources.getInstance().getPalette().getDirectory());
             MainPageResources.getInstance().getPalette().getFrames().poll();
+            MainPageResources.getInstance().adjustPanelTab((JTabbedPane) parent, true);
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
-     * The behavior for the action ACTION_COMMAND_SELECIONAR_PASTA_DESTINO.
-     * Sets a folder where the final report will be saved.
-     * 
+     * The behavior for the action ACTION_COMMAND_SELECIONAR_PASTA_DESTINO. Sets
+     * a folder where the final report will be saved.
+     *
      * @param isADirectoryOnly
      * @param parent
      * @return
-     * @throws DirectoryNotValidException 
+     * @throws DirectoryNotValidException
      */
-    private boolean actionCommandSetSavingFolder(boolean isADirectoryOnly, Component parent) throws DirectoryNotValidException{
+    private boolean actionCommandSetSavingFolder(boolean isADirectoryOnly, Component parent) throws DirectoryNotValidException {
         LOG.log(Level.INFO, "Setting a new saving Folder.");
         File file = fileChooser.dialogs(JFileChooser.OPEN_DIALOG, isADirectoryOnly, parent);
         if (file != null && file.exists()) {
@@ -167,8 +173,9 @@ public class FileSelectionControllerImplement implements FileSelectionController
 
     /**
      * Save the final relatories in the computer.
-     * 
-     * @return <code>True</code> in case of success. <code> False </code> otherwise.
+     *
+     * @return <code>True</code> in case of success. <code> False </code>
+     * otherwise.
      */
     private boolean actionCommandSaveFinalFile() throws DirectoryNotValidException {
         try {

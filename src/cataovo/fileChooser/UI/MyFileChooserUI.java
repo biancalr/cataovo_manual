@@ -5,12 +5,15 @@
  */
 package cataovo.fileChooser.UI;
 
+import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.filechooser.handler.FileExtension;
 import cataovo.filechooser.handler.FileFilterExtensions;
+import cataovo.resources.MainPageResources;
 import java.awt.Component;
 import java.awt.HeadlessException;
 import java.io.File;
 import javax.swing.JFileChooser;
+import javax.swing.JTabbedPane;
 
 /**
  *
@@ -43,8 +46,9 @@ public class MyFileChooserUI extends JFileChooser{
     * @param parent the parent Component
     * @return the selected file/directory or null if nothing was selected
     * @throws HeadlessException 
+     * @throws cataovo.exceptions.DirectoryNotValidException 
     */
-    public File dialogs(int dialogType, boolean isSelectionDirectory, Component parent) throws HeadlessException{
+    public File dialogs(int dialogType, boolean isSelectionDirectory, Component parent) throws HeadlessException, DirectoryNotValidException{
         File f = null;
         switch(dialogType){
             case JFileChooser.OPEN_DIALOG:
@@ -66,21 +70,24 @@ public class MyFileChooserUI extends JFileChooser{
      * @param isSelectionDirectory <code>True</code> if the selection mode is a <code>DIRECTORY_ONLY</code> or <code>False</code> if the selection mode is a <code>FILES_AND_DIRECTORIES</code>
      * @return the selected file/directory or null if nothing was selected
      * @throws HeadlessException 
+     * @throws cataovo.exceptions.DirectoryNotValidException 
      */
-    public File openDialog(Component parent, boolean isSelectionDirectory) throws HeadlessException {
+    public File openDialog(Component parent, boolean isSelectionDirectory) throws HeadlessException, DirectoryNotValidException {
         File f = null;
         int returnInterval;
-        
         selectionFileMode(isSelectionDirectory);
         returnInterval = super.showOpenDialog(parent);
         switch (returnInterval) {
             case JFileChooser.APPROVE_OPTION:
                 f = super.getSelectedFile();
+                MainPageResources.getInstance().adjustPanelTab((JTabbedPane)parent, true);
                 break;
             case JFileChooser.CANCEL_OPTION:
                 f = null;
+                MainPageResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
                 break;
             case JFileChooser.ERROR_OPTION:
+                MainPageResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
                 throw new HeadlessException("Exception ocurred while openning the dialog box.");
             default:
                 break;

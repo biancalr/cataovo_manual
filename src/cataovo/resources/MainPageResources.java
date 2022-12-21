@@ -10,10 +10,12 @@ import cataovo.entities.Palette;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.fileChooser.UI.MyFileChooserUI;
 import cataovo.filechooser.handler.MyFileListHandler;
+import cataovo.helper.MainPanelTabHelper;
 import java.io.File;
 import java.util.logging.Level;
 import javax.swing.filechooser.FileSystemView;
 import java.util.logging.Logger;
+import javax.swing.JTabbedPane;
 
 /**
  *
@@ -30,6 +32,7 @@ public class MainPageResources {
     private Frame currentFrame;
     private File savingFolder;
     private static volatile MainPageResources MAIN_PAGE_RESOURCES;
+    private final MainPanelTabHelper panelTabHelper;
 
     public MainPageResources() throws DirectoryNotValidException {
         current = FileSystemView.getFileSystemView().getHomeDirectory().getPath();
@@ -39,6 +42,7 @@ public class MainPageResources {
         palette = new Palette();
         paletteToSave = new Palette();
         currentFrame = new Frame();
+        panelTabHelper = new MainPanelTabHelper(false, 0, "Manual");
     }
     
     public static MainPageResources getInstance() throws DirectoryNotValidException{
@@ -104,6 +108,16 @@ public class MainPageResources {
 
     public void setCurrentFrame(Frame currentFrame) {
         this.currentFrame = currentFrame;
+    }
+
+    public MainPanelTabHelper getPanelTabHelper() {
+        return panelTabHelper;
+    }
+    
+    public void adjustPanelTab(JTabbedPane pane, boolean isActualTabProcessing){
+        panelTabHelper.setIsActualTabProcessing(isActualTabProcessing);
+        panelTabHelper.setTabIndex(pane.getSelectedIndex());
+        panelTabHelper.setTabName(pane.getTitleAt(pane.getSelectedIndex()));
     }
     
     public final File getFileFolder(File file) throws DirectoryNotValidException {

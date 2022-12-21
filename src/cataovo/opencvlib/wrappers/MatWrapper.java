@@ -6,7 +6,6 @@
 package cataovo.opencvlib.wrappers;
 
 import cataovo.entities.Frame;
-import cataovo.entities.Point;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
@@ -19,13 +18,14 @@ import org.opencv.imgcodecs.Imgcodecs;
 public class MatWrapper{
 
     private static final int DEPTH = CvType.CV_8U;
-    private final Point finalFramePoint = new Point(640, 480);
+    private int WIDTH = 640;
+    private int HEIGHT = 480;
     private Mat mat;
     private String location;
     
     public MatWrapper() {
         location = null;
-        mat = new Mat(new Size(finalFramePoint.getX(), finalFramePoint.getY()), DEPTH);
+        mat = new Mat(new Size(WIDTH, HEIGHT), DEPTH);
     }
     
     public MatWrapper(Mat m, String location) {
@@ -53,4 +53,21 @@ public class MatWrapper{
     public void setOpencvMat(Mat mat) {
         this.mat = mat;
     }
+
+    public int getWIDTH() {
+        return WIDTH;
+    }
+
+    public void setWIDTH(int WIDTH) {
+        this.WIDTH = WIDTH;
+    }
+
+    public int getHEIGHT() {
+        return HEIGHT;
+    }
+
+    public void setHEIGHT(int HEIGHT) {
+        this.HEIGHT = HEIGHT;
+    }
+    
 }

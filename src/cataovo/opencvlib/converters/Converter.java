@@ -22,6 +22,8 @@ import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 
 /**
+ * This class is responsable for the conversion between image formats to show
+ * them on frame.
  *
  * @author bibil
  */
@@ -29,11 +31,11 @@ public final class Converter {
 
     private static final Logger LOG = Logger.getLogger(Converter.class.getName());
     private static volatile Converter CONVERTER;
-    
+
     public static Converter getInstance() {
         Converter FORMAT_CONVERTER = Converter.CONVERTER;
         if (FORMAT_CONVERTER == null) {
-            synchronized (Converter.class){
+            synchronized (Converter.class) {
                 FORMAT_CONVERTER = Converter.CONVERTER;
                 if (FORMAT_CONVERTER == null) {
                     Converter.CONVERTER = FORMAT_CONVERTER = new Converter();
@@ -42,20 +44,20 @@ public final class Converter {
         }
         return FORMAT_CONVERTER;
     }
-    
+
     /**
      * Converts an image Frame to an OpenCV Mat.
-     * 
+     *
      * @param current
-     * @return 
+     * @return
      */
-    public MatWrapper convertImageFrameToMat(Frame current){
+    public MatWrapper convertImageFrameToMat(Frame current) {
         Mat m = new Mat();
         Optional<Mat> optional = Optional.ofNullable(Imgcodecs.imread(current.getPaletteFrame().getPath()));
         optional.ifPresent((t) -> t.copyTo(m));
         MatWrapper wrapper = new MatWrapper(m.clone(), current.getPaletteFrame().getAbsolutePath());
         return wrapper;
-        
+
     }
 
     /**
@@ -77,29 +79,29 @@ public final class Converter {
     public Optional<BufferedImage> convertMatToPng(MatWrapper current) {
         return Optional.ofNullable(matToBuffedImageConvert(current, FileExtension.PNG));
     }
-    
+
     /**
      * Converts the current frame to a image of given extension.
-     * 
+     *
      * @param current the current frame as Opencv.Mat
      * @param extension the type of desired extension for the frame.
      * @return the image as given extension.
      */
-    private BufferedImage matToBuffedImageConvert(MatWrapper current, FileExtension extension){
+    private BufferedImage matToBuffedImageConvert(MatWrapper current, FileExtension extension) {
         LOG.log(Level.INFO, "Error while converting a MAT to: {0}", extension.name());
         MatOfBytesWrapper ofBytesWrapper = new MatOfBytesWrapper();
         boolean codeOk = Imgcodecs.imencode("." + extension.toString().toLowerCase(), current.getOpencvMat(), ofBytesWrapper);
         BufferedImage output = makeConversion(codeOk, ofBytesWrapper, extension);
         return output;
-        
+
     }
 
     /**
-     * 
+     *
      * @param codeOk
      * @param ofBytesWrapper
      * @param extension
-     * @return 
+     * @return
      */
     private BufferedImage makeConversion(boolean codeOk, MatOfBytesWrapper ofBytesWrapper, FileExtension extension) {
         BufferedImage output = null;
@@ -115,8 +117,7 @@ public final class Converter {
         } else {
             return null;
         }
-        
+
     }
-    
 
 }
