@@ -63,8 +63,7 @@ public class MainPageControllerImplements implements MainPageController {
         parent.setText(null);
         parent.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         parent.setVisible(true);
-        if (frame instanceof Frame) {
-            Frame fr = (Frame) frame;
+        if (frame instanceof Frame fr) {
             LOG.log(Level.INFO, "Presenting the image {0} on screen...", fr.getName());
             if (fr.getPaletteFrame() != null && fr.getPaletteFrame().exists()) {
                 File f = (File) fr.getPaletteFrame();
@@ -73,8 +72,7 @@ public class MainPageControllerImplements implements MainPageController {
                 parentName.setText(fr.getName());
                 return true;
             }
-        } else if (frame instanceof Icon) {
-            Icon icon = (Icon) frame;
+        } else if (frame instanceof Icon icon) {
             parent.setIcon(icon);
             return true;
         }
@@ -118,16 +116,16 @@ public class MainPageControllerImplements implements MainPageController {
     public void showFramesOnSelectedTabScreen(Component tabComponent, JLabel parentNameLabel, JLabel parentLabel, Object frame) throws ImageNotValidException, DirectoryNotValidException {
         if (tabComponent instanceof JTabbedPane jTabbedPane) { // if the component is another type of component just add another conditional
             switch (jTabbedPane.getSelectedIndex()) {
-                case 0:
-                    showFrameOnScreen(parentNameLabel, parentLabel, frame);
-                    break;
-                case 1:
-                    showFrameOnScreen(parentNameLabel, parentLabel, frame);
-                    break;
-                default:
-                    throw new AssertionError();
+                case 0 -> showFrameOnScreen(parentNameLabel, parentLabel, frame);
+                case 1 -> showFrameOnScreen(parentNameLabel, parentLabel, frame);
+                default -> throw new AssertionError();
             }
         }
+    }
+
+    @Override
+    public boolean onAutoProcessPalette(JLabel jLabel4, JLabel jLabel3) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

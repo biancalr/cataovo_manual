@@ -51,14 +51,10 @@ public class MyFileChooserUI extends JFileChooser{
     public File dialogs(int dialogType, boolean isSelectionDirectory, Component parent) throws HeadlessException, DirectoryNotValidException{
         File f = null;
         switch(dialogType){
-            case JFileChooser.OPEN_DIALOG:
-                f = openDialog(parent, isSelectionDirectory);
-                break;
-            case JFileChooser.SAVE_DIALOG:
-                f = saveDialog(parent, isSelectionDirectory);
-                break;
-            default:
-                break;
+            case JFileChooser.OPEN_DIALOG -> f = openDialog(parent, isSelectionDirectory);
+            case JFileChooser.SAVE_DIALOG -> f = saveDialog(parent, isSelectionDirectory);
+            default -> {
+            }
         }
         return f;
     }  
@@ -78,19 +74,20 @@ public class MyFileChooserUI extends JFileChooser{
         selectionFileMode(isSelectionDirectory);
         returnInterval = super.showOpenDialog(parent);
         switch (returnInterval) {
-            case JFileChooser.APPROVE_OPTION:
+            case JFileChooser.APPROVE_OPTION -> {
                 f = super.getSelectedFile();
                 MainPageResources.getInstance().adjustPanelTab((JTabbedPane)parent, true);
-                break;
-            case JFileChooser.CANCEL_OPTION:
+            }
+            case JFileChooser.CANCEL_OPTION -> {
                 f = null;
                 MainPageResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
-                break;
-            case JFileChooser.ERROR_OPTION:
+            }
+            case JFileChooser.ERROR_OPTION -> {
                 MainPageResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
                 throw new HeadlessException("Exception ocurred while openning the dialog box.");
-            default:
-                break;
+            }
+            default -> {
+            }
         }
         
         return f;
@@ -124,16 +121,11 @@ public class MyFileChooserUI extends JFileChooser{
         selectionFileMode(isSelectionDirectory);
         returnInterval = super.showSaveDialog(parent);
         switch (returnInterval) {
-            case JFileChooser.APPROVE_OPTION:
-                f = super.getSelectedFile();
-                break;
-            case JFileChooser.CANCEL_OPTION:
-                f = null;
-                break;
-            case JFileChooser.ERROR_OPTION:
-                throw new HeadlessException("Exception ocurred while openning the dialog box.");
-            default:
-                break;
+            case JFileChooser.APPROVE_OPTION -> f = super.getSelectedFile();
+            case JFileChooser.CANCEL_OPTION -> f = null;
+            case JFileChooser.ERROR_OPTION -> throw new HeadlessException("Exception ocurred while openning the dialog box.");
+            default -> {
+            }
         }
         
         return f;

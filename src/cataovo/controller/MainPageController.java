@@ -47,4 +47,6 @@ public interface MainPageController {
      */
     public void showFramesOnSelectedTabScreen(Component tabComponent, JLabel parentNameLabel, JLabel parentLabel, Object frame) throws ImageNotValidException, DirectoryNotValidException;
 
+    public boolean onAutoProcessPalette(JLabel jLabel4, JLabel jLabel3);
+
 }

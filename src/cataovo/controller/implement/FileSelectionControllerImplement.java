@@ -64,7 +64,7 @@ public class FileSelectionControllerImplement implements FileSelectionController
                 case Constants.ACTION_COMMAND_SELECIONAR_PASTA_DESTINO:
                     return actionCommandSetSavingFolder(isADirectoryOnly, parent);
                 case Constants.ACTION_COMMAND_SALVAR_ARQUIVO_FINAL:
-                    return actionCommandSaveFinalFile();
+                    return actionCommandSaveFinalFile(parent);
                 default:
                     LOG.log(Level.WARNING, "Not implemented yet {0}", actionCommand);
                     return false;
@@ -177,13 +177,13 @@ public class FileSelectionControllerImplement implements FileSelectionController
      * @return <code>True</code> in case of success. <code> False </code>
      * otherwise.
      */
-    private boolean actionCommandSaveFinalFile() throws DirectoryNotValidException {
+    private boolean actionCommandSaveFinalFile(Component parent) throws DirectoryNotValidException {
         try {
             LOG.log(Level.INFO, "Final file save: start");
             this.createRelatories = new ThreadAutomationManualProcess(
                     MainPageResources.getInstance().getPaletteToSave(),
                     MainPageResources.getInstance().getSavingFolder().getPath(),
-                    FileExtension.CSV);
+                    FileExtension.CSV, parent);
             createRelatories.start();
             createRelatories.join();
             return true;

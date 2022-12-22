@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import cataovo.entities.Palette;
 import cataovo.filechooser.handler.FileExtension;
+import java.awt.Component;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -16,6 +17,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
+import javax.swing.JTabbedPane;
 
 /**
  *
@@ -27,11 +29,13 @@ public abstract class ThreadAutomation extends Thread {
     protected Palette palette;
     protected String savingDirectory;
     protected FileExtension fileExtension;
+    private Component parent;
 
-    public ThreadAutomation(Palette palette, String savingDirectory, FileExtension extension) {
+    public ThreadAutomation(Palette palette, String savingDirectory, FileExtension extension, Component parent) {
         this.palette = palette;
         this.savingDirectory = savingDirectory;
         this.fileExtension = extension;
+        this.parent = parent;
     }
 
     @Override
@@ -46,16 +50,20 @@ public abstract class ThreadAutomation extends Thread {
     }
 
     private synchronized void createFile() {
-        StringBuffer sb;
-        String dstn = palette.getDirectory().getName() + "//" + "Relatory_" + getDateTime("dd-MM-yyyy_HH-mm");
-        File directory = new File(savingDirectory + "//relatories//" + palette.getDirectory().getName());
+        StringBuffer sb = new StringBuffer();
+        String typeOfProcessing = "";
+        if (parent instanceof JTabbedPane actualTab) {
+            typeOfProcessing = actualTab.getSelectedIndex() == 0 ? "manual" : actualTab.getSelectedIndex() == 1 ? "auto" : "";
+        }
+        String dstn = typeOfProcessing + "/" + palette.getDirectory().getName() + "/" + "Relatory_" + getDateTime("dd-MM-yyyy_HH-mm");
+        File directory = new File(savingDirectory + "/relatories/" + typeOfProcessing + palette.getDirectory().getName());
         if (!directory.exists()) {
             directory.mkdirs();
         }
-        try (FileWriter csvWriter = new FileWriter(savingDirectory + "//relatories//" + dstn + "." + this.fileExtension.toString().toLowerCase());
+        try (FileWriter csvWriter = new FileWriter(savingDirectory + "/relatories/" + typeOfProcessing + dstn + "." + this.fileExtension.toString().toLowerCase());
                 PrintWriter csvPrinter = new PrintWriter(csvWriter);) {
 
-            sb = createContent();
+            sb.append(createContent());
             csvPrinter.print(sb);
             LOG.log(Level.INFO, "The file will be saved under the name: {0}", savingDirectory + "//relatories//" + dstn + "." + this.fileExtension.toString().toLowerCase());
         } catch (Exception e) {
