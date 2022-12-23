@@ -15,7 +15,7 @@ import cataovo.controller.implement.MainPageControllerImplements;
 import cataovo.entities.Point;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
-import cataovo.resources.MainPageResources;
+import cataovo.resources.MainResources;
 import java.io.FileNotFoundException;
 import java.util.Locale;
 import java.util.logging.Logger;
@@ -433,7 +433,7 @@ public class MainPage extends javax.swing.JFrame {
         try {
             LOG.log(Level.INFO, evt.getActionCommand());
             boolean wasFileSelected = fileSelectionController.fileSelectionEvent(evt.getActionCommand(), jTabbedPane1, true);
-            if (wasFileSelected && MainPageResources.getInstance().getCurrentFrame().getPaletteFrame().exists()) {
+            if (wasFileSelected && MainResources.getInstance().getCurrentFrame().getPaletteFrame().exists()) {
                 jButton3.setEnabled(wasFileSelected && jTabbedPane1.getSelectedIndex() == 0);
                 jButton2.setEnabled(wasFileSelected && jTabbedPane1.getSelectedIndex() == 0);
                 jButton1.setEnabled(wasFileSelected && jTabbedPane1.getSelectedIndex() == 1);
@@ -444,7 +444,7 @@ public class MainPage extends javax.swing.JFrame {
                         jTabbedPane1,
                         jTabbedPane1.getSelectedIndex() == 0 ? jLabel1 : jLabel4, // the label name
                         jTabbedPane1.getSelectedIndex() == 0 ? jLabel2 : jLabel3, // the frame label
-                        MainPageResources.getInstance().getCurrentFrame());
+                        MainResources.getInstance().getCurrentFrame());
             }
         } catch (DirectoryNotValidException | FileNotFoundException | ImageNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -466,13 +466,13 @@ public class MainPage extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         try {
             LOG.log(Level.INFO, evt.getActionCommand());
-            if (MainPageResources.getInstance().getPalette().getFrames().iterator().hasNext()) {
+            if (MainResources.getInstance().getPalette().getFrames().iterator().hasNext()) {
                 mainPageController.onFrameFinished(jLabel1, jLabel2);
             } else {
                 LOG.info("You've reached the end of the Palette.");
                 jButton3.setEnabled(false);
                 jButton2.setEnabled(false);
-                MainPageResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
+                MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
                 if (!fileSelectionController.fileSelectionEvent(Constants.ACTION_COMMAND_SALVAR_ARQUIVO_FINAL, jTabbedPane1, true)) {
                     LOG.log(Level.WARNING, "It wasn't possible to seve the Palette on a file");
                     JOptionPane.showMessageDialog(jPanel1, "It wasn't possible to seve the Palette on a file");
@@ -531,7 +531,7 @@ public class MainPage extends javax.swing.JFrame {
 
         try {
             // Ao final do processamento, liberar os botões e a mudança de tab
-            MainPageResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
+            MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
         } catch (DirectoryNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
@@ -541,11 +541,11 @@ public class MainPage extends javax.swing.JFrame {
     private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
         System.out.println(jTabbedPane1.getSelectedIndex());
         try {
-            if (MainPageResources.getInstance().getPanelTabHelper().isIsActualTabProcessing()) {
-                LOG.log(Level.WARNING, "Can''t change to Tab {0} {1} while {2} {3} is still processing", new Object[]{jTabbedPane1.getSelectedIndex(), jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()), MainPageResources.getInstance().getPanelTabHelper().getTabIndex(), MainPageResources.getInstance().getPanelTabHelper().getTabName()});
-                jTabbedPane1.setSelectedIndex(MainPageResources.getInstance().getPanelTabHelper().getTabIndex());
+            if (MainResources.getInstance().getPanelTabHelper().isIsActualTabProcessing()) {
+                LOG.log(Level.WARNING, "Can''t change to Tab {0} {1} while {2} {3} is still processing", new Object[]{jTabbedPane1.getSelectedIndex(), jTabbedPane1.getTitleAt(jTabbedPane1.getSelectedIndex()), MainResources.getInstance().getPanelTabHelper().getTabIndex(), MainResources.getInstance().getPanelTabHelper().getTabName()});
+                jTabbedPane1.setSelectedIndex(MainResources.getInstance().getPanelTabHelper().getTabIndex());
             } else {
-                MainPageResources.getInstance().adjustPanelTab(jTabbedPane1, false);
+                MainResources.getInstance().adjustPanelTab(jTabbedPane1, false);
             }
         } catch (DirectoryNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);

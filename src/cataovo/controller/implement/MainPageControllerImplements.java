@@ -7,11 +7,10 @@
 package cataovo.controller.implement;
 
 import cataovo.controller.MainPageController;
-import cataovo.resources.MainPanelTabHelper;
 import cataovo.entities.Frame;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
-import cataovo.resources.MainPageResources;
+import cataovo.resources.MainResources;
 import java.awt.Color;
 import java.awt.Component;
 import java.io.File;
@@ -46,8 +45,8 @@ public class MainPageControllerImplements implements MainPageController {
      */
     @Override
     public void toNextFrame(JLabel parentName, JLabel parent) throws ImageNotValidException, DirectoryNotValidException {
-        Frame frame = MainPageResources.getInstance().getPalette().getFrames().poll();
-        MainPageResources.getInstance().setCurrentFrame(frame);
+        Frame frame = MainResources.getInstance().getPalette().getFrames().poll();
+        MainResources.getInstance().setCurrentFrame(frame);
         showFrameOnScreen(parentName, parent, frame);
     }
 
@@ -99,8 +98,8 @@ public class MainPageControllerImplements implements MainPageController {
     @Override
     public void onFrameFinished(JLabel jLabel1, JLabel jLabel2) throws ImageNotValidException, DirectoryNotValidException {
         LOG.log(Level.INFO, "The frame was analysed. Charging next...");
-        MainPageResources.getInstance().getPaletteToSave().getFrames()
-                .offer(MainPageResources.getInstance().getCurrentFrame());
+        MainResources.getInstance().getPaletteToSave().getFrames()
+                .offer(MainResources.getInstance().getCurrentFrame());
         toNextFrame(jLabel1, jLabel2);
     }
 
@@ -125,7 +124,9 @@ public class MainPageControllerImplements implements MainPageController {
 
     @Override
     public boolean onAutoProcessPalette(JLabel jLabel4, JLabel jLabel3) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
+        return false;
+        
     }
 
 }

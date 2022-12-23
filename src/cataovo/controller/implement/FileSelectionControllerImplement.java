@@ -13,7 +13,7 @@ import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
 import cataovo.fileChooser.UI.MyFileChooserUI;
 import cataovo.filechooser.handler.FileExtension;
-import cataovo.resources.MainPageResources;
+import cataovo.resources.MainResources;
 import cataovo.automation.threads.ThreadAutomation;
 import cataovo.automation.threads.ThreadAutomationManualProcess;
 import java.awt.Component;
@@ -39,7 +39,7 @@ public class FileSelectionControllerImplement implements FileSelectionController
     private ThreadAutomation createRelatories;
 
     public FileSelectionControllerImplement() throws DirectoryNotValidException {
-        fileChooser = MainPageResources.getInstance().getFileChooserUI();
+        fileChooser = MainResources.getInstance().getFileChooserUI();
     }
 
     /**
@@ -57,17 +57,21 @@ public class FileSelectionControllerImplement implements FileSelectionController
      */
     @Override
     public boolean fileSelectionEvent(String actionCommand, Component parent, boolean isADirectoryOnly) throws DirectoryNotValidException, ImageNotValidException, FileNotFoundException {
-        if (!MainPageResources.getInstance().getPanelTabHelper().isIsActualTabProcessing()) {
+        if (!MainResources.getInstance().getPanelTabHelper().isIsActualTabProcessing()) {
             switch (actionCommand) {
-                case Constants.ACTION_COMMAND_ABRIR_PASTA:
+                case Constants.ACTION_COMMAND_ABRIR_PASTA -> {
                     return actionCommandOpenFolder(isADirectoryOnly, parent);
-                case Constants.ACTION_COMMAND_SELECIONAR_PASTA_DESTINO:
+                }
+                case Constants.ACTION_COMMAND_SELECIONAR_PASTA_DESTINO -> {
                     return actionCommandSetSavingFolder(isADirectoryOnly, parent);
-                case Constants.ACTION_COMMAND_SALVAR_ARQUIVO_FINAL:
+                }
+                case Constants.ACTION_COMMAND_SALVAR_ARQUIVO_FINAL -> {
                     return actionCommandSaveFinalFile(parent);
-                default:
+                }
+                default -> {
                     LOG.log(Level.WARNING, "Not implemented yet {0}", actionCommand);
                     return false;
+                }
             }
 
         }
@@ -90,11 +94,11 @@ public class FileSelectionControllerImplement implements FileSelectionController
         if (file != null && file.exists()) {
             // Set the palette which represents the folder where the frames are contained
 
-            MainPageResources.getInstance().setPalette(setNewPalette(file));
-            MainPageResources.getInstance().setPaletteToSave(new Palette());
-            MainPageResources.getInstance().getPaletteToSave().setDirectory(MainPageResources.getInstance().getPalette().getDirectory());
-            MainPageResources.getInstance().getPalette().getFrames().poll();
-            MainPageResources.getInstance().adjustPanelTab((JTabbedPane) parent, true);
+            MainResources.getInstance().setPalette(setNewPalette(file));
+            MainResources.getInstance().setPaletteToSave(new Palette());
+            MainResources.getInstance().getPaletteToSave().setDirectory(MainResources.getInstance().getPalette().getDirectory());
+            MainResources.getInstance().getPalette().getFrames().poll();
+            MainResources.getInstance().adjustPanelTab((JTabbedPane) parent, true);
             return true;
         }
         return false;
@@ -114,7 +118,7 @@ public class FileSelectionControllerImplement implements FileSelectionController
         File file = fileChooser.dialogs(JFileChooser.OPEN_DIALOG, isADirectoryOnly, parent);
         if (file != null && file.exists()) {
             // Set the folder where the result will be saved.
-            MainPageResources.getInstance().setSavingFolder(file);
+            MainResources.getInstance().setSavingFolder(file);
             LOG.log(Level.INFO, "A new saving Folder {0}", file);
             return true;
         } else {
@@ -133,11 +137,11 @@ public class FileSelectionControllerImplement implements FileSelectionController
         LOG.log(Level.INFO, "Setting a new Palette...");
         Palette pal = null;
         if (selectedFile.exists()) {
-            MainPageResources.getInstance().setCurrent(selectedFile.getAbsolutePath());
+            MainResources.getInstance().setCurrent(selectedFile.getAbsolutePath());
             if (selectedFile.isDirectory()) {
                 pal = new Palette(selectedFile);
                 pal.setFrames(setPaletteFrames(selectedFile.listFiles()));
-                MainPageResources.getInstance().setCurrentFrame(pal.getFrames().peek());
+                MainResources.getInstance().setCurrentFrame(pal.getFrames().peek());
             } else {
                 throw new DirectoryNotValidException("The selected file is not a directory. Please, choose a directory.");
             }
@@ -161,7 +165,7 @@ public class FileSelectionControllerImplement implements FileSelectionController
      */
     private Queue<Frame> setPaletteFrames(File[] listFiles) throws DirectoryNotValidException, ImageNotValidException {
         Queue<Frame> frames = new LinkedList<>();
-        Collection<File> colection = MainPageResources.getInstance().getFileListHandler().normalizeFilesOnAList(listFiles, FileExtension.PNG);
+        Collection<File> colection = MainResources.getInstance().getFileListHandler().normalizeFilesOnAList(listFiles, FileExtension.PNG);
         Frame frame;
         for (File file1 : colection) {
             frame = new Frame(file1.getPath());
@@ -181,8 +185,8 @@ public class FileSelectionControllerImplement implements FileSelectionController
         try {
             LOG.log(Level.INFO, "Final file save: start");
             this.createRelatories = new ThreadAutomationManualProcess(
-                    MainPageResources.getInstance().getPaletteToSave(),
-                    MainPageResources.getInstance().getSavingFolder().getPath(),
+                    MainResources.getInstance().getPaletteToSave(),
+                    MainResources.getInstance().getSavingFolder().getPath(),
                     FileExtension.CSV, parent);
             createRelatories.start();
             createRelatories.join();
