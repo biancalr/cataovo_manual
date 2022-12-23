@@ -29,7 +29,7 @@ public abstract class ThreadAutomation extends Thread {
     protected Palette palette;
     protected String savingDirectory;
     protected FileExtension fileExtension;
-    private Component parent;
+    private final Component parent;
 
     public ThreadAutomation(Palette palette, String savingDirectory, FileExtension extension, Component parent) {
         this.palette = palette;
@@ -51,21 +51,21 @@ public abstract class ThreadAutomation extends Thread {
 
     private synchronized void createFile() {
         StringBuffer sb = new StringBuffer();
-        String typeOfProcessing = "";
+        String processingMode = "";
         if (parent instanceof JTabbedPane actualTab) {
-            typeOfProcessing = actualTab.getSelectedIndex() == 0 ? "manual" : actualTab.getSelectedIndex() == 1 ? "auto" : "";
+            processingMode = actualTab.getSelectedIndex() == 0 ? "manual" : actualTab.getSelectedIndex() == 1 ? "auto" : "result";
         }
-        String dstn = typeOfProcessing + "/" + palette.getDirectory().getName() + "/" + "Relatory_" + getDateTime("dd-MM-yyyy_HH-mm");
-        File directory = new File(savingDirectory + "/relatories/" + typeOfProcessing + palette.getDirectory().getName());
+        String dstn = palette.getDirectory().getName() + "/" + processingMode + "/" + "Relatory_" + getDateTime("dd-MM-yyyy_HH-mm");
+        File directory = new File(savingDirectory + "/cataovo/" + palette.getDirectory().getName() + "/" + processingMode);
         if (!directory.exists()) {
             directory.mkdirs();
         }
-        try (FileWriter csvWriter = new FileWriter(savingDirectory + "/relatories/" + typeOfProcessing + dstn + "." + this.fileExtension.toString().toLowerCase());
+        try (FileWriter csvWriter = new FileWriter(savingDirectory + "/cataovo/" + dstn + "." + this.fileExtension.toString().toLowerCase());
                 PrintWriter csvPrinter = new PrintWriter(csvWriter);) {
 
             sb.append(createContent());
             csvPrinter.print(sb);
-            LOG.log(Level.INFO, "The file will be saved under the name: {0}", savingDirectory + "//relatories//" + dstn + "." + this.fileExtension.toString().toLowerCase());
+            LOG.log(Level.INFO, "The file will be saved under the name: {0}", savingDirectory + "/cataovo/" + dstn + "." + this.fileExtension.toString().toLowerCase());
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());
             JOptionPane.showMessageDialog(null, e.getMessage());

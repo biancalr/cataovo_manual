@@ -88,7 +88,7 @@ public final class Converter {
      * @return the image as given extension.
      */
     private BufferedImage matToBuffedImageConvert(MatWrapper current, FileExtension extension) {
-        LOG.log(Level.INFO, "Error while converting a MAT to: {0}", extension.name());
+        LOG.log(Level.INFO, "Converting a MAT to: {0}", extension.name());
         MatOfBytesWrapper ofBytesWrapper = new MatOfBytesWrapper();
         boolean codeOk = Imgcodecs.imencode("." + extension.toString().toLowerCase(), current.getOpencvMat(), ofBytesWrapper);
         BufferedImage output = makeConversion(codeOk, ofBytesWrapper, extension);
