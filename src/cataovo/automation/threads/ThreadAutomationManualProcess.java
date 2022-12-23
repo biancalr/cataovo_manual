@@ -7,7 +7,6 @@ package cataovo.automation.threads;
 
 import cataovo.entities.Palette;
 import cataovo.filechooser.handler.FileExtension;
-import java.awt.Component;
 
 /**
  *
@@ -15,7 +14,7 @@ import java.awt.Component;
  */
 public class ThreadAutomationManualProcess extends ThreadAutomation{
 
-    public ThreadAutomationManualProcess(Palette palette, String savingDirectory, FileExtension extension, Component parent) {
+    public ThreadAutomationManualProcess(Palette palette, String savingDirectory, FileExtension extension, String parent) {
         super(palette, savingDirectory, extension, parent);
     }
 

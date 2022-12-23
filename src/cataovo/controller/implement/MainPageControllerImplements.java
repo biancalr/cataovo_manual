@@ -6,10 +6,13 @@
  */
 package cataovo.controller.implement;
 
+import cataovo.automation.threads.ThreadAutomation;
+import cataovo.automation.threads.ThreadAutomationAutomaticProcess;
 import cataovo.controller.MainPageController;
 import cataovo.entities.Frame;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
+import cataovo.filechooser.handler.FileExtension;
 import cataovo.resources.MainResources;
 import java.awt.Color;
 import java.awt.Component;
@@ -63,18 +66,18 @@ public class MainPageControllerImplements implements MainPageController {
         parent.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         parent.setVisible(true);
         if (frame instanceof Frame fr) {
-            LOG.log(Level.INFO, "Presenting the image {0} on screen...", fr.getName());
-            if (fr.getPaletteFrame() != null && fr.getPaletteFrame().exists()) {
-                File f = (File) fr.getPaletteFrame();
-                showImageFile(f);
-                parent.setIcon(showImageFile(f));
-                parentName.setText(fr.getName());
+                LOG.log(Level.INFO, "Presenting the image {0} on screen...", fr.getName());
+                if (fr.getPaletteFrame() != null && fr.getPaletteFrame().exists()) {
+                    File f = (File) fr.getPaletteFrame();
+                    showImageFile(f);
+                    parent.setIcon(showImageFile(f));
+                    parentName.setText(fr.getName());
+                    return true;
+                }
+        } else if (frame instanceof Icon icon) {
+                parent.setIcon(icon);
                 return true;
             }
-        } else if (frame instanceof Icon icon) {
-            parent.setIcon(icon);
-            return true;
-        }
         return false;
     }
 
@@ -122,9 +125,15 @@ public class MainPageControllerImplements implements MainPageController {
         }
     }
 
+    /**
+     *
+     * @param jLabel4
+     * @param jLabel3
+     * @return
+     */
     @Override
     public boolean onAutoProcessPalette(JLabel jLabel4, JLabel jLabel3) {
-        
+//        ThreadAutomation automation = new ThreadAutomationAutomaticProcess(MainResources.getInstance().getPalette(), MainResources.getInstance().getSavingFolder().getPath(), FileExtension.CSV, MainResources.getInstance().getPanelTabHelper().getTabName());
         return false;
         
     }

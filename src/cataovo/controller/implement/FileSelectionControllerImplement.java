@@ -66,7 +66,7 @@ public class FileSelectionControllerImplement implements FileSelectionController
                     return actionCommandSetSavingFolder(isADirectoryOnly, parent);
                 }
                 case Constants.ACTION_COMMAND_SALVAR_ARQUIVO_FINAL -> {
-                    return actionCommandSaveFinalFile(parent);
+                    return actionCommandSaveFinalFile(MainResources.getInstance().getPanelTabHelper().getTabName());
                 }
                 default -> {
                     LOG.log(Level.WARNING, "Not implemented yet {0}", actionCommand);
@@ -181,7 +181,7 @@ public class FileSelectionControllerImplement implements FileSelectionController
      * @return <code>True</code> in case of success. <code> False </code>
      * otherwise.
      */
-    private boolean actionCommandSaveFinalFile(Component parent) throws DirectoryNotValidException {
+    private boolean actionCommandSaveFinalFile(String parent) throws DirectoryNotValidException {
         try {
             LOG.log(Level.INFO, "Final file save: start");
             this.createRelatories = new ThreadAutomationManualProcess(

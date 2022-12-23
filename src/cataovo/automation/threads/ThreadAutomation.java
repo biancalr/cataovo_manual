@@ -5,6 +5,7 @@
  */
 package cataovo.automation.threads;
 
+import cataovo.constants.Constants;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import cataovo.entities.Palette;
@@ -29,13 +30,13 @@ public abstract class ThreadAutomation extends Thread {
     protected Palette palette;
     protected String savingDirectory;
     protected FileExtension fileExtension;
-    private final Component parent;
+    private final String parent;
 
-    public ThreadAutomation(Palette palette, String savingDirectory, FileExtension extension, Component parent) {
+    public ThreadAutomation(Palette palette, String savingDirectory, FileExtension extension, String parentName) {
         this.palette = palette;
         this.savingDirectory = savingDirectory;
         this.fileExtension = extension;
-        this.parent = parent;
+        this.parent = parentName;
     }
 
     @Override
@@ -51,10 +52,7 @@ public abstract class ThreadAutomation extends Thread {
 
     private synchronized void createFile() {
         StringBuffer sb = new StringBuffer();
-        String processingMode = "";
-        if (parent instanceof JTabbedPane actualTab) {
-            processingMode = actualTab.getSelectedIndex() == 0 ? "manual" : actualTab.getSelectedIndex() == 1 ? "auto" : "result";
-        }
+        String processingMode = (this.parent == null ? Constants.TAB_NAME_MANUAL == null : this.parent.equals(Constants.TAB_NAME_MANUAL)) ? "manual" : (this.parent == null ? Constants.TAB_NAME_AUTOMATICO == null : this.parent.equals(Constants.TAB_NAME_AUTOMATICO))? "auto" : "result";
         String dstn = palette.getDirectory().getName() + "/" + processingMode + "/" + "Relatory_" + getDateTime("dd-MM-yyyy_HH-mm");
         File directory = new File(savingDirectory + "/cataovo/" + palette.getDirectory().getName() + "/" + processingMode);
         if (!directory.exists()) {

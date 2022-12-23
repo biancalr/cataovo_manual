@@ -518,18 +518,16 @@ public class MainPage extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         LOG.log(Level.INFO, evt.getActionCommand());
-        // Iniciar processamento
-
+        // Disable the buttons and start processing;
         jButton4.setEnabled(false);
         jButton5.setEnabled(false);
         jButton1.setEnabled(false);
-        if (mainPageController.onAutoProcessPalette(jLabel4, jLabel3)) {
-            jButton4.setEnabled(true);
-            jButton5.setEnabled(true);
-            jButton1.setEnabled(true);
-        }
-
         try {
+            if (mainPageController.onAutoProcessPalette(jLabel4, jLabel3)) {
+                jButton4.setEnabled(true);
+                jButton5.setEnabled(true);
+                jButton1.setEnabled(true);
+            }
             // Ao final do processamento, liberar os botões e a mudança de tab
             MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
         } catch (DirectoryNotValidException ex) {
