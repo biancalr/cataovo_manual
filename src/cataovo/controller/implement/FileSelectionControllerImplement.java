@@ -59,13 +59,13 @@ public class FileSelectionControllerImplement implements FileSelectionController
     public boolean fileSelectionEvent(String actionCommand, Component parent, boolean isADirectoryOnly) throws DirectoryNotValidException, ImageNotValidException, FileNotFoundException {
         if (!MainResources.getInstance().getPanelTabHelper().isIsActualTabProcessing()) {
             switch (actionCommand) {
-                case Constants.ACTION_COMMAND_ABRIR_PASTA -> {
+                case Constants.ITEM_ACTION_COMMAND_ABRIR_PASTA -> {
                     return actionCommandOpenFolder(isADirectoryOnly, parent);
                 }
-                case Constants.ACTION_COMMAND_SELECIONAR_PASTA_DESTINO -> {
+                case Constants.ITEM_ACTION_COMMAND_SELECIONAR_PASTA_DESTINO -> {
                     return actionCommandSetSavingFolder(isADirectoryOnly, parent);
                 }
-                case Constants.ACTION_COMMAND_SALVAR_ARQUIVO_FINAL -> {
+                case Constants.ITEM_ACTION_COMMAND_SALVAR_ARQUIVO_FINAL -> {
                     return actionCommandSaveFinalFile(MainResources.getInstance().getPanelTabHelper().getTabName());
                 }
                 default -> {
@@ -97,8 +97,12 @@ public class FileSelectionControllerImplement implements FileSelectionController
             MainResources.getInstance().setPalette(setNewPalette(file));
             MainResources.getInstance().setPaletteToSave(new Palette());
             MainResources.getInstance().getPaletteToSave().setDirectory(MainResources.getInstance().getPalette().getDirectory());
-            MainResources.getInstance().getPalette().getFrames().poll();
-            MainResources.getInstance().adjustPanelTab((JTabbedPane) parent, true);
+            if (parent instanceof JTabbedPane jTabbedPane) {
+                if (jTabbedPane.getSelectedIndex() == 0) {
+                    MainResources.getInstance().getPalette().getFrames().poll();
+                }
+                MainResources.getInstance().adjustPanelTab(jTabbedPane, true);
+            }
             return true;
         }
         return false;
