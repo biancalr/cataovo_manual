@@ -6,9 +6,11 @@
 package cataovo;
 
 import cataovo.constants.Constants;
+import cataovo.controller.AutomaticProcessorController;
 import cataovo.controller.FileSelectionController;
 import cataovo.controller.FramePainterController;
 import cataovo.controller.MainPageController;
+import cataovo.controller.implement.AutomaticProcessorControllerImplements;
 import cataovo.controller.implement.FileSelectionControllerImplement;
 import cataovo.controller.implement.FramePainterControllerImplements;
 import cataovo.controller.implement.MainPageControllerImplements;
@@ -34,6 +36,7 @@ public class MainPage extends javax.swing.JFrame {
     private FileSelectionController fileSelectionController = null;
     private MainPageController mainPageController = null;
     private FramePainterController framePainterController = null;
+    private AutomaticProcessorController automaticProcessorController = null;
 
     /**
      * Creates new form MainPage
@@ -57,6 +60,7 @@ public class MainPage extends javax.swing.JFrame {
             fileSelectionController = new FileSelectionControllerImplement();
             mainPageController = new MainPageControllerImplements();
             framePainterController = new FramePainterControllerImplements();
+            automaticProcessorController = new AutomaticProcessorControllerImplements();
         } catch (DirectoryNotValidException ex) {
             LOG.log(Level.SEVERE, ex.getMessage());
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
@@ -523,7 +527,7 @@ public class MainPage extends javax.swing.JFrame {
         jButton5.setEnabled(false);
         jButton1.setEnabled(false);
         try {
-            if (mainPageController.onAutoProcessPalette(jLabel4, jLabel3)) {
+            if (automaticProcessorController.onAutoProcessPalette(jLabel4, jLabel3)) {
                 jButton4.setEnabled(true);
                 jButton5.setEnabled(true);
                 jButton1.setEnabled(true);

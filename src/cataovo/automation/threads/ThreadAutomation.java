@@ -74,7 +74,7 @@ public abstract class ThreadAutomation extends Thread {
      *
      * @return the content of the file;
      */
-    protected abstract StringBuffer createContent(); 
+    protected abstract String createContent(); 
 
     /**
      * Calculates the date and the time.

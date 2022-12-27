@@ -125,17 +125,4 @@ public class MainPageControllerImplements implements MainPageController {
         }
     }
 
-    /**
-     *
-     * @param jLabel4
-     * @param jLabel3
-     * @return
-     */
-    @Override
-    public boolean onAutoProcessPalette(JLabel jLabel4, JLabel jLabel3) {
-//        ThreadAutomation automation = new ThreadAutomationAutomaticProcess(MainResources.getInstance().getPalette(), MainResources.getInstance().getSavingFolder().getPath(), FileExtension.CSV, MainResources.getInstance().getPanelTabHelper().getTabName());
-        return false;
-        
-    }
-
 }

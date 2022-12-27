@@ -19,7 +19,7 @@ public class ThreadAutomationManualProcess extends ThreadAutomation{
     }
 
     @Override
-    protected StringBuffer createContent() {
+    protected String createContent() {
         StringBuffer sb = new StringBuffer(getPalette().getDirectory().getPath());
         sb.append("|");
         sb.append(getPalette().getTheTotalNumberOfEggsPalette());
@@ -43,7 +43,7 @@ public class ThreadAutomationManualProcess extends ThreadAutomation{
                 sb.append(r.getHeight());
             });
         });
-        return sb;
+        return sb.toString();
     }
     
 }

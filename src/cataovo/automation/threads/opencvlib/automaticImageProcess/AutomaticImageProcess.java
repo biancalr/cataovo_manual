@@ -4,11 +4,8 @@
  */
 package cataovo.automation.threads.opencvlib.automaticImageProcess;
 
-import java.util.List;
+import java.awt.image.BufferedImage;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfPoint;
-import org.opencv.core.Point;
-import org.opencv.core.Scalar;
 
 /**
  *
@@ -19,60 +16,42 @@ public interface AutomaticImageProcess {
     /**
      *
      * @param imageMatToBlur
+     * @param savingPath
+     * @param ksize_width
+     * @param ksize_height
      * @return
      */
-    public Mat blurImage(Mat imageMatToBlur);
+    public Mat applyBlurOnImage(String savingPath, Mat imageMatToBlur, int ksize_width, int ksize_height);
+    
+    /**
+     * 
+     * @param savingPath
+     * @param buffImgToBinary
+     * @return 
+     */
+    public Mat applyBinaryOnImage(String savingPath, BufferedImage buffImgToBinary);
 
     /**
      *
-     * @param shapeOfStructuringElement
+     * @param savingPath
      * @param structuringElementSize
+     * @param imageToMorph
      * @return
      */
-    public Mat applyMorphOnImage(int shapeOfStructuringElement, int structuringElementSize);
+    public Mat applyMorphOnImage(String savingPath, int structuringElementSize, Mat imageToMorph);
 
     /**
      *
-     * @param imageInitialState
-     * @param imageFinalState
-     * @param morphologyType
-     * @param structuringElement
+     * @param savingPath
+     * @param imageToDraw
      * @return
      */
-    public Mat morphologyEx(Mat imageInitialState, Mat imageFinalState, int morphologyType, Mat structuringElement);
-
+    public Mat drawContoursOnImage(String savingPath, Mat imageToDraw);
+    
     /**
      *
-     * @param imageToFindContours
-     * @param outputContours
-     * @param hierarchyType
-     * @param contourRetrivalMode
-     * @param contourApproximationMethod
      * @return
      */
-    public List<MatOfPoint> findContours(Mat imageToFindContours, List<MatOfPoint> outputContours, Mat hierarchyType, int contourRetrivalMode, int contourApproximationMethod);
-
-    /**
-     * Calculates a contour area.
-     *
-     * @param contourToCalculateArea
-     * @return
-     */
-    public double contourArea(Mat contourToCalculateArea);
-
-    /**
-     *
-     * @param resultImage
-     * @param foundContours
-     * @param contourIdx
-     * @param contourColor
-     * @param contourThickness
-     * @param contourLineTipe
-     * @param contourHierarchyType
-     * @param contourMaxLevelToDraw
-     * @param optionalContourShift
-     * @return
-     */
-    public Mat drawContours(Mat resultImage, List<MatOfPoint> foundContours, int contourIdx, Scalar contourColor, int contourThickness, int contourLineTipe, Mat contourHierarchyType, int contourMaxLevelToDraw, Point optionalContourShift);
-
+    public AutomaticFrameArchiveProcess generateArchiveContent();
+    
 }
