@@ -47,8 +47,8 @@ public class MainPage extends javax.swing.JFrame {
             jButton2.setEnabled(false);
             jButton4.setEnabled(false);
             jButton5.setEnabled(false);
-            jMenuItem1.setText(Constants.ACTION_COMMAND_ABRIR_PASTA);
-            jMenuItem5.setText(Constants.ACTION_COMMAND_SELECIONAR_PASTA_DESTINO);
+            jMenuItem1.setText(Constants.ITEM_ACTION_COMMAND_ABRIR_PASTA);
+            jMenuItem5.setText(Constants.ITEM_ACTION_COMMAND_SELECIONAR_PASTA_DESTINO);
             jTabbedPane1.setTitleAt(0, Constants.TAB_NAME_MANUAL);
             jTabbedPane1.setTitleAt(1, Constants.TAB_NAME_AUTOMATICO);
             //</editor-fold>
@@ -473,7 +473,7 @@ public class MainPage extends javax.swing.JFrame {
                 jButton3.setEnabled(false);
                 jButton2.setEnabled(false);
                 MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
-                if (!fileSelectionController.fileSelectionEvent(Constants.ACTION_COMMAND_SALVAR_ARQUIVO_FINAL, jTabbedPane1, true)) {
+                if (!fileSelectionController.fileSelectionEvent(Constants.ITEM_ACTION_COMMAND_SALVAR_ARQUIVO_FINAL, jTabbedPane1, true)) {
                     LOG.log(Level.WARNING, "It wasn't possible to seve the Palette on a file");
                     JOptionPane.showMessageDialog(jPanel1, "It wasn't possible to seve the Palette on a file");
                 } else {
