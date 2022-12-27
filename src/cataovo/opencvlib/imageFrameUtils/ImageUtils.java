@@ -44,4 +44,12 @@ public interface ImageUtils {
      * @return the area Rect of the clicked Grid
      */
     public Rect captureGridMat(Point beginGrid, Point endGrid);
+    
+    /**
+     * 
+     * @param region
+     * @param frame
+     * @return 
+     */
+    public Mat captureSubmat(Rect region, Mat frame);
 }

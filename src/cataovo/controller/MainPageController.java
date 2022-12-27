@@ -5,9 +5,11 @@
  */
 package cataovo.controller;
 
+import cataovo.entities.Point;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
 import java.awt.Component;
+import javax.swing.Icon;
 import javax.swing.JLabel;
 /**
  * Controls how the frames are demonstrated on screen
@@ -46,6 +48,16 @@ public interface MainPageController {
      * @throws cataovo.exceptions.DirectoryNotValidException 
      */
     public void showFramesOnSelectedTabScreen(Component tabComponent, JLabel parentNameLabel, JLabel parentLabel, Object frame) throws ImageNotValidException, DirectoryNotValidException;
+
+    /**
+     * 
+     * @param subframeNameLabel
+     * @param subframeLabel
+     * @param frame 
+     * @param point 
+     * @throws cataovo.exceptions.DirectoryNotValidException 
+     */
+    public void showSubFrameOnSelectedTabScreen(JLabel subframeNameLabel, JLabel subframeLabel, Icon frame, Point point) throws DirectoryNotValidException;
 
 
 }

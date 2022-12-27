@@ -70,12 +70,62 @@ public abstract class FrameUtils {
      * @return
      */
     protected abstract Icon drawRectangle(RectWrapper rw);
+    
+    /**
+     * 
+     * @param beginGrid
+     * @param endGrid
+     * @return 
+     */
+    protected abstract Region captureGridSubmat(PointWrapper beginGrid, PointWrapper endGrid);
+    
+    /**
+     * 
+     * @return 
+     */
+    protected abstract MatWrapper prepareGrids();
+    
+    /**
+     * 
+     * @param pw
+     * @return 
+     */
+    protected Icon dot(PointWrapper pw){
+        return drawDot(pw);
+    }
+    
+    /**
+     * 
+     * @param rw
+     * @return 
+     */
+    protected Icon rectangle(RectWrapper rw){
+        return drawSquare(rw);
+    }
+    
+    /**
+     * 
+     * @param beginGrid
+     * @param endGrid
+     * @return 
+     */
+    protected Region captureGrid(PointWrapper beginGrid, PointWrapper endGrid){
+        return captureSubmat(beginGrid, endGrid);
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    protected MatWrapper updateGrids(){
+        return preprareRegions();
+    }
 
-    protected Icon dot(PointWrapper pw) {
+    private Icon drawDot(PointWrapper pw) {
         LOG.log(Level.INFO, "Starting..");
 //        mockRegionsInFrame();
         if (!this.frame.getRegionsContainingEggs().isEmpty()) {
-            this.matWrapper = preprareGrids();
+            this.matWrapper = preprareRegions();
         } else {
             matWrapper = Converter.getInstance().convertImageFrameToMat(frame);
         }
@@ -83,11 +133,11 @@ public abstract class FrameUtils {
         return new ImageIcon(Converter.getInstance().convertMatToImg(matWrapper).get());
     }
 
-    protected Icon rectangle(RectWrapper rw) {
+    private Icon drawSquare(RectWrapper rw) {
         LOG.log(Level.INFO, "Starting..");
 //        mockRegionsInFrame();
         if (!this.frame.getRegionsContainingEggs().isEmpty()) {
-            this.matWrapper = preprareGrids();
+            this.matWrapper = preprareRegions();
         }
         pointWrapper = new PointWrapper(
                 new Point(rw.getRegion().getInitialPoint().getX(),
@@ -95,7 +145,7 @@ public abstract class FrameUtils {
         PointWrapper pw2 = new PointWrapper(new Point(
                 Math.abs(rw.getRegion().getInitialPoint().getX() - rw.getRegion().getWidth()),
                 Math.abs(rw.getRegion().getInitialPoint().getY() - rw.getRegion().getHeight())));
-        this.frame.getRegionsContainingEggs().add(captureGrid(pointWrapper, pw2));
+        this.frame.getRegionsContainingEggs().add(captureSubmat(pointWrapper, pw2));
         matWrapper.setOpencvMat(imageUtils.rectangle(
                 pointWrapper.getOpencvPoint(), pw2.getOpencvPoint(), matWrapper.getOpencvMat()));
         return new ImageIcon(Converter.getInstance().convertMatToImg(matWrapper).get());
@@ -107,7 +157,7 @@ public abstract class FrameUtils {
      * @param endGrid
      * @return
      */
-    private Region captureGrid(PointWrapper beginGrid, PointWrapper endGrid) {
+    private Region captureSubmat(PointWrapper beginGrid, PointWrapper endGrid) {
         return new RectWrapper(imageUtils.captureGridMat(beginGrid.getOpencvPoint(), endGrid.getOpencvPoint())).getRegion();
     }
 
@@ -116,7 +166,7 @@ public abstract class FrameUtils {
      *
      * @return
      */
-    protected MatWrapper preprareGrids() {
+    private MatWrapper preprareRegions() {
         MatWrapper mw = new MatWrapper(this.frame);
         this.frame.getRegionsContainingEggs().stream().forEach((r) -> {
             PointWrapper pw1 = new PointWrapper(

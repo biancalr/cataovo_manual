@@ -6,10 +6,14 @@
 package cataovo.opencvlib.imageFrameUtils;
 
 import cataovo.entities.Frame;
+import cataovo.entities.Point;
+import cataovo.entities.Region;
+import cataovo.opencvlib.converters.Converter;
 import cataovo.opencvlib.wrappers.MatWrapper;
 import cataovo.opencvlib.wrappers.PointWrapper;
 import cataovo.opencvlib.wrappers.RectWrapper;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 
 /**
@@ -55,6 +59,39 @@ public class FramePrimaryUtils extends FrameUtils{
      * @return 
      */
     public MatWrapper updateGridsOnFrame(){
-        return super.preprareGrids();
+        return super.updateGrids();
     }
+
+    /**
+     * 
+     * @param beginGrid
+     * @param endGrid
+     * @return 
+     */
+    @Override
+    protected Region captureGridSubmat(PointWrapper beginGrid, PointWrapper endGrid) {
+        return super.captureGrid(beginGrid, endGrid);
+    }
+
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    protected MatWrapper prepareGrids() {
+        return super.updateGrids();
+    }
+    
+    /**
+     * 
+     * @param initialPoint
+     * @param pointClick
+     * @return 
+     */
+    public Icon captureSubframe(Point initialPoint, Point pointClick) {
+        rectWrapper = new RectWrapper(captureGrid(new PointWrapper(initialPoint), new PointWrapper(pointClick)));
+        matWrapper = new MatWrapper(imageUtils.captureSubmat(rectWrapper.getOpencvRect(), Converter.getInstance().convertImageFrameToMat(frame).getOpencvMat()), null);
+        return new ImageIcon(Converter.getInstance().convertMatToImg(matWrapper).get());
+    }
+
 }

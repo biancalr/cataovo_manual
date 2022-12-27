@@ -29,7 +29,6 @@ public class FramePainterControllerImplements implements FramePainterController 
 
     public FramePainterControllerImplements() {
         clickCount = 0;
-        this.initialPoint = new Point(0, 0);
         frameUtils = new FramePrimaryUtils();
     }
 
@@ -94,6 +93,22 @@ public class FramePainterControllerImplements implements FramePainterController 
             );
             return new ImageIcon(Converter.getInstance().convertMatToImg(frameUtils.updateGridsOnFrame()).get());
         }
+    }
+
+    /**
+     * 
+     * @param pointClick
+     * @return
+     * @throws DirectoryNotValidException 
+     */
+    @Override
+    public Icon captureSubframe(Point pointClick) throws DirectoryNotValidException {
+        Icon subframeImage = null;
+        if (clickCount == 0 && initialPoint != null) {
+            this.frameUtils = new FramePrimaryUtils(MainResources.getInstance().getCurrentFrame());
+            subframeImage = this.frameUtils.captureSubframe(this.initialPoint, pointClick);
+        }
+        return subframeImage;
     }
 
 }

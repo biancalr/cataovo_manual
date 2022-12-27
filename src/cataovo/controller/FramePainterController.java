@@ -33,4 +33,12 @@ public interface FramePainterController {
      */
     public Icon removeLastRegion() throws DirectoryNotValidException;
     
+    /**
+     * 
+     * @param pointClick
+     * @return
+     * @throws DirectoryNotValidException 
+     */
+    public Icon captureSubframe(Point pointClick) throws DirectoryNotValidException;
+    
 }

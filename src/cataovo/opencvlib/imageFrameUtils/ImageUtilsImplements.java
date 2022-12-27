@@ -5,7 +5,6 @@
  */
 package cataovo.opencvlib.imageFrameUtils;
 
-import java.io.IOException;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -78,6 +77,15 @@ public class ImageUtilsImplements implements ImageUtils{
         grid.height = (int) (beginGrid.y - endGrid.y);
         return grid;
 
+    }
+
+    @Override
+    public Mat captureSubmat(Rect region, Mat frame) {
+        LOG.log(Level.INFO, "Capturing submat");
+        region.width = Math.abs(region.width);
+        region.height = Math.abs(region.height);
+        Mat submat = frame.submat(region);
+        return submat;
     }
 
 }
