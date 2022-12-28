@@ -12,38 +12,40 @@ import cataovo.filechooser.handler.FileExtension;
  *
  * @author bibil
  */
-public class ThreadAutomationManualProcess extends ThreadAutomation{
+public class ThreadAutomationManualProcess extends ThreadAutomation {
 
     public ThreadAutomationManualProcess(Palette palette, String savingDirectory, FileExtension extension, String parent) {
         super(palette, savingDirectory, extension, parent);
     }
 
     @Override
-    protected String createContent() {
+    protected StringBuffer createContent() {
         StringBuffer sb = new StringBuffer(getPalette().getDirectory().getPath());
         sb.append("|");
         sb.append(getPalette().getTheTotalNumberOfEggsPalette());
-        getPalette().getFrames().stream().forEachOrdered((f) -> {
+        getPalette().getFrames().stream().forEach((f) -> {
             sb.append("|");
             sb.append(f.getName());
-            f.getRegionsContainingEggs().stream().map((r) -> {
-                sb.append(",");
-                sb.append(r.getInitialPoint().getX());
-                return r;
-            }).map((r) -> {
-                sb.append(",");
-                sb.append(r.getInitialPoint().getY());
-                return r;
-            }).map((r) -> {
-                sb.append(",");
-                sb.append(r.getWidth());
-                return r;
-            }).forEachOrdered((r) -> {
-                sb.append(",");
-                sb.append(r.getHeight());
-            });
+            if (!f.getRegionsContainingEggs().isEmpty()) {
+                f.getRegionsContainingEggs().stream().map((r) -> {
+                    sb.append(",");
+                    sb.append(r.getInitialPoint().getX());
+                    return r;
+                }).map((r) -> {
+                    sb.append(",");
+                    sb.append(r.getInitialPoint().getY());
+                    return r;
+                }).map((r) -> {
+                    sb.append(",");
+                    sb.append(r.getWidth());
+                    return r;
+                }).forEachOrdered((r) -> {
+                    sb.append(",");
+                    sb.append(r.getHeight());
+                });
+            }
         });
-        return sb.toString();
+        return sb;
     }
-    
+
 }
