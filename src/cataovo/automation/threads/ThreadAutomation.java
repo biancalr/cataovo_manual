@@ -50,11 +50,11 @@ public abstract class ThreadAutomation extends Thread {
         }
     }
 
-    private synchronized void createFile() {
+    private synchronized boolean createFile() {
         StringBuffer sb = new StringBuffer();
         String processingMode = (this.parent == null ? Constants.TAB_NAME_MANUAL == null : this.parent.equals(Constants.TAB_NAME_MANUAL)) ? "manual" : (this.parent == null ? Constants.TAB_NAME_AUTOMATICO == null : this.parent.equals(Constants.TAB_NAME_AUTOMATICO))? "auto" : "result";
-        String dstn = palette.getDirectory().getName() + "/" + processingMode + "/" + "Relatory_" + getDateTime("dd-MM-yyyy_HH-mm");
-        File directory = new File(savingDirectory + "/cataovo/" + palette.getDirectory().getName() + "/" + processingMode);
+        String dstn = palette.getDirectory().getName() + "/" + processingMode + "/" + getDateTime("dd-MM-yyyy_HH-mm") + "/" + "Relatory";
+        File directory = new File(savingDirectory + "/cataovo/" + palette.getDirectory().getName() + "/" + processingMode + "/" + getDateTime("dd-MM-yyyy_HH-mm"));
         if (!directory.exists()) {
             directory.mkdirs();
         }
@@ -64,17 +64,19 @@ public abstract class ThreadAutomation extends Thread {
             sb.append(createContent());
             csvPrinter.print(sb);
             LOG.log(Level.INFO, "The file will be saved under the name: {0}", savingDirectory + "/cataovo/" + dstn + "." + this.fileExtension.toString().toLowerCase());
+            return true;
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
+        return false;
     }
 
     /**
      *
      * @return the content of the file;
      */
-    protected abstract String createContent(); 
+    protected abstract StringBuffer createContent(); 
 
     /**
      * Calculates the date and the time.
@@ -82,7 +84,7 @@ public abstract class ThreadAutomation extends Thread {
      * @param datePattern the pattern to return the date
      * @return date and time depending on the datePattern
      */
-    public static String getDateTime(String datePattern) {
+    public String getDateTime(String datePattern) {
         DateFormat dateFormat = new SimpleDateFormat(datePattern);
         Date date = new Date();
         return dateFormat.format(date);
