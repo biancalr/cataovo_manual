@@ -39,7 +39,7 @@ public class ThreadAutomationAutomaticProcess extends ThreadAutomation {
     }
 
     @Override
-    protected String createContent() {
+    protected StringBuffer createContent() {
         StringBuffer imagesDestination;
         StringBuffer writeContentFinalFile = new StringBuffer(palette.getDirectory().getName());
         File fileImagesDestination;
@@ -53,7 +53,7 @@ public class ThreadAutomationAutomaticProcess extends ThreadAutomation {
             }
             writeContentFinalFile.append(createArchiveContent(createImagesContent(imagesDestination.toString(), frame), frame));
         }
-        return writeContentFinalFile.toString();
+        return writeContentFinalFile;
     }
 }
 
