@@ -27,8 +27,10 @@ import javax.swing.JOptionPane;
 import org.opencv.core.Core;
 
 /**
+ * Module that interacts with the user. This is the main face of this
+ * application
  *
- * @author bibil
+ * @author Bianca Leopoldo Ramos
  */
 public class MainPage extends javax.swing.JFrame {
 
@@ -50,6 +52,9 @@ public class MainPage extends javax.swing.JFrame {
             jButton2.setEnabled(false);
             jButton4.setEnabled(false);
             jButton5.setEnabled(false);
+            jLabel10.setText("");
+            jLabel9.setIcon(null);
+            jLabel1.setText(Constants.NO_PALETTE_SELECTED);
             jMenuItem1.setText(Constants.ITEM_ACTION_COMMAND_ABRIR_PASTA);
             jMenuItem5.setText(Constants.ITEM_ACTION_COMMAND_SELECIONAR_PASTA_DESTINO);
             jTabbedPane1.setTitleAt(0, Constants.TAB_NAME_MANUAL);
@@ -504,8 +509,11 @@ public class MainPage extends javax.swing.JFrame {
                 mainPageController.onFrameFinished(jLabel1, jLabel2);
             } else {
                 LOG.info("You've reached the end of the Palette.");
+                mainPageController.onFrameFinished(jLabel1, jLabel2);
                 jButton3.setEnabled(false);
                 jButton2.setEnabled(false);
+                jLabel10.setText("");
+                jLabel9.setIcon(null);
                 MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
                 if (!fileSelectionController.fileSelectionEvent(Constants.ITEM_ACTION_COMMAND_SALVAR_ARQUIVO_FINAL, jTabbedPane1, true)) {
                     LOG.log(Level.WARNING, "It wasn't possible to seve the Palette on a file");
@@ -574,6 +582,7 @@ public class MainPage extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
+        LOG.log(Level.INFO, evt.toString());
         System.out.println(jTabbedPane1.getSelectedIndex());
         try {
             if (MainResources.getInstance().getPanelTabHelper().isIsActualTabProcessing()) {

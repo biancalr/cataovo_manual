@@ -12,7 +12,7 @@ import java.awt.Component;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 /**
- * Controls how the frames are demonstrated on screen
+ * Controls how the frames are demonstrated on screen and how to move from one to the other
  *
  * @author bibil
  */

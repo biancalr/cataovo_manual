@@ -6,14 +6,12 @@
  */
 package cataovo.controller.implement;
 
+import cataovo.constants.Constants;
 import cataovo.controller.MainPageController;
 import cataovo.entities.Frame;
 import cataovo.entities.Point;
-import cataovo.entities.Region;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
-import cataovo.opencvlib.imageFrameUtils.FramePrimaryUtils;
-import cataovo.opencvlib.imageFrameUtils.FrameUtils;
 import cataovo.resources.MainResources;
 import java.awt.Color;
 import java.awt.Component;
@@ -49,9 +47,17 @@ public class MainPageControllerImplements implements MainPageController {
      */
     @Override
     public void toNextFrame(JLabel parentName, JLabel parent) throws ImageNotValidException, DirectoryNotValidException {
-        Frame frame = MainResources.getInstance().getPalette().getFrames().poll();
-        MainResources.getInstance().setCurrentFrame(frame);
-        showFrameOnScreen(parentName, parent, frame);
+        if (!MainResources.getInstance().getPalette().getFrames().isEmpty()) {
+            Frame frame = MainResources.getInstance().getPalette().getFrames().poll();
+            MainResources.getInstance().setCurrentFrame(frame);
+            showFrameOnScreen(parentName, parent, frame);
+        } else {
+            LOG.log(Level.INFO, "The Palette was completed!");
+            parentName.setText(Constants.NO_PALETTE_SELECTED);
+            parent.setIcon(null);
+            parent.setBorder(null);
+        }
+
     }
 
     /**

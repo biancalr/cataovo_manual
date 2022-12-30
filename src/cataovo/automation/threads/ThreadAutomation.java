@@ -10,7 +10,6 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import cataovo.entities.Palette;
 import cataovo.filechooser.handler.FileExtension;
-import java.awt.Component;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -18,7 +17,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
-import javax.swing.JTabbedPane;
 
 /**
  *

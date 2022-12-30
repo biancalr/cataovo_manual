@@ -23,7 +23,7 @@ public class ImageUtilsImplements implements ImageUtils {
     private static final Logger LOG = Logger.getLogger(ImageUtilsImplements.class.getName());
 
     /**
-     * Paint the dot clicked in the image.
+     * Draw the dot clicked in the image.
      *
      * @param point axis to paint
      * @param imagePointed the image to draw a circule point
@@ -42,7 +42,7 @@ public class ImageUtilsImplements implements ImageUtils {
     }
 
     /**
-     * Mark a grid made by two dots in the image
+     * Draw a grid made by two dots in the image
      *
      * @param beginPoint
      * @param endPoint
@@ -60,7 +60,7 @@ public class ImageUtilsImplements implements ImageUtils {
     }
 
     /**
-     * Capture the Rect of the grid for identification.Allows to capture the
+     * Capture the Rect of the grid for identification. Allows to capture the
      * rect so it can be possible to indentify which grid has a certain egg
      * inside.
      *

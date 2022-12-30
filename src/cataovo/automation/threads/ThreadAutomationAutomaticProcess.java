@@ -4,12 +4,13 @@
  */
 package cataovo.automation.threads;
 
-import cataovo.automation.threads.opencvlib.automaticImageProcess.AutomaticFrameArchiveProcess;
-import cataovo.automation.threads.opencvlib.automaticImageProcess.AutomaticImageProcess;
-import cataovo.automation.threads.opencvlib.automaticImageProcess.AutomaticImageProcessImplements;
+import cataovo.opencvlib.automation.automaticImageProcess.AutomaticFrameArchiveProcess;
+import cataovo.opencvlib.automation.automaticImageProcess.AutomaticImageProcess;
+import cataovo.opencvlib.automation.automaticImageProcess.AutomaticImageProcessImplements;
 import cataovo.entities.Frame;
 import cataovo.entities.Palette;
 import cataovo.filechooser.handler.FileExtension;
+import cataovo.opencvlib.wrappers.MatWrapper;
 import java.io.File;
 
 /**
@@ -34,7 +35,10 @@ public class ThreadAutomationAutomaticProcess extends ThreadAutomation {
         return writer.toString();
     }
 
-    private AutomaticFrameArchiveProcess createImagesContent(String toString, Frame frame) {
+    private AutomaticFrameArchiveProcess createImagesContent(String destination, Frame frame) {
+        MatWrapper matWrapper = new MatWrapper(frame);
+        matWrapper.setOpencvMat(imageProcess.applyBlurOnImage(destination + "/blur.png", matWrapper.getOpencvMat(), 5, 5));
+        
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
@@ -55,6 +59,5 @@ public class ThreadAutomationAutomaticProcess extends ThreadAutomation {
         }
         return writeContentFinalFile;
     }
+
 }
-
-

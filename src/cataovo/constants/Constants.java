@@ -18,4 +18,6 @@ public class Constants {
     public static final String TAB_NAME_MANUAL = "Manual";
     public static final String TAB_NAME_AUTOMATICO = "Automático";
     
+    public static final String NO_PALETTE_SELECTED = "Escolha uma pasta";
+    
 }
