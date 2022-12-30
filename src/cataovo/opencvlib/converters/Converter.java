@@ -36,6 +36,10 @@ public final class Converter {
     private static final Logger LOG = Logger.getLogger(Converter.class.getName());
     private static volatile Converter CONVERTER;
 
+    /**
+     * 
+     * @return start the operation of converting types
+     */
     public static Converter getInstance() {
         Converter FORMAT_CONVERTER = Converter.CONVERTER;
         if (FORMAT_CONVERTER == null) {
@@ -118,7 +122,7 @@ public final class Converter {
      * @param codeOk
      * @param ofBytesWrapper
      * @param extension
-     * @return
+     * @return the image converted
      */
     private BufferedImage makeConversion(boolean codeOk, MatOfBytesWrapper ofBytesWrapper, FileExtension extension) {
         BufferedImage output = null;

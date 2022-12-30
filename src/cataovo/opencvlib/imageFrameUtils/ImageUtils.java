@@ -44,12 +44,23 @@ public interface ImageUtils {
      * @return the area Rect of the clicked Grid
      */
     public Rect captureGridMat(Point beginGrid, Point endGrid);
-    
+
     /**
-     * 
+     * Captures the submat of an denmarked egg. It must have to obbey the
+     * expression:
+     * <p>
+     * <strong><code>
+     * 0 &le; roi.x &amp; 0 &le; roi.width &amp; roi.x + roi.width &le; m.cols &amp; 0 &le; roi.y
+     * &amp; 0 &le; roi.height &amp; roi.y + roi.height &le; m.rows </code></strong></p>
+     *
+     * As the <code>frame.submat(rect)</code> is only able to capture a
+     * {@link Rect} denmarked from left to right and up to down. Since is 
+     * the signal (+ or -) what defines right or left, to up or to down, this 
+     * method must adapt the values to react without the signal.
+     *
      * @param region
      * @param frame
-     * @return 
+     * @return
      */
     public Mat captureSubmat(Rect region, Mat frame);
 }

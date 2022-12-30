@@ -113,7 +113,7 @@ public class MainPageControllerImplements implements MainPageController {
     /**
      * Receives a file and shows its image at jLabelImage.
      *
-     * @param par the File image
+     * @param file the File image
      */
     private ImageIcon showImageFile(File file) {
         return new ImageIcon(file.getPath());

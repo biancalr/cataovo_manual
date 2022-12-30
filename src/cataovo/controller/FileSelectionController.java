@@ -20,11 +20,11 @@ public interface FileSelectionController {
      * Selects an event and an action based on the parameters.
      *
      * @param actionCommand comand that defines a dialog showing actions
-     * @param parent
+     * @param parent the component
      * @param isADirectoryOnly <code>True</code> if the selection mode is a
      * <code>DIRECTORY_ONLY</code> or <code>False</code> if the selection mode
      * is a <code>FILES_AND_DIRECTORIES</code>
-     * @return
+     * @return the selected file
      * @throws cataovo.exceptions.DirectoryNotValidException
      * @throws cataovo.exceptions.ImageNotValidException
      * @throws java.io.FileNotFoundException

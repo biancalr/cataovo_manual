@@ -14,12 +14,22 @@ import javax.swing.filechooser.FileFilter;
  */
 public class FileFilterExtensions extends FileFilter {
 
+    /**
+     * The file extension to work with.
+     */
     public FileExtension extension;
 
+    /**
+     * 
+     * @param extension the extension needed
+     */
     public FileFilterExtensions(FileExtension extension) {
         this.extension = extension;
     }
 
+    /**
+     * Empty Constructor
+     */
     public FileFilterExtensions() {
         
     }
@@ -36,10 +46,18 @@ public class FileFilterExtensions extends FileFilter {
         return "*." + extension.toString().toLowerCase();
     }
 
+    /**
+     * 
+     * @param extension 
+     */
     public void setExtension(FileExtension extension) {
         this.extension = extension;
     }
 
+    /**
+     * 
+     * @return the extension
+     */
     public FileExtension getExtension() {
         return extension;
     }
