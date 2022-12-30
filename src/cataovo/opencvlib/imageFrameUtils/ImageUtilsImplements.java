@@ -82,8 +82,10 @@ public class ImageUtilsImplements implements ImageUtils{
     @Override
     public Mat captureSubmat(Rect region, Mat frame) {
         LOG.log(Level.INFO, "Capturing submat");
-        region.width = Math.abs(region.width);
-        region.height = Math.abs(region.height);
+        region.x = region.width > 0 ? (region.x - region.width) : region.x;
+        region.y = region.height > 0 ? (region.y - region.height) : region.y;
+        region.width = region.width > 0 ? region.width : Math.abs(region.width);
+        region.height = region.height > 0 ? region.height : Math.abs(region.height);
         Mat submat = frame.submat(region);
         return submat;
     }

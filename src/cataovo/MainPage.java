@@ -444,6 +444,10 @@ public class MainPage extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
             LOG.log(Level.INFO, "Removing the last created region: {0}", evt.getActionCommand());
+            jLabel10.setText("");
+            jLabel10.setIcon(null);
+            jLabel9.setIcon(null);
+            jLabel9.setText("");
             mainPageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel1, jLabel2, framePainterController.removeLastRegion());
         } catch (DirectoryNotValidException | ImageNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -493,6 +497,10 @@ public class MainPage extends javax.swing.JFrame {
         try {
             LOG.log(Level.INFO, evt.getActionCommand());
             if (MainResources.getInstance().getPalette().getFrames().iterator().hasNext()) {
+                jLabel10.setText("");
+                jLabel10.setIcon(null);
+                jLabel9.setIcon(null);
+                jLabel9.setText("");
                 mainPageController.onFrameFinished(jLabel1, jLabel2);
             } else {
                 LOG.info("You've reached the end of the Palette.");
