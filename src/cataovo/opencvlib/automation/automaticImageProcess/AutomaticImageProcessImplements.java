@@ -4,10 +4,24 @@
  */
 package cataovo.opencvlib.automation.automaticImageProcess;
 
+import cataovo.filechooser.handler.FileExtension;
+import cataovo.opencvlib.converters.Converter;
+import cataovo.opencvlib.wrappers.MatWrapper;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
-import org.opencv.imgcodecs.Imgcodecs;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+import javax.imageio.ImageIO;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 /**
@@ -15,6 +29,10 @@ import org.opencv.imgproc.Imgproc;
  * @author Bianca Leopoldo Ramos
  */
 public class AutomaticImageProcessImplements implements AutomaticImageProcess {
+
+    private static final Logger LOG = Logger.getLogger(AutomaticImageProcessImplements.class.getName());
+    private static final double[] WHITE = {255, 255, 255};
+    private static final double[] BLACK = {0, 0, 0};
 
     private AutomaticFrameArchiveProcess frameArchiveProcess;
 
@@ -24,10 +42,11 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
 
     @Override
     public Mat applyBlurOnImage(String savingPath, Mat imageMatToBlur, int ksize_width, int ksize_height) {
-        Mat dstn = new Mat(imageMatToBlur.size(), imageMatToBlur.type());
-        Imgproc.blur(imageMatToBlur.clone(), dstn, new Size(ksize_width, ksize_height));
-        boolean success = Imgcodecs.imwrite(savingPath, dstn);
-        if (success) {
+        LOG.log(Level.INFO, "Applying blur...");
+        Mat dstn = Mat.zeros(imageMatToBlur.size(), CvType.CV_8U);
+        Imgproc.cvtColor(imageMatToBlur.clone(), dstn, Imgproc.COLOR_BGR2GRAY);
+        Imgproc.blur(dstn, dstn, new Size(ksize_width, ksize_height));
+        if (saveImage(dstn, savingPath)) {
             return dstn;
         }
         return null;
@@ -35,22 +54,116 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
 
     @Override
     public Mat applyBinaryOnImage(String savingPath, BufferedImage buffImgToBinary) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Mat dstn = Mat.zeros(new Size(buffImgToBinary.getWidth(), buffImgToBinary.getHeight()), CvType.CV_8UC3);
+        for (int i = 0; i < buffImgToBinary.getWidth(); i++) {
+            for (int j = 0; j < buffImgToBinary.getHeight(); j++) {
+                Color color = new Color(buffImgToBinary.getRGB(i, j));
+                double blue = color.getRed();
+                double green = color.getGreen();
+                double red = color.getBlue();
+                if ((blue > (red + 25))
+                        || (red > 75 && blue > 75 && green > 75)
+                        || (blue > (green + 15))) {
+                    dstn.put(j, i, WHITE);
+                } else {
+                    dstn.put(j, i, BLACK);
+                }
+            }
+        }
+        if (saveImage(dstn, savingPath)) {
+            return dstn;
+        }
+        return null;
     }
 
     @Override
-    public Mat applyMorphOnImage(String savingPath, int structuringElementSize, Mat imageToMorph) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Mat applyMorphOnImage(String savingPath, int structuringElementWidth, int structuringElementHeight, int morphologicalOperation, Mat imageToMorph) {
+        Mat dstn = Mat.zeros(imageToMorph.size(), imageToMorph.type());
+        Mat structuringElement = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(structuringElementWidth, structuringElementHeight));
+        Imgproc.morphologyEx(imageToMorph.clone(), dstn, morphologicalOperation, structuringElement);
+        if (saveImage(dstn, savingPath)) {
+            return dstn;
+        }
+        return null;
     }
 
     @Override
-    public Mat drawContoursOnImage(String savingPath, Mat imageToDraw) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Mat drawContoursOnImage(String savingPath, Mat imageToDraw, Mat imgToFindContours, int minSizeArea, int maxSizeArea) {
+        int numOfContours = 0;
+        Mat result = imageToDraw.clone();
+        List<MatOfPoint> contours = findContours(imgToFindContours.clone());
+
+        for (int i = 0; i < contours.size(); i++) {
+            double contourArea = Imgproc.contourArea(contours.get(i));
+
+            if ((contourArea > minSizeArea) && (contourArea < maxSizeArea)) {
+                numOfContours++;
+                if (contourArea > 300) {
+                    numOfContours++;
+                }
+                LOG.log(Level.INFO, "Quantity of contours: {0}", numOfContours);
+
+                Imgproc.drawContours(result, contours, i, new Scalar(0, 200, 0), 2, 8, new Mat(), 0, new Point(0, 0));
+            }
+        }
+
+        if (saveImage(result, savingPath)) {
+            return result;
+        }
+        return null;
     }
 
     @Override
     public AutomaticFrameArchiveProcess generateArchiveContent() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    /**
+     * Saves the resulted image from any step.
+     * 
+     * @param dstn
+     * @param savingPath
+     * @return 
+     */
+    private boolean saveImage(Mat dstn, String savingPath) {
+        try {
+            BufferedImage image = Converter.getInstance().convertMatToPng(new MatWrapper(dstn, savingPath)).get();
+            ImageIO.write(image, FileExtension.PNG.toString().toLowerCase(), new File(savingPath));
+            return true;
+        } catch (IOException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+
+    /**
+     * Look for the contours in each object of the image
+     *
+     * @param src
+     * @return
+     */
+    public List<MatOfPoint> findContours(Mat src) {
+        List<MatOfPoint> contours = new ArrayList<>();
+        Mat dstny = getChannelImage(src);
+        Imgproc.findContours(dstny, contours, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
+        return contours;
+    }
+
+    /**
+     * Transforms a three channels image to a single channel image.
+     *
+     * @param src
+     * @return
+     */
+    private Mat getChannelImage(Mat src) {
+        Mat matR = Mat.zeros(src.size(), CvType.CV_8UC1);
+        for (int i = 0; i < src.rows(); i++) {
+            for (int j = 0; j < src.cols(); j++) {
+                double temp[] = src.get(i, j);
+                matR.put(i, j, temp[2]);
+            }
+        }
+        return matR;
     }
 
 }

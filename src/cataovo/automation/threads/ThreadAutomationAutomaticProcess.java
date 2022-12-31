@@ -10,6 +10,7 @@ import cataovo.opencvlib.automation.automaticImageProcess.AutomaticImageProcessI
 import cataovo.entities.Frame;
 import cataovo.entities.Palette;
 import cataovo.filechooser.handler.FileExtension;
+import cataovo.opencvlib.converters.Converter;
 import cataovo.opencvlib.wrappers.MatWrapper;
 import java.io.File;
 
@@ -36,8 +37,21 @@ public class ThreadAutomationAutomaticProcess extends ThreadAutomation {
     }
 
     private AutomaticFrameArchiveProcess createImagesContent(String destination, Frame frame) {
-        MatWrapper matWrapper = new MatWrapper(frame);
-        matWrapper.setOpencvMat(imageProcess.applyBlurOnImage(destination + "/blur.png", matWrapper.getOpencvMat(), 5, 5));
+        MatWrapper current = new MatWrapper(frame);
+        
+        // blur
+        current.setOpencvMat(imageProcess.applyBlurOnImage(destination + "/blur.png", current.getOpencvMat(), 5, 5));
+        
+        // binary
+        current.setOpencvMat(imageProcess.applyBinaryOnImage(destination + "/binary.png", 
+                Converter.getInstance().convertMatToPng(current).get()));
+        
+        // morphology
+        current.setOpencvMat(imageProcess.applyMorphOnImage(destination + "/morph.png", 11, 25, 2, current.getOpencvMat()));
+        current.setOpencvMat(imageProcess.applyMorphOnImage(destination + "/morph.png", 25, 11, 2, current.getOpencvMat()));
+        
+        // contours
+        current.setOpencvMat(imageProcess.drawContoursOnImage(destination + "/contours.png", new MatWrapper(frame).getOpencvMat(), current.getOpencvMat(), 780, 4800));
         
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }

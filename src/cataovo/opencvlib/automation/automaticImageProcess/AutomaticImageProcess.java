@@ -34,19 +34,24 @@ public interface AutomaticImageProcess {
     /**
      *
      * @param savingPath
-     * @param structuringElementSize
+     * @param structuringElementWidth
+     * @param structuringElementHeight
+     * @param morphologicalOperation <ul><li><code>MORPH_ERODE = 0,</code></li><li><code>MORPH_DILATE = 1,</code></li> <li><code>MORPH_OPEN = 2,</code></li><li><code>MORPH_CLOSE = 3,</code></li><li><code>MORPH_GRADIENT = 4,</code></li><li><code>MORPH_TOPHAT = 5,</code></li><li><code>MORPH_BLACKHAT = 6,</code></li><li><code>MORPH_HITMISS = 7;</code></li></ul>
      * @param imageToMorph
      * @return
      */
-    public Mat applyMorphOnImage(String savingPath, int structuringElementSize, Mat imageToMorph);
+    public Mat applyMorphOnImage(String savingPath, int structuringElementWidth, int structuringElementHeight, int morphologicalOperation, Mat imageToMorph);
 
     /**
      *
      * @param savingPath
      * @param imageToDraw
+     * @param imgToFindContours
+     * @param minSizeArea
+     * @param maxSizeArea
      * @return
      */
-    public Mat drawContoursOnImage(String savingPath, Mat imageToDraw);
+    public Mat drawContoursOnImage(String savingPath, Mat imageToDraw, Mat imgToFindContours, int minSizeArea, int maxSizeArea);
     
     /**
      *

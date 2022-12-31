@@ -26,8 +26,10 @@ public class AutomaticProcessorControllerImplements implements AutomaticProcesso
     public boolean onAutoProcessPalette(JLabel jLabel4, JLabel jLabel3) {
         try {
             ThreadAutomation automation = new ThreadAutomationAutomaticProcess(MainResources.getInstance().getPalette(), MainResources.getInstance().getSavingFolder().getPath(), FileExtension.CSV, MainResources.getInstance().getPanelTabHelper().getTabName());
+            automation.start();
+            automation.join();
             return true;
-        } catch (DirectoryNotValidException ex) {
+        } catch (DirectoryNotValidException | InterruptedException ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
         return false;
