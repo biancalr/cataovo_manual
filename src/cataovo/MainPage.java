@@ -520,7 +520,7 @@ public class MainPage extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(jPanel1, "It wasn't possible to seve the Palette on a file");
                 } else {
                     LOG.log(Level.INFO, "The palette was saved successfully!");
-                    JOptionPane.showMessageDialog(jPanel1, "The palette was saved successfully!");
+                    JOptionPane.showMessageDialog(jPanel1, "The palette was saved successfully at: " + fileSelectionController.getFinalRelatoryDestination());
                 }
             }
         } catch (ImageNotValidException | DirectoryNotValidException | FileNotFoundException ex) {
@@ -568,13 +568,23 @@ public class MainPage extends javax.swing.JFrame {
         jButton5.setEnabled(false);
         jButton1.setEnabled(false);
         try {
-            if (automaticProcessorController.onAutoProcessPalette(jLabel4, jLabel3)) {
-                jButton4.setEnabled(true);
-                jButton5.setEnabled(true);
-                jButton1.setEnabled(true);
+//            if (automaticProcessorController.onAutoProcessPalette(jLabel4, jLabel3)) {
+//                jButton4.setEnabled(true);
+//                jButton5.setEnabled(true);
+//                jButton1.setEnabled(true);
+//            }
+            String result = automaticProcessorController.onNewAutoProcessPalette(jLabel4, jLabel3);
+            while (result.isBlank()) {
+                jButton4.setEnabled(false);
+                jButton5.setEnabled(false);
+                jButton1.setEnabled(false);
             }
+            jButton4.setEnabled(true);
+            jButton5.setEnabled(true);
+            jButton1.setEnabled(true);
             // Ao final do processamento, liberar os botões e a mudança de tab
             MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
+            JOptionPane.showMessageDialog(jPanel1, "The directory created was named: " + result);
         } catch (DirectoryNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.automation.threads;
+package cataovo.automation.threads.runnable;
 
 import cataovo.constants.Constants;
 import java.util.logging.Logger;
@@ -48,6 +48,13 @@ public abstract class ThreadAutomation extends Thread {
         }
     }
 
+    /**
+     * Responsible for creating the contents of each folder needed to save the final products
+     *
+     * @return the content of the file;
+     */
+    protected abstract StringBuffer createContent(); 
+    
     private synchronized boolean createFile() {
         StringBuffer sb = new StringBuffer();
         String processingMode = (this.parent == null ? Constants.TAB_NAME_MANUAL == null : this.parent.equals(Constants.TAB_NAME_MANUAL)) ? "manual" : (this.parent == null ? Constants.TAB_NAME_AUTOMATICO == null : this.parent.equals(Constants.TAB_NAME_AUTOMATICO))? "auto" : "result";
@@ -69,12 +76,6 @@ public abstract class ThreadAutomation extends Thread {
         }
         return false;
     }
-
-    /**
-     *
-     * @return the content of the file;
-     */
-    protected abstract StringBuffer createContent(); 
 
     /**
      * Calculates the date and the time.
@@ -104,4 +105,15 @@ public abstract class ThreadAutomation extends Thread {
         this.savingDirectory = savingDirectory;
     }
 
+    public FileExtension getFileExtension() {
+        return fileExtension;
+    }
+
+    public void setFileExtension(FileExtension fileExtension) {
+        this.fileExtension = fileExtension;
+    }
+
+    public String getParent() {
+        return parent;
+    }
 }

@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package cataovo.automation.threads;
+package cataovo.automation.threads.runnable;
 
 import cataovo.opencvlib.automation.automaticImageProcess.AutomaticFrameArchiveProcess;
 import cataovo.opencvlib.automation.automaticImageProcess.AutomaticImageProcess;
@@ -53,7 +53,7 @@ public class ThreadAutomationAutomaticProcess extends ThreadAutomation {
         // contours
         current.setOpencvMat(imageProcess.drawContoursOnImage(destination + "/contours.png", new MatWrapper(frame).getOpencvMat(), current.getOpencvMat(), 780, 4800));
         
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return imageProcess.generateArchiveContent();
     }
 
     @Override
@@ -69,9 +69,13 @@ public class ThreadAutomationAutomaticProcess extends ThreadAutomation {
             if (!fileImagesDestination.exists()) {
                 fileImagesDestination.mkdirs();
             }
+            // wait(100)
+            // Lançar as outras threads
             writeContentFinalFile.append(createArchiveContent(createImagesContent(imagesDestination.toString(), frame), frame));
         }
         return writeContentFinalFile;
     }
+    
+    
 
 }

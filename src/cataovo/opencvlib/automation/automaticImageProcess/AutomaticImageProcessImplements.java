@@ -35,6 +35,8 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
     private static final double[] BLACK = {0, 0, 0};
 
     private AutomaticFrameArchiveProcess frameArchiveProcess;
+    private int quantityOfEggs = 0;
+    private List<MatOfPoint> eggsContours = new ArrayList<>();
 
     public AutomaticImageProcessImplements() {
 
@@ -54,6 +56,7 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
 
     @Override
     public Mat applyBinaryOnImage(String savingPath, BufferedImage buffImgToBinary) {
+        LOG.log(Level.INFO, "Applying binary...");
         Mat dstn = Mat.zeros(new Size(buffImgToBinary.getWidth(), buffImgToBinary.getHeight()), CvType.CV_8UC3);
         for (int i = 0; i < buffImgToBinary.getWidth(); i++) {
             for (int j = 0; j < buffImgToBinary.getHeight(); j++) {
@@ -78,6 +81,7 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
 
     @Override
     public Mat applyMorphOnImage(String savingPath, int structuringElementWidth, int structuringElementHeight, int morphologicalOperation, Mat imageToMorph) {
+        LOG.log(Level.INFO, "Applying morphology...");
         Mat dstn = Mat.zeros(imageToMorph.size(), imageToMorph.type());
         Mat structuringElement = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(structuringElementWidth, structuringElementHeight));
         Imgproc.morphologyEx(imageToMorph.clone(), dstn, morphologicalOperation, structuringElement);
@@ -89,23 +93,29 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
 
     @Override
     public Mat drawContoursOnImage(String savingPath, Mat imageToDraw, Mat imgToFindContours, int minSizeArea, int maxSizeArea) {
+        LOG.log(Level.INFO, "drawing objects...");
         int numOfContours = 0;
         Mat result = imageToDraw.clone();
         List<MatOfPoint> contours = findContours(imgToFindContours.clone());
+        List<MatOfPoint> foundContours = new ArrayList<>();
 
         for (int i = 0; i < contours.size(); i++) {
             double contourArea = Imgproc.contourArea(contours.get(i));
 
             if ((contourArea > minSizeArea) && (contourArea < maxSizeArea)) {
                 numOfContours++;
-                if (contourArea > 300) {
+                if (contourArea > 3000) {
                     numOfContours++;
                 }
-                LOG.log(Level.INFO, "Quantity of contours: {0}", numOfContours);
+                foundContours.add(contours.get(i));
 
                 Imgproc.drawContours(result, contours, i, new Scalar(0, 200, 0), 2, 8, new Mat(), 0, new Point(0, 0));
             }
         }
+        LOG.log(Level.INFO, "Quantity of contours: {0}", numOfContours);
+
+        this.quantityOfEggs = numOfContours;
+        this.eggsContours = foundContours;
 
         if (saveImage(result, savingPath)) {
             return result;
@@ -115,15 +125,16 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
 
     @Override
     public AutomaticFrameArchiveProcess generateArchiveContent() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        this.frameArchiveProcess = new AutomaticFrameArchiveProcess(quantityOfEggs, eggsContours);
+        return frameArchiveProcess;
     }
 
     /**
      * Saves the resulted image from any step.
-     * 
+     *
      * @param dstn
      * @param savingPath
-     * @return 
+     * @return
      */
     private boolean saveImage(Mat dstn, String savingPath) {
         try {
@@ -143,6 +154,7 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
      * @return
      */
     public List<MatOfPoint> findContours(Mat src) {
+        LOG.log(Level.INFO, "Finding objects...");
         List<MatOfPoint> contours = new ArrayList<>();
         Mat dstny = getChannelImage(src);
         Imgproc.findContours(dstny, contours, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);

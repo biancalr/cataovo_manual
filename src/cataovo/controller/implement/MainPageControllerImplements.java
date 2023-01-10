@@ -151,7 +151,7 @@ public class MainPageControllerImplements implements MainPageController {
      * @throws DirectoryNotValidException
      */
     @Override
-    public void showFramesOnSelectedTabScreen(Component tabComponent, JLabel parentNameLabel, JLabel parentLabel, Object frame) throws ImageNotValidException, DirectoryNotValidException {
+    public void showFramesOnSelectedTabScreen(Component tabComponent, JLabel parentNameLabel, JLabel parentLabel, Object frame) throws ImageNotValidException, DirectoryNotValidException, UnsupportedOperationException, AssertionError {
         if (tabComponent instanceof JTabbedPane jTabbedPane) { // if the component is another type of component just add another conditional
             switch (jTabbedPane.getSelectedIndex()) {
                 case 0 -> {
@@ -165,6 +165,8 @@ public class MainPageControllerImplements implements MainPageController {
                 default ->
                     throw new AssertionError("No tab with such index");
             }
+        } else {
+            throw new UnsupportedOperationException("Operation not supported with such component.");
         }
     }
 

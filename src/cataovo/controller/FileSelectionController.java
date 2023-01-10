@@ -31,4 +31,10 @@ public interface FileSelectionController {
      */
     public boolean fileSelectionEvent(String actionCommand, Component parent, boolean isADirectoryOnly) throws DirectoryNotValidException, ImageNotValidException, FileNotFoundException;
     
+    /**
+     * 
+     * @return 
+     */
+    public String getFinalRelatoryDestination();
+    
 }

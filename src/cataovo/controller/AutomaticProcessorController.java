@@ -21,4 +21,13 @@ public interface AutomaticProcessorController {
      */
     public boolean onAutoProcessPalette(JLabel jLabel4, JLabel jLabel3);
     
+    /**
+     * Starts the automatic processing of the Palette
+     * 
+     * @param jLabel4
+     * @param jLabel3
+     * @return 
+     */
+    public String onNewAutoProcessPalette(JLabel jLabel4, JLabel jLabel3);
+    
 }

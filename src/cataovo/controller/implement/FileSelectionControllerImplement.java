@@ -5,6 +5,8 @@
  */
 package cataovo.controller.implement;
 
+import cataovo.automation.threads.callable.NewThreadAutomation;
+import cataovo.automation.threads.callable.NewThreadAutomationManualProcess;
 import cataovo.constants.Constants;
 import cataovo.controller.FileSelectionController;
 import cataovo.entities.Frame;
@@ -14,14 +16,19 @@ import cataovo.exceptions.ImageNotValidException;
 import cataovo.fileChooser.UI.MyFileChooserUI;
 import cataovo.filechooser.handler.FileExtension;
 import cataovo.resources.MainResources;
-import cataovo.automation.threads.ThreadAutomation;
-import cataovo.automation.threads.ThreadAutomationManualProcess;
+import cataovo.automation.threads.runnable.ThreadAutomation;
+import cataovo.automation.threads.runnable.ThreadAutomationManualProcess;
 import java.awt.Component;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import javax.swing.JFileChooser;
@@ -37,9 +44,12 @@ public class FileSelectionControllerImplement implements FileSelectionController
     private static final Logger LOG = Logger.getLogger(FileSelectionControllerImplement.class.getName());
     private final MyFileChooserUI fileChooser;
     private ThreadAutomation createRelatories;
+    private NewThreadAutomation newCreateRelatories;
+    private String finalRelatoryDestination;
 
     public FileSelectionControllerImplement() throws DirectoryNotValidException {
         fileChooser = MainResources.getInstance().getFileChooserUI();
+        finalRelatoryDestination = "";
     }
 
     /**
@@ -66,7 +76,7 @@ public class FileSelectionControllerImplement implements FileSelectionController
                     return actionCommandSetSavingFolder(isADirectoryOnly, parent);
                 }
                 case Constants.ITEM_ACTION_COMMAND_SALVAR_ARQUIVO_FINAL -> {
-                    return actionCommandSaveFinalFile(MainResources.getInstance().getPanelTabHelper().getTabName());
+                    return actionCommandNewSaveFinalFile(MainResources.getInstance().getPanelTabHelper().getTabName());
                 }
                 default -> {
                     LOG.log(Level.WARNING, "Not implemented yet {0}", actionCommand);
@@ -201,8 +211,41 @@ public class FileSelectionControllerImplement implements FileSelectionController
         }
     }
 
+    /**
+     * Save the final relatories in the computer.
+     *
+     * @return <code>True</code> in case of success. <code> False </code>
+     * otherwise.
+     */
+    private boolean actionCommandNewSaveFinalFile(String parent) {
+        LOG.log(Level.INFO, "Final file save: start");
+        try {
+            Future<String> task;
+            ExecutorService executorService = Executors.newSingleThreadExecutor();
+            this.newCreateRelatories = new NewThreadAutomationManualProcess(
+                    MainResources.getInstance().getPaletteToSave(),
+                    MainResources.getInstance().getSavingFolder().getPath(),
+                    FileExtension.CSV,
+                    parent);
+            task = executorService.submit(newCreateRelatories);
+            this.finalRelatoryDestination = task.get();
+            executorService.awaitTermination(5, TimeUnit.MILLISECONDS);
+            executorService.shutdown();
+            return true;
+        } catch (DirectoryNotValidException | InterruptedException | ExecutionException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            return false;
+        }
+
+    }
+
     public MyFileChooserUI getFileChooser() {
         return fileChooser;
+    }
+
+    @Override
+    public String getFinalRelatoryDestination() {
+        return finalRelatoryDestination;
     }
 
 }

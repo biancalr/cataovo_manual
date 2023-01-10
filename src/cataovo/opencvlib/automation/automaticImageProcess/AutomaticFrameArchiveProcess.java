@@ -35,11 +35,8 @@ public class AutomaticFrameArchiveProcess {
             System.out.println("auxlist.size: " + auxlist.size());
             for (int j = 0; j < auxlist.size(); j++) {
 
-                if (j == (auxlist.size() * 0.25)
-                        || j == (auxlist.size() * 0.50)
-                        || j == (auxlist.size() * 0.75)
-                        || j == (auxlist.size() - 1)) {
-
+                // Saves a point each five steps
+                if ((j % 50) == 0){
                     mainPoints.add(auxlist.get(j));
                 }
 
