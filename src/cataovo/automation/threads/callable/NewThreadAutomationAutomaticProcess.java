@@ -7,7 +7,7 @@ package cataovo.automation.threads.callable;
 import cataovo.entities.Frame;
 import cataovo.entities.Palette;
 import cataovo.filechooser.handler.FileExtension;
-import cataovo.opencvlib.automation.automaticImageProcess.threads.ThreadAutomaticFramesProcessor;
+import cataovo.automation.threads.callable.automaticImageProcess.ThreadAutomaticFramesProcessor;
 import java.io.File;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -42,9 +42,10 @@ public class NewThreadAutomationAutomaticProcess extends NewThreadAutomation {
 
     @Override
     protected StringBuffer createContent() {
-        StringBuffer result = new StringBuffer();
+        StringBuffer result = new StringBuffer(palette.getPathName());
         palette.getFrames().forEach(frame -> {
             String destination = imagesDestination.toString() + "/" + frame.getName();
+            result.append("|").append(frame.getName()).append(",");
             try {
                 if (createImagesFolders(destination)) {
                     synchronized (destination) {
@@ -59,18 +60,19 @@ public class NewThreadAutomationAutomaticProcess extends NewThreadAutomation {
     }
 
     /**
-     *
+     * Calls the thread wich is going to processesescha frame.
+     * 
      * @param frame
-     * @param executorService
-     * @param result
+     * @param destination
+     * @return a string containing the of quantity of eggs in a frame and a percentage of the total points for later checks
      * @throws ExecutionException
-     * @throws InterruptedException
+     * @throws InterruptedException 
      */
     private synchronized StringBuffer processFrameImages(Frame frame, String destination) throws ExecutionException, InterruptedException {
         Future<StringBuffer> task;
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         StringBuffer result = new StringBuffer();
-        framesProcessor = new ThreadAutomaticFramesProcessor(frame, destination, getFileExtension().toString().toLowerCase());
+        framesProcessor = new ThreadAutomaticFramesProcessor(frame, destination);
         task = executorService.submit(framesProcessor);
         result.append(task.get());
         executorService.awaitTermination(5, TimeUnit.MILLISECONDS);
@@ -80,10 +82,10 @@ public class NewThreadAutomationAutomaticProcess extends NewThreadAutomation {
     }
 
     /**
-     *
-     * @param actualFrame
-     * @param paletteDirectory
+     * 
+     * @param destination
      * @return
+     * @throws InterruptedException 
      */
     private synchronized boolean createImagesFolders(String destination) throws InterruptedException {
         File fileImagesDestination;

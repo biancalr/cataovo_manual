@@ -563,10 +563,6 @@ public class MainPage extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         LOG.log(Level.INFO, evt.getActionCommand());
-        // Disable the buttons and start processing;
-        jButton4.setEnabled(false);
-        jButton5.setEnabled(false);
-        jButton1.setEnabled(false);
         try {
 //            if (automaticProcessorController.onAutoProcessPalette(jLabel4, jLabel3)) {
 //                jButton4.setEnabled(true);
@@ -574,11 +570,13 @@ public class MainPage extends javax.swing.JFrame {
 //                jButton1.setEnabled(true);
 //            }
             String result = automaticProcessorController.onNewAutoProcessPalette(jLabel4, jLabel3);
-            while (result.isBlank()) {
+            do {
+                // Disable the buttons and start processing;
                 jButton4.setEnabled(false);
                 jButton5.setEnabled(false);
                 jButton1.setEnabled(false);
-            }
+            } while (result.isBlank());
+            
             jButton4.setEnabled(true);
             jButton5.setEnabled(true);
             jButton1.setEnabled(true);

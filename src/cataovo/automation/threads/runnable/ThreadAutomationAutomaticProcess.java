@@ -4,7 +4,6 @@
  */
 package cataovo.automation.threads.runnable;
 
-import cataovo.opencvlib.automation.automaticImageProcess.AutomaticFrameArchiveProcess;
 import cataovo.opencvlib.automation.automaticImageProcess.AutomaticImageProcess;
 import cataovo.opencvlib.automation.automaticImageProcess.AutomaticImageProcessImplements;
 import cataovo.entities.Frame;
@@ -27,16 +26,16 @@ public class ThreadAutomationAutomaticProcess extends ThreadAutomation {
         imageProcess = new AutomaticImageProcessImplements();
     }
 
-    private String createArchiveContent(AutomaticFrameArchiveProcess archiveContent, Frame frame) {
-        StringBuffer writer = new StringBuffer("|");
-        writer.append(frame.getName());
-        writer.append(",");
-        writer.append(archiveContent.getTotalOfEggs());
-        writer.append(archiveContent.getMainPointsInEgg());
-        return writer.toString();
-    }
+//    private String createArchiveContent(AutomaticFrameArchiveProcess archiveContent, Frame frame) {
+//        StringBuffer writer = new StringBuffer("|");
+//        writer.append(frame.getName());
+//        writer.append(",");
+//        writer.append(archiveContent.getTotalOfEggs());
+//        writer.append(archiveContent.getMainPointsInEgg());
+//        return writer.toString();
+//    }
 
-    private AutomaticFrameArchiveProcess createImagesContent(String destination, Frame frame) {
+    private StringBuffer createImagesContent(String destination, Frame frame) {
         MatWrapper current = new MatWrapper(frame);
         
         // blur
@@ -53,7 +52,7 @@ public class ThreadAutomationAutomaticProcess extends ThreadAutomation {
         // contours
         current.setOpencvMat(imageProcess.drawContoursOnImage(destination + "/contours.png", new MatWrapper(frame).getOpencvMat(), current.getOpencvMat(), 780, 4800));
         
-        return imageProcess.generateArchiveContent();
+        return imageProcess.generateAutomaticProcessmentRelatory();
     }
 
     @Override
@@ -71,7 +70,7 @@ public class ThreadAutomationAutomaticProcess extends ThreadAutomation {
             }
             // wait(100)
             // Lançar as outras threads
-            writeContentFinalFile.append(createArchiveContent(createImagesContent(imagesDestination.toString(), frame), frame));
+            writeContentFinalFile.append(createImagesContent(imagesDestination.toString(), frame));
         }
         return writeContentFinalFile;
     }

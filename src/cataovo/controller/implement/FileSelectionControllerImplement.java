@@ -239,10 +239,18 @@ public class FileSelectionControllerImplement implements FileSelectionController
 
     }
 
+    /**
+     * 
+     * @return 
+     */
     public MyFileChooserUI getFileChooser() {
         return fileChooser;
     }
 
+    /**
+     * 
+     * @return 
+     */
     @Override
     public String getFinalRelatoryDestination() {
         return finalRelatoryDestination;

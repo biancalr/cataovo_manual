@@ -25,6 +25,8 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 /**
+ * Class that contains the implementation of the stablished steps to detect
+ * Aedes eggs in a image.
  *
  * @author Bianca Leopoldo Ramos
  */
@@ -33,17 +35,12 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
     private static final Logger LOG = Logger.getLogger(AutomaticImageProcessImplements.class.getName());
     private static final double[] WHITE = {255, 255, 255};
     private static final double[] BLACK = {0, 0, 0};
-
-    private AutomaticFrameArchiveProcess frameArchiveProcess;
     private int quantityOfEggs = 0;
     private List<MatOfPoint> eggsContours = new ArrayList<>();
 
-    public AutomaticImageProcessImplements() {
-
-    }
-
     @Override
     public Mat applyBlurOnImage(String savingPath, Mat imageMatToBlur, int ksize_width, int ksize_height) {
+        saveImage(imageMatToBlur, savingPath.replace("/blur.png", "/original.png"));
         LOG.log(Level.INFO, "Applying blur...");
         Mat dstn = Mat.zeros(imageMatToBlur.size(), CvType.CV_8U);
         Imgproc.cvtColor(imageMatToBlur.clone(), dstn, Imgproc.COLOR_BGR2GRAY);
@@ -123,12 +120,6 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
         return null;
     }
 
-    @Override
-    public AutomaticFrameArchiveProcess generateArchiveContent() {
-        this.frameArchiveProcess = new AutomaticFrameArchiveProcess(quantityOfEggs, eggsContours);
-        return frameArchiveProcess;
-    }
-
     /**
      * Saves the resulted image from any step.
      *
@@ -148,7 +139,7 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
     }
 
     /**
-     * Look for the contours in each object of the image
+     * Look for objectd detecting each boundary from the image
      *
      * @param src
      * @return
@@ -176,6 +167,42 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
             }
         }
         return matR;
+    }
+
+    /**
+     * Generates the content of the automatic counting.
+     *
+     * @return A text containg the total of the eggs and a list of a certain
+     * quantity of coodinates that forms each object.
+     */
+    @Override
+    public StringBuffer generateAutomaticProcessmentRelatory() {
+        StringBuffer builder = new StringBuffer(Integer.toString(this.quantityOfEggs));
+        List<Point> auxlist;
+        List<Point> mainPoints = new ArrayList<>();
+        for (int i = 0; i < this.eggsContours.size(); i++) {
+            MatOfPoint get = this.eggsContours.get(i);
+
+            auxlist = get.toList();
+            for (int j = 0; j < auxlist.size(); j++) {
+
+                // Saves a point each fifty steps
+                if ((j % 50) == 0) {
+                    mainPoints.add(auxlist.get(j));
+                }
+
+            }
+
+        }
+        
+        mainPoints.stream().forEach((p) -> {
+            builder.append(",");
+            builder.append(p.x);
+            builder.append(",");
+            builder.append(p.y);
+        });
+
+        return builder;
     }
 
 }

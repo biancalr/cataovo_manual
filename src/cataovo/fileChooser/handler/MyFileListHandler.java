@@ -15,7 +15,7 @@ import java.util.logging.Level;
 /**
  *
  * @author bibil
- * @param <T>
+ * @param <T> The type of the elements to deal in the List
  */
 public final class MyFileListHandler<T> {
 
