@@ -12,8 +12,9 @@ import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 
 /**
+ * Wrapps {@link org.opencv.core.Mat}
  *
- * @author bibil
+ * @author Bianca Leopoldo Ramos
  */
 public class MatWrapper{
 

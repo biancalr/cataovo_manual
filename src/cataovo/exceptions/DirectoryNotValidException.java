@@ -6,8 +6,9 @@
 package cataovo.exceptions;
 
 /**
+ * When the directory's not valid.
  *
- * @author bibil
+ * @author Bianca Leopoldo Ramos
  */
 public class DirectoryNotValidException extends Exception {
 

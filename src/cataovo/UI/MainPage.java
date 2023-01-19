@@ -3,21 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo;
+package cataovo.UI;
 
 import cataovo.constants.Constants;
 import cataovo.controller.AutomaticProcessorController;
 import cataovo.controller.FileSelectionController;
-import cataovo.controller.FramePainterController;
 import cataovo.controller.MainPageController;
 import cataovo.controller.implement.AutomaticProcessorControllerImplements;
 import cataovo.controller.implement.FileSelectionControllerImplement;
-import cataovo.controller.implement.FramePainterControllerImplements;
+import cataovo.controller.implement.FrameActionsControllerImplements;
 import cataovo.controller.implement.MainPageControllerImplements;
 import cataovo.entities.Point;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
 import cataovo.resources.MainResources;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.FileNotFoundException;
 import java.util.Locale;
 import java.util.logging.Logger;
@@ -25,6 +26,7 @@ import java.util.logging.Level;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import org.opencv.core.Core;
+import cataovo.controller.FrameActionsController;
 
 /**
  * Module that interacts with the user. This is the main face of this
@@ -37,7 +39,7 @@ public class MainPage extends javax.swing.JFrame {
     private static final Logger LOG = Logger.getLogger(MainPage.class.getName());
     private FileSelectionController fileSelectionController = null;
     private MainPageController mainPageController = null;
-    private FramePainterController framePainterController = null;
+    private FrameActionsController frameActionsController = null;
     private AutomaticProcessorController automaticProcessorController = null;
 
     /**
@@ -64,12 +66,19 @@ public class MainPage extends javax.swing.JFrame {
             //</editor-fold>
             fileSelectionController = new FileSelectionControllerImplement();
             mainPageController = new MainPageControllerImplements();
-            framePainterController = new FramePainterControllerImplements();
+            frameActionsController = new FrameActionsControllerImplements();
             automaticProcessorController = new AutomaticProcessorControllerImplements();
+            centralizeComponent();
         } catch (DirectoryNotValidException ex) {
             LOG.log(Level.SEVERE, ex.getMessage());
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
         }
+    }
+
+    private void centralizeComponent() {
+        Dimension ds = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension dw = getSize();
+        setLocation((ds.width - dw.width) / 2, (ds.height - dw.height) / 2);
     }
 
     /**
@@ -106,6 +115,7 @@ public class MainPage extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        jLabel11 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -350,11 +360,16 @@ public class MainPage extends javax.swing.JFrame {
             }
         });
 
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel11.setText("jLabel11");
+
         jDesktopPane2.setLayer(jTabbedPane2, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane2.setLayer(jLabel4, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane2.setLayer(jButton4, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane2.setLayer(jButton5, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane2.setLayer(jButton1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane2.setLayer(jLabel11, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jDesktopPane2Layout = new javax.swing.GroupLayout(jDesktopPane2);
         jDesktopPane2.setLayout(jDesktopPane2Layout);
@@ -371,13 +386,15 @@ public class MainPage extends javax.swing.JFrame {
                         .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 19, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jDesktopPane2Layout.createSequentialGroup()
-                        .addGap(88, 88, 88)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jDesktopPane2Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jDesktopPane2Layout.createSequentialGroup()
+                        .addGap(88, 88, 88)
+                        .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jDesktopPane2Layout.setVerticalGroup(
             jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -394,7 +411,9 @@ public class MainPage extends javax.swing.JFrame {
                             .addComponent(jButton4)
                             .addComponent(jButton5))
                         .addGap(92, 92, 92)
-                        .addComponent(jButton1)))
+                        .addComponent(jButton1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel11)))
                 .addContainerGap(35, Short.MAX_VALUE))
         );
 
@@ -453,7 +472,7 @@ public class MainPage extends javax.swing.JFrame {
             jLabel10.setIcon(null);
             jLabel9.setIcon(null);
             jLabel9.setText("");
-            mainPageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel1, jLabel2, framePainterController.removeLastRegion());
+            mainPageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel1, jLabel2, frameActionsController.removeLastRegion());
         } catch (DirectoryNotValidException | ImageNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
@@ -474,7 +493,7 @@ public class MainPage extends javax.swing.JFrame {
                 jButton1.setEnabled(wasFileSelected && jTabbedPane1.getSelectedIndex() == 1);
                 jButton4.setEnabled(wasFileSelected && jTabbedPane1.getSelectedIndex() == 1);
                 jButton5.setEnabled(wasFileSelected && jTabbedPane1.getSelectedIndex() == 1);
-
+                
                 mainPageController.showFramesOnSelectedTabScreen(
                         jTabbedPane1,
                         jTabbedPane1.getSelectedIndex() == 0 ? jLabel1 : jLabel4, // the label name
@@ -534,8 +553,8 @@ public class MainPage extends javax.swing.JFrame {
         Icon frame, subFrame;
         Point pointClick = new Point(evt.getX(), evt.getY());
         try {
-            frame = framePainterController.paintFormat(pointClick);
-            subFrame = framePainterController.captureSubframe(pointClick);
+            frame = frameActionsController.paintFormat(pointClick);
+            subFrame = frameActionsController.captureSubframe(pointClick);
             if (frame != null) {
                 mainPageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel1, jLabel2, frame);
                 mainPageController.showSubFrameOnSelectedTabScreen(jLabel10, jLabel9, subFrame, pointClick);
@@ -563,30 +582,17 @@ public class MainPage extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         LOG.log(Level.INFO, evt.getActionCommand());
+        String result;
         try {
-//            if (automaticProcessorController.onAutoProcessPalette(jLabel4, jLabel3)) {
-//                jButton4.setEnabled(true);
-//                jButton5.setEnabled(true);
-//                jButton1.setEnabled(true);
-//            }
-            String result = automaticProcessorController.onNewAutoProcessPalette(jLabel4, jLabel3);
-            do {
-                // Disable the buttons and start processing;
-                jButton4.setEnabled(false);
-                jButton5.setEnabled(false);
-                jButton1.setEnabled(false);
-            } while (result.isBlank());
-            
-            jButton4.setEnabled(true);
-            jButton5.setEnabled(true);
-            jButton1.setEnabled(true);
+            result = automaticProcessorController.onNewAutoProcessPalette(jLabel4, jLabel3);
             // Ao final do processamento, liberar os botões e a mudança de tab
             MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
-            JOptionPane.showMessageDialog(jPanel1, "The directory created was named: " + result);
+            JOptionPane.showMessageDialog(jPanel1, "O diretório foi criado sob o nome: " + result);
         } catch (DirectoryNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
         }
+        jLabel11.setText("Busca Finalizada!");
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
@@ -635,7 +641,7 @@ public class MainPage extends javax.swing.JFrame {
             new MainPage().setVisible(true);
         });
     }
-
+//<editor-fold defaultstate="collapsed" desc="Variables">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -646,6 +652,7 @@ public class MainPage extends javax.swing.JFrame {
     private javax.swing.JDesktopPane jDesktopPane2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -668,4 +675,5 @@ public class MainPage extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
     // End of variables declaration//GEN-END:variables
+//</editor-fold>
 }

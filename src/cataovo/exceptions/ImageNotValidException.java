@@ -6,8 +6,12 @@
 package cataovo.exceptions;
 
 /**
+ * When the image extension is not valid.
+ * 
+ * @see cataovo.resources.fileChooser.handler.FileExtension#JPG
+ * @see cataovo.resources.fileChooser.handler.FileExtension#PNG
  *
- * @author bibil
+ * @author Bianca Leopoldo Ramos
  */
 public class ImageNotValidException extends Exception {
 

@@ -10,8 +10,9 @@ import org.opencv.core.Point;
 import org.opencv.core.Rect;
 
 /**
+ * Use resources from Opencv to transform an image.
  *
- * @author bibil
+ * @author Bianca Leopoldo Ramos.
  */
 public interface ImageUtils {
 

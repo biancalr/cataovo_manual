@@ -2,28 +2,45 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package cataovo.automation.threads.callable.automaticImageProcess;
+package cataovo.controller.automation.threads.callable.automaticImageProcess;
 
 import cataovo.entities.Frame;
 import cataovo.opencvlib.automation.automaticImageProcess.AutomaticImageProcess;
 import cataovo.opencvlib.automation.automaticImageProcess.AutomaticImageProcessImplements;
 import cataovo.opencvlib.converters.Converter;
 import cataovo.opencvlib.wrappers.MatWrapper;
+import java.util.Queue;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * This thread is responsible for batch processing a frame. This processment is
+ * This thread is responsible for batch processing a {@link cataovo.entities.Frame}. This processment is
  * responsible for find each egg present in the frame.
  *
- * @author bianc
+ * @author Bianca Leopoldo Ramos.
  */
 public class ThreadAutomaticFramesProcessor implements Callable<StringBuffer> {
 
+    /**
+     * Logging for ThreadAutomaticFramesProcessor.
+     */
     private static final Logger LOG = Logger.getLogger(ThreadAutomaticFramesProcessor.class.getName());
+    /**
+     * the {@link cataovo.entities.Frame} to be processed.
+     */
     private final Frame frame;
+    /**
+     * The a slot of the total frames in a palette to be processed.
+     */
+    private Queue<Frame> frames;
+    /**
+     * Where the frames wll be saved.
+     */
     private final String destination;
+    /**
+     * Contains the methods to process a frame.
+     */
     private final AutomaticImageProcess imageProcess;
 
     /**
@@ -39,26 +56,46 @@ public class ThreadAutomaticFramesProcessor implements Callable<StringBuffer> {
     }
 
     /**
+     * The thread responsable for the automatic processing.
+     *
+     * @param frames The a slot of the total {@link cataovo.entities.Frame}s in a palette to be processed.
+     * @param destination Where the frames wll be saved.
+     */
+    public ThreadAutomaticFramesProcessor(Queue<Frame> frames, String destination) {
+        this.frame = new Frame();
+        this.frames = frames;
+        this.destination = destination;
+        this.imageProcess = new AutomaticImageProcessImplements();
+    }
+
+    /**
      * Initiates the sequence of steps stablished to fing the desired objects in
-     * a frame. The serired objects in this case are the eggs of Aedes aegypti.
+     * a {@link cataovo.entities.Frame} . The serired objects in this case are the eggs of Aedes aegypti.
      *
      * @return the folder where the images and the relatory ware saved.
      * @throws Exception
+     * @see cataovo.controller.automation.threads.callable.NewThreadAutomationAutomaticProcess
      */
     @Override
     public StringBuffer call() throws Exception {
         LOG.log(Level.INFO, "Starting Sequence...");
-        return startSequence();
+        StringBuffer result = new StringBuffer();
+        for (Frame f : frames) {
+            result.append("|").append(f.getName()).append(",");
+            result.append(startSequence(f));
+        }
+        return result;
     }
 
     /**
-     * Sequence that processes each frame of a Palette.
+     * <p>Sequence that processes each {@link cataovo.entities.Frame} of a {@link cataovo.entities.Palette}.</p>
      *
      * @return a text containing the quanity of eggs of Aedes found in the
      * frame, and a List of some of the points that make part of the eggs
-     * contours
+     * contours.
+     * @see cataovo.opencvlib.automation.automaticImageProcess.AutomaticImageProcess
      */
-    private StringBuffer startSequence() {
+    private StringBuffer startSequence(Frame frame) {
         MatWrapper current = new MatWrapper(frame);
 
         // blur
@@ -70,14 +107,12 @@ public class ThreadAutomaticFramesProcessor implements Callable<StringBuffer> {
 
         // morphology
         current.setOpencvMat(imageProcess.applyMorphOnImage(destination + "/morph.png", 11, 25, 2, current.getOpencvMat()));
-//        current.setOpencvMat(imageProcess.applyMorphOnImage(destination + "/morph.png", 25, 11, 2, current.getOpencvMat()));
+        current.setOpencvMat(imageProcess.applyMorphOnImage(destination + "/morph.png", 25, 11, 2, current.getOpencvMat()));
 
         // contours
         current.setOpencvMat(imageProcess.drawContoursOnImage(destination + "/contours.png", new MatWrapper(frame).getOpencvMat(), current.getOpencvMat(), 780, 4800));
 
         return imageProcess.generateAutomaticProcessmentRelatory();
     }
-    
-    
 
 }

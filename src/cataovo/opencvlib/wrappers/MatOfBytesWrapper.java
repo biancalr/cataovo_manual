@@ -9,8 +9,9 @@ import org.opencv.core.CvType;
 import org.opencv.core.MatOfByte;
 
 /**
+ * Wrapps {@link org.opencv.core.MatOfByte}
  *
- * @author bibil
+ * @author Bianca Leopoldo Ramos
  */
 public class MatOfBytesWrapper extends MatOfByte {
 
@@ -35,6 +36,7 @@ public class MatOfBytesWrapper extends MatOfByte {
     }
 
     /**
+     * Transforms a Mat of bytes in an array.
      *
      * @return
      */

@@ -4,7 +4,7 @@
  */
 package cataovo.opencvlib.automation.automaticImageProcess;
 
-import cataovo.filechooser.handler.FileExtension;
+import cataovo.resources.fileChooser.handler.FileExtension;
 import cataovo.opencvlib.converters.Converter;
 import cataovo.opencvlib.wrappers.MatWrapper;
 import java.awt.Color;
@@ -25,17 +25,33 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 /**
- * Class that contains the implementation of the stablished steps to detect
- * Aedes eggs in a image.
+ * Contains the implementation of the stablished steps to detect Aedes eggs in a
+ * image.
  *
  * @author Bianca Leopoldo Ramos
  */
 public class AutomaticImageProcessImplements implements AutomaticImageProcess {
 
+    /**
+     * Logging for AutomaticImageProcessImplements.
+     */
     private static final Logger LOG = Logger.getLogger(AutomaticImageProcessImplements.class.getName());
+    /**
+     * Represents white the color.
+     */
     private static final double[] WHITE = {255, 255, 255};
+    /**
+     * Represents the black color.
+     */
     private static final double[] BLACK = {0, 0, 0};
+    /**
+     * Quantity of eggs in a frame.
+     */
     private int quantityOfEggs = 0;
+    /**
+     * Objects found in each image. Potencial eggs, a single egg or collection
+     * of two or mor eggs.
+     */
     private List<MatOfPoint> eggsContours = new ArrayList<>();
 
     @Override
@@ -141,8 +157,10 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
     /**
      * Look for objectd detecting each boundary from the image
      *
-     * @param src
-     * @return
+     * @param src the image to find the contours.
+     * @return the list of found contours
+     * @see #drawContoursOnImage(java.lang.String, org.opencv.core.Mat,
+     * org.opencv.core.Mat, int, int)
      */
     public List<MatOfPoint> findContours(Mat src) {
         LOG.log(Level.INFO, "Finding objects...");
@@ -155,8 +173,8 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
     /**
      * Transforms a three channels image to a single channel image.
      *
-     * @param src
-     * @return
+     * @param src the image to split the channels
+     * @return a single channel result image
      */
     private Mat getChannelImage(Mat src) {
         Mat matR = Mat.zeros(src.size(), CvType.CV_8UC1);
@@ -170,7 +188,8 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
     }
 
     /**
-     * Generates the content of the automatic counting.
+     * <p>
+     * Generates the content of the automatic counting.</p>
      *
      * @return A text containg the total of the eggs and a list of a certain
      * quantity of coodinates that forms each object.
@@ -194,7 +213,7 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
             }
 
         }
-        
+
         mainPoints.stream().forEach((p) -> {
             builder.append(",");
             builder.append(p.x);

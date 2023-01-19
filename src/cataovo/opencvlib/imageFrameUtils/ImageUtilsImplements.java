@@ -15,8 +15,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Implements resources from Opencv to transform an image.
  *
- * @author bibil
+ * @author Bianca Leopoldo Ramos
  */
 public class ImageUtilsImplements implements ImageUtils {
 

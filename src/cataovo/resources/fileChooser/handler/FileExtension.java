@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.filechooser.handler;
+package cataovo.resources.fileChooser.handler;
 
 /**
  *

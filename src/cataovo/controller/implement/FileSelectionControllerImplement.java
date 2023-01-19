@@ -5,19 +5,19 @@
  */
 package cataovo.controller.implement;
 
-import cataovo.automation.threads.callable.NewThreadAutomation;
-import cataovo.automation.threads.callable.NewThreadAutomationManualProcess;
+import cataovo.controller.automation.threads.callable.NewThreadAutomation;
+import cataovo.controller.automation.threads.callable.NewThreadAutomationManualProcess;
 import cataovo.constants.Constants;
 import cataovo.controller.FileSelectionController;
 import cataovo.entities.Frame;
 import cataovo.entities.Palette;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
-import cataovo.fileChooser.UI.MyFileChooserUI;
-import cataovo.filechooser.handler.FileExtension;
+import cataovo.resources.fileChooser.UI.MyFileChooserUI;
+import cataovo.resources.fileChooser.handler.FileExtension;
 import cataovo.resources.MainResources;
-import cataovo.automation.threads.runnable.ThreadAutomation;
-import cataovo.automation.threads.runnable.ThreadAutomationManualProcess;
+import cataovo.controller.automation.threads.runnable.ThreadAutomation;
+import cataovo.controller.automation.threads.runnable.ThreadAutomationManualProcess;
 import java.awt.Component;
 import java.io.File;
 import java.io.FileNotFoundException;

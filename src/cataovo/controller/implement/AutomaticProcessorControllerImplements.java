@@ -4,13 +4,13 @@
  */
 package cataovo.controller.implement;
 
-import cataovo.automation.threads.runnable.ThreadAutomation;
-import cataovo.automation.threads.runnable.ThreadAutomationAutomaticProcess;
-import cataovo.automation.threads.callable.NewThreadAutomation;
-import cataovo.automation.threads.callable.NewThreadAutomationAutomaticProcess;
+import cataovo.controller.automation.threads.runnable.ThreadAutomation;
+import cataovo.controller.automation.threads.runnable.ThreadAutomationAutomaticProcess;
+import cataovo.controller.automation.threads.callable.NewThreadAutomation;
+import cataovo.controller.automation.threads.callable.NewThreadAutomationAutomaticProcess;
 import cataovo.controller.AutomaticProcessorController;
 import cataovo.exceptions.DirectoryNotValidException;
-import cataovo.filechooser.handler.FileExtension;
+import cataovo.resources.fileChooser.handler.FileExtension;
 import cataovo.resources.MainResources;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -22,15 +22,16 @@ import java.util.logging.Logger;
 import javax.swing.JLabel;
 
 /**
+ * Implements the automatic processment controller
  *
- * @author bianc
+ * @author Bianca Leopoldo Ramos
  */
 public class AutomaticProcessorControllerImplements implements AutomaticProcessorController {
 
     private static final Logger LOG = Logger.getLogger(AutomaticProcessorControllerImplements.class.getName());
     
     @Override
-    public boolean onAutoProcessPalette(JLabel jLabel4, JLabel jLabel3) {
+    public boolean onAutoProcessPalette(JLabel jLabelImageName, JLabel jLabelImageFrame) {
         try {
             ThreadAutomation automation = 
                     new ThreadAutomationAutomaticProcess(
@@ -48,7 +49,7 @@ public class AutomaticProcessorControllerImplements implements AutomaticProcesso
     }
 
     @Override
-    public String onNewAutoProcessPalette(JLabel jLabel4, JLabel jLabel3) {
+    public String onNewAutoProcessPalette(JLabel jLabelImageName, JLabel jLabelImageFrame) {
         try { 
             NewThreadAutomation automation;
             Future<String> task;
@@ -62,7 +63,7 @@ public class AutomaticProcessorControllerImplements implements AutomaticProcesso
                     MainResources.getInstance().getPanelTabHelper().getTabName());
             task = executorService.submit(automation);
             result = task.get();
-            executorService.awaitTermination(10, TimeUnit.MILLISECONDS);
+            executorService.awaitTermination(1, TimeUnit.MILLISECONDS);
             executorService.shutdown();
             return result;
         } catch (DirectoryNotValidException | InterruptedException | ExecutionException ex) {

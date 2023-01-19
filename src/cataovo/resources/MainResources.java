@@ -8,8 +8,8 @@ package cataovo.resources;
 import cataovo.entities.Frame;
 import cataovo.entities.Palette;
 import cataovo.exceptions.DirectoryNotValidException;
-import cataovo.fileChooser.UI.MyFileChooserUI;
-import cataovo.filechooser.handler.MyFileListHandler;
+import cataovo.resources.fileChooser.UI.MyFileChooserUI;
+import cataovo.resources.fileChooser.handler.MyFileListHandler;
 import java.io.File;
 import java.util.logging.Level;
 import javax.swing.filechooser.FileSystemView;
@@ -17,8 +17,9 @@ import java.util.logging.Logger;
 import javax.swing.JTabbedPane;
 
 /**
+ * Resources used in the applications as a whole.
  *
- * @author bibil
+ * @author Bianca Leopoldo Ramos
  */
 public class MainResources {
     

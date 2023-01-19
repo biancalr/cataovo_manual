@@ -2,13 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package cataovo.automation.threads.runnable;
+package cataovo.controller.automation.threads.runnable;
 
 import cataovo.opencvlib.automation.automaticImageProcess.AutomaticImageProcess;
 import cataovo.opencvlib.automation.automaticImageProcess.AutomaticImageProcessImplements;
 import cataovo.entities.Frame;
 import cataovo.entities.Palette;
-import cataovo.filechooser.handler.FileExtension;
+import cataovo.resources.fileChooser.handler.FileExtension;
 import cataovo.opencvlib.converters.Converter;
 import cataovo.opencvlib.wrappers.MatWrapper;
 import java.io.File;

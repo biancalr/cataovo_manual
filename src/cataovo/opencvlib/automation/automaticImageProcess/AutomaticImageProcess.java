@@ -8,12 +8,14 @@ import java.awt.image.BufferedImage;
 import org.opencv.core.Mat;
 
 /**
+ * Stablish the steps to detect Aedes eggs in a image.
  *
- * @author bianc
+ * @author Bianca Leopoldo Ramos.
  */
 public interface AutomaticImageProcess {
 
     /**
+     * Apply Blur On a Image
      *
      * @param imageMatToBlur
      * @param savingPath
@@ -24,6 +26,7 @@ public interface AutomaticImageProcess {
     public Mat applyBlurOnImage(String savingPath, Mat imageMatToBlur, int ksize_width, int ksize_height);
 
     /**
+     * Apply Binary On a Image
      *
      * @param savingPath
      * @param buffImgToBinary
@@ -32,6 +35,7 @@ public interface AutomaticImageProcess {
     public Mat applyBinaryOnImage(String savingPath, BufferedImage buffImgToBinary);
 
     /**
+     * Apply Morphology On a Image
      *
      * @param savingPath
      * @param structuringElementWidth
@@ -45,7 +49,8 @@ public interface AutomaticImageProcess {
     public Mat applyMorphOnImage(String savingPath, int structuringElementWidth, int structuringElementHeight, int morphologicalOperation, Mat imageToMorph);
 
     /**
-     *
+     * Draw Contours On a Image
+     * 
      * @param savingPath
      * @param imageToDraw
      * @param imgToFindContours

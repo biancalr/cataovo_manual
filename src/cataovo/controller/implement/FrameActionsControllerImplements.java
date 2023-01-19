@@ -5,33 +5,51 @@
  */
 package cataovo.controller.implement;
 
-import cataovo.controller.FramePainterController;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.opencvlib.converters.Converter;
-import cataovo.opencvlib.imageFrameUtils.FramePrimaryUtils;
+import cataovo.utils.frameUtils.FrameActionsUtils;
 import cataovo.opencvlib.wrappers.PointWrapper;
 import cataovo.opencvlib.wrappers.RectWrapper;
 import cataovo.resources.MainResources;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import cataovo.controller.FrameActionsController;
 
 /**
+ * Implements the frame actions controller.
  *
- * @author bibil
+ * @author Bianca Leopoldo Ramos.
  */
-public class FramePainterControllerImplements implements FramePainterController {
+public class FrameActionsControllerImplements implements FrameActionsController {
 
+    /**
+     * Controls the quantity of clicks to base the actions upon.
+     */
     private int clickCount;
+    /**
+     * The initial point to start the actions.
+     */
     private Point initialPoint = null;
-    private FramePrimaryUtils frameUtils;
+    /**
+     * Opencv utilitaries used to make actions in the frame.
+     */
+    private FrameActionsUtils frameUtils;
 
-    public FramePainterControllerImplements() {
+    public FrameActionsControllerImplements() {
         clickCount = 0;
-        frameUtils = new FramePrimaryUtils();
+        frameUtils = new FrameActionsUtils();
     }
 
+    /**
+     * Chooses the format to paint the frame whether is a dot or a rectangle
+     *
+     * @param point the point clicked in the frame
+     * @return the image correspondent to the quantoty of clicks in the frame.
+     * @throws DirectoryNotValidException
+     * @throws CloneNotSupportedException
+     */
     @Override
     public Icon paintFormat(Point point) throws DirectoryNotValidException, CloneNotSupportedException {
         switch (clickCount) {
@@ -51,6 +69,7 @@ public class FramePainterControllerImplements implements FramePainterController 
     }
 
     /**
+     * Paints a dot on a frame
      *
      * @param point
      * @return
@@ -58,12 +77,13 @@ public class FramePainterControllerImplements implements FramePainterController 
      * @throws CloneNotSupportedException
      */
     private Icon paintDotOnFrame(Point point) throws DirectoryNotValidException, CloneNotSupportedException {
-        this.frameUtils = new FramePrimaryUtils(MainResources.getInstance().getCurrentFrame().clone());
+        this.frameUtils = new FrameActionsUtils(MainResources.getInstance().getCurrentFrame().clone());
         PointWrapper pw = new PointWrapper(point);
         return frameUtils.drawCircle(pw);
     }
 
     /**
+     * Paints a grid on a frame.
      *
      * @param region
      * @return
@@ -71,7 +91,7 @@ public class FramePainterControllerImplements implements FramePainterController 
      * @throws CloneNotSupportedException
      */
     private Icon paintGridOnFrame(Region region) throws DirectoryNotValidException, CloneNotSupportedException {
-        this.frameUtils = new FramePrimaryUtils(MainResources.getInstance().getCurrentFrame().clone());
+        this.frameUtils = new FrameActionsUtils(MainResources.getInstance().getCurrentFrame().clone());
         RectWrapper rw = new RectWrapper(region);
         Icon icon = frameUtils.drawRectangle(rw);
         MainResources.getInstance().getCurrentFrame().getRegionsContainingEggs().addAll(frameUtils.getFrame().getRegionsContainingEggs());
@@ -79,8 +99,10 @@ public class FramePainterControllerImplements implements FramePainterController 
     }
 
     /**
+     * Removes the last demarked region.
      *
-     * @return @throws cataovo.exceptions.DirectoryNotValidException
+     * @return the image updated
+     * @throws DirectoryNotValidException
      */
     @Override
     public Icon removeLastRegion() throws DirectoryNotValidException {
@@ -96,16 +118,18 @@ public class FramePainterControllerImplements implements FramePainterController 
     }
 
     /**
-     * 
-     * @param pointClick
-     * @return
-     * @throws DirectoryNotValidException 
+     * Captures a subframe in the current selected region to focus in the
+     * application.
+     *
+     * @param pointClick the point clicked in the frame
+     * @return the captured subframe
+     * @throws DirectoryNotValidException
      */
     @Override
     public Icon captureSubframe(Point pointClick) throws DirectoryNotValidException {
         Icon subframeImage = null;
         if (clickCount == 0 && initialPoint != null) {
-            this.frameUtils = new FramePrimaryUtils(MainResources.getInstance().getCurrentFrame());
+            this.frameUtils = new FrameActionsUtils(MainResources.getInstance().getCurrentFrame());
             subframeImage = this.frameUtils.captureSubframe(this.initialPoint, pointClick);
         }
         return subframeImage;

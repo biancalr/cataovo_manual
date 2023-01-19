@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.opencvlib.imageFrameUtils;
+package cataovo.utils.frameUtils;
 
 import cataovo.entities.Frame;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
 import cataovo.opencvlib.converters.Converter;
+import cataovo.opencvlib.imageFrameUtils.ImageUtils;
+import cataovo.opencvlib.imageFrameUtils.ImageUtilsImplements;
 import cataovo.opencvlib.wrappers.MatWrapper;
 import cataovo.opencvlib.wrappers.PointWrapper;
 import cataovo.opencvlib.wrappers.RectWrapper;
@@ -18,8 +20,9 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 /**
- *
- * @author bibil
+ * Define the actions to do in a {@link cataovo.entities.Frame}.
+ * 
+ * @author Bianca Leopoldo Ramos
  */
 public abstract class FrameUtils {
 
@@ -58,30 +61,32 @@ public abstract class FrameUtils {
     }
 
     /**
-     *
-     * @param pw
-     * @return
+     * Draws a circle based on a point click.
+     * @param pw Opencv {@link org.opencv.core.Point} Wrapper
+     * @return a image with a drawn point circle.
      */
     protected abstract Icon drawCircle(PointWrapper pw);
 
     /**
-     *
-     * @param rw
-     * @return
+     * Draws a rectangle based on two point clicks.
+     * @param rw Opencv {@link org.opencv.core.Rect} Wrapper
+     * @return a image with a drawn rectangle.
      */
     protected abstract Icon drawRectangle(RectWrapper rw);
     
     /**
+     * Captures a subgrid based on a {@link cataovo.entities.Region} between two point clicks.
      * 
-     * @param beginGrid
-     * @param endGrid
-     * @return 
+     * @param beginGrid a point to start calculating the {@link org.opencv.core.Rect}.
+     * @param endGrid a point to delimitate {@link org.opencv.core.Rect}.
+     * @return a subGrid captured on a image {@link org.opencv.core.Mat}
      */
     protected abstract Region captureGridSubmat(PointWrapper beginGrid, PointWrapper endGrid);
     
     /**
+     * Updates a grid if there's already denmarked {@link cataovo.entities.Region}s
      * 
-     * @return 
+     * @return the updated grid.
      */
     protected abstract MatWrapper prepareGrids();
     

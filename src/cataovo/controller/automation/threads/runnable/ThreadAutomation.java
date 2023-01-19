@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.automation.threads.runnable;
+package cataovo.controller.automation.threads.runnable;
 
 import cataovo.constants.Constants;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import cataovo.entities.Palette;
-import cataovo.filechooser.handler.FileExtension;
+import cataovo.resources.fileChooser.handler.FileExtension;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;

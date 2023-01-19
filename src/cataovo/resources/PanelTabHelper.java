@@ -5,8 +5,9 @@
 package cataovo.resources;
 
 /**
- *
- * @author bianc
+ * Responsable to support the tab changing.
+ * 
+ * @author Bianca Leopoldo Ramos
  */
 public class PanelTabHelper {
     

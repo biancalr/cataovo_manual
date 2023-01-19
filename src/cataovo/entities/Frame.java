@@ -6,7 +6,7 @@
 package cataovo.entities;
 
 import cataovo.exceptions.ImageNotValidException;
-import cataovo.filechooser.handler.FileExtension;
+import cataovo.resources.fileChooser.handler.FileExtension;
 import java.io.File;
 import java.io.Serializable;
 import java.util.HashSet;

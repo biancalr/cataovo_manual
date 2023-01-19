@@ -16,8 +16,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Just testing some stuf.
  *
- * @author bibil
+ * @author Bianca Leopoldo Ramos
  */
 public class cataovo {
 
