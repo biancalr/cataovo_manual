@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.controller;
+package cataovo.controllers;
 
 import cataovo.entities.Point;
 import cataovo.exceptions.DirectoryNotValidException;

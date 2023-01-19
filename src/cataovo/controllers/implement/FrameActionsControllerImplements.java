@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.controller.implement;
+package cataovo.controllers.implement;
 
 import cataovo.entities.Point;
 import cataovo.entities.Region;
@@ -15,7 +15,7 @@ import cataovo.opencvlib.wrappers.RectWrapper;
 import cataovo.resources.MainResources;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import cataovo.controller.FrameActionsController;
+import cataovo.controllers.FrameActionsController;
 
 /**
  * Implements the frame actions controller.

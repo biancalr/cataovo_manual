@@ -4,10 +4,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.controller.implement;
+package cataovo.controllers.implement;
 
 import cataovo.constants.Constants;
-import cataovo.controller.MainPageController;
+import cataovo.controllers.MainPageController;
 import cataovo.entities.Frame;
 import cataovo.entities.Point;
 import cataovo.exceptions.DirectoryNotValidException;

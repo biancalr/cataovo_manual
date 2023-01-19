@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.controller.automation.threads.runnable;
+package cataovo.controllers.automation.threads.runnable;
 
 import cataovo.entities.Palette;
 import cataovo.resources.fileChooser.handler.FileExtension;

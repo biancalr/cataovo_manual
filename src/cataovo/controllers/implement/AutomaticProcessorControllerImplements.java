@@ -2,13 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package cataovo.controller.implement;
+package cataovo.controllers.implement;
 
-import cataovo.controller.automation.threads.runnable.ThreadAutomation;
-import cataovo.controller.automation.threads.runnable.ThreadAutomationAutomaticProcess;
-import cataovo.controller.automation.threads.callable.NewThreadAutomation;
-import cataovo.controller.automation.threads.callable.NewThreadAutomationAutomaticProcess;
-import cataovo.controller.AutomaticProcessorController;
+import cataovo.controllers.automation.threads.runnable.ThreadAutomation;
+import cataovo.controllers.automation.threads.runnable.ThreadAutomationAutomaticProcess;
+import cataovo.controllers.automation.threads.callable.NewThreadAutomation;
+import cataovo.controllers.automation.threads.callable.NewThreadAutomationAutomaticProcess;
+import cataovo.controllers.AutomaticProcessorController;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.resources.fileChooser.handler.FileExtension;
 import cataovo.resources.MainResources;

@@ -6,13 +6,13 @@
 package cataovo.UI;
 
 import cataovo.constants.Constants;
-import cataovo.controller.AutomaticProcessorController;
-import cataovo.controller.FileSelectionController;
-import cataovo.controller.MainPageController;
-import cataovo.controller.implement.AutomaticProcessorControllerImplements;
-import cataovo.controller.implement.FileSelectionControllerImplement;
-import cataovo.controller.implement.FrameActionsControllerImplements;
-import cataovo.controller.implement.MainPageControllerImplements;
+import cataovo.controllers.AutomaticProcessorController;
+import cataovo.controllers.FileSelectionController;
+import cataovo.controllers.MainPageController;
+import cataovo.controllers.implement.AutomaticProcessorControllerImplements;
+import cataovo.controllers.implement.FileSelectionControllerImplement;
+import cataovo.controllers.implement.FrameActionsControllerImplements;
+import cataovo.controllers.implement.MainPageControllerImplements;
 import cataovo.entities.Point;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
@@ -26,7 +26,7 @@ import java.util.logging.Level;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import org.opencv.core.Core;
-import cataovo.controller.FrameActionsController;
+import cataovo.controllers.FrameActionsController;
 
 /**
  * Module that interacts with the user. This is the main face of this
