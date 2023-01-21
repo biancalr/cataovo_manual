@@ -52,7 +52,7 @@ public class ThreadAutomationAutomaticProcess extends ThreadAutomation {
         // contours
         current.setOpencvMat(imageProcess.drawContoursOnImage(destination + "/contours.png", new MatWrapper(frame).getOpencvMat(), current.getOpencvMat(), 780, 4800));
         
-        return imageProcess.generateAutomaticProcessmentRelatory();
+        return imageProcess.generateAutomaticRelatory();
     }
 
     @Override

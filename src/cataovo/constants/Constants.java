@@ -39,4 +39,9 @@ public class Constants {
      */
     public static final String NO_PALETTE_SELECTED = "Escolha uma pasta";
     
+    /**
+     * QUEBRA DE LINHA
+     */
+    public static final String QUEBRA_LINHA = "\n";
+    
 }

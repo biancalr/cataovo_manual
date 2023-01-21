@@ -4,6 +4,7 @@
  */
 package cataovo.controllers.automation.threads.callable;
 
+import cataovo.constants.Constants;
 import cataovo.entities.Palette;
 import cataovo.resources.fileChooser.handler.FileExtension;
 
@@ -32,10 +33,10 @@ public class NewThreadAutomationManualProcess extends NewThreadAutomation{
     @Override
     protected StringBuffer createContent() {
         StringBuffer sb = new StringBuffer(getPalette().getDirectory().getPath());
-        sb.append("|");
+        sb.append(Constants.QUEBRA_LINHA);
         sb.append(getPalette().getTheTotalNumberOfEggsPalette());
         getPalette().getFrames().stream().forEach((f) -> {
-            sb.append("|");
+            sb.append(Constants.QUEBRA_LINHA);
             sb.append(f.getName());
             if (!f.getRegionsContainingEggs().isEmpty()) {
                 f.getRegionsContainingEggs().stream().map((r) -> {

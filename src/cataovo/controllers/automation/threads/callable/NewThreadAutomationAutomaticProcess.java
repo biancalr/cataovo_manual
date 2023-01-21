@@ -4,6 +4,7 @@
  */
 package cataovo.controllers.automation.threads.callable;
 
+import cataovo.constants.Constants;
 import cataovo.entities.Frame;
 import cataovo.entities.Palette;
 import cataovo.resources.fileChooser.handler.FileExtension;
@@ -65,7 +66,7 @@ public class NewThreadAutomationAutomaticProcess extends NewThreadAutomation {
 
     @Override
     protected StringBuffer createContent() {
-        StringBuffer result = new StringBuffer(palette.getPathName());
+        StringBuffer result = new StringBuffer(palette.getPathName()).append(Constants.QUEBRA_LINHA);
         Queue<Frame> splitted;
         String destination = imagesDestination.toString();
         do {
@@ -78,7 +79,7 @@ public class NewThreadAutomationAutomaticProcess extends NewThreadAutomation {
                 }
 
                 synchronized (destination) {
-                    result.append(processFrameImages(splitted, destination));
+                    result.append(processFrameImages(splitted, imagesDestination.toString()));
                 }
             } catch (InterruptedException | ExecutionException ex) {
                 Logger.getLogger(NewThreadAutomationAutomaticProcess.class.getName()).log(Level.SEVERE, null, ex);

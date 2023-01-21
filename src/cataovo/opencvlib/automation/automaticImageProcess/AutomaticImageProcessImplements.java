@@ -195,7 +195,7 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
      * quantity of coodinates that forms each object.
      */
     @Override
-    public StringBuffer generateAutomaticProcessmentRelatory() {
+    public StringBuffer generateAutomaticRelatory() {
         StringBuffer builder = new StringBuffer(Integer.toString(this.quantityOfEggs));
         List<Point> auxlist;
         List<Point> mainPoints = new ArrayList<>();

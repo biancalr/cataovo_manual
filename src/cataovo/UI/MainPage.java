@@ -493,7 +493,8 @@ public class MainPage extends javax.swing.JFrame {
                 jButton1.setEnabled(wasFileSelected && jTabbedPane1.getSelectedIndex() == 1);
                 jButton4.setEnabled(wasFileSelected && jTabbedPane1.getSelectedIndex() == 1);
                 jButton5.setEnabled(wasFileSelected && jTabbedPane1.getSelectedIndex() == 1);
-                
+                jLabel11.setText("");
+
                 mainPageController.showFramesOnSelectedTabScreen(
                         jTabbedPane1,
                         jTabbedPane1.getSelectedIndex() == 0 ? jLabel1 : jLabel4, // the label name
@@ -509,8 +510,11 @@ public class MainPage extends javax.swing.JFrame {
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         try {
             LOG.log(Level.INFO, evt.paramString());
-            fileSelectionController.fileSelectionEvent(evt.getActionCommand(), jTabbedPane1, true);
-            JOptionPane.showMessageDialog(jPanel1, "The diretory to save the relatory was changed successfully");
+            if (fileSelectionController.fileSelectionEvent(evt.getActionCommand(), jTabbedPane1, true)) {
+                JOptionPane.showMessageDialog(jPanel1, "The diretory to save the relatory was changed successfully");
+            } else {
+                JOptionPane.showMessageDialog(jPanel1, "Directory wasn't changed. The possibilities are: folder selection was cancelled, trying to change the folder while processing or error in the folder selection.");
+            }
         } catch (DirectoryNotValidException | FileNotFoundException | ImageNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
@@ -583,8 +587,10 @@ public class MainPage extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         LOG.log(Level.INFO, evt.getActionCommand());
         String result;
+        jLabel11.setText("");
         try {
             result = automaticProcessorController.onNewAutoProcessPalette(jLabel4, jLabel3);
+            jLabel11.setText("Busca Finalizada!");
             // Ao final do processamento, liberar os botões e a mudança de tab
             MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
             JOptionPane.showMessageDialog(jPanel1, "O diretório foi criado sob o nome: " + result);
@@ -592,7 +598,6 @@ public class MainPage extends javax.swing.JFrame {
             LOG.log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
         }
-        jLabel11.setText("Busca Finalizada!");
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
