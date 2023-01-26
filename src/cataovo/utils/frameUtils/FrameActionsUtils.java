@@ -15,18 +15,17 @@ import cataovo.opencvlib.wrappers.RectWrapper;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-
 /**
  * Define the actions to do in a {@link cataovo.entities.Frame}.
  *
  * @author Bianca Leopoldo Ramos
  */
-public class FrameActionsUtils extends FrameUtils{
+public class FrameActionsUtils extends FrameUtils {
 
     public FrameActionsUtils(Frame frame) {
         super(frame);
     }
-    
+
     public FrameActionsUtils() {
         super();
     }
@@ -37,7 +36,8 @@ public class FrameActionsUtils extends FrameUtils{
 
     /**
      * Draws a circle based on a point click.
-     * @param pw Opencv {@link org.opencv.core.Point} Wrapper
+     *
+     * @param pw the Opencv {@link org.opencv.core.Point} Wrapper
      * @return a image with a drawn point circle.
      */
     @Override
@@ -47,27 +47,31 @@ public class FrameActionsUtils extends FrameUtils{
 
     /**
      * Draws a rectangle based on two point clicks.
-     * @param rw Opencv {@link org.opencv.core.Rect} Wrapper
+     *
+     * @param rw the Opencv {@link org.opencv.core.Rect} Wrapper
      * @return a image with a drawn rectangle.
      */
     @Override
     public Icon drawRectangle(RectWrapper rw) {
         return super.rectangle(rw);
     }
-    
+
     /**
-     * Updates drawn rectangles based on add/remove {@link cataovo.entities.Region}s.
-     * 
+     * Updates drawn rectangles based on add/remove
+     * {@link cataovo.entities.Region}s.
+     *
      * @return an image with the quantity of grids updated.
      */
-    public MatWrapper updateGridsOnFrame(){
+    public MatWrapper updateGridsOnFrame() {
         return super.updateGrids();
     }
 
     /**
-     * Captures a subgrid based on a {@link cataovo.entities.Region} between two point clicks.
-     * 
-     * @param beginGrid a point to start calculating the {@link org.opencv.core.Rect}.
+     * Captures a subgrid based on a {@link cataovo.entities.Region} between two
+     * point clicks.
+     *
+     * @param beginGrid a point to start calculating the
+     * {@link org.opencv.core.Rect}.
      * @param endGrid a point to delimitate {@link org.opencv.core.Rect}.
      * @return a subGrid captured on a image {@link org.opencv.core.Mat}
      */
@@ -77,18 +81,20 @@ public class FrameActionsUtils extends FrameUtils{
     }
 
     /**
-     * Updates a grid if there's already denmarked {@link cataovo.entities.Region}s
-     * 
-     * @return the updated grid.
+     * Updates a grid if there's already denmarked
+     * {@link cataovo.entities.Region}s
+     *
+     * @return the updated image with the proper number of grids.
      */
     @Override
     protected MatWrapper prepareGrids() {
         return super.updateGrids();
     }
-    
+
     /**
-     * Captures a subgrid based on a {@link cataovo.entities.Region} between two point clicks.
-     * 
+     * Captures a subgrid based on a {@link cataovo.entities.Region} between two
+     * point clicks.
+     *
      * @param initialPoint a point to start calculating the grid.
      * @param pointClick a point to delimitate the grid
      * @return a Image within these clicks.

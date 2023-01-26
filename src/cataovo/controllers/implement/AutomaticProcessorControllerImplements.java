@@ -4,10 +4,10 @@
  */
 package cataovo.controllers.implement;
 
-import cataovo.controllers.automation.threads.runnable.ThreadAutomation;
-import cataovo.controllers.automation.threads.runnable.ThreadAutomationAutomaticProcess;
-import cataovo.controllers.automation.threads.callable.NewThreadAutomation;
-import cataovo.controllers.automation.threads.callable.NewThreadAutomationAutomaticProcess;
+import cataovo.controllers.implement.automation.threads.runnable.ThreadAutomation;
+import cataovo.controllers.implement.automation.threads.runnable.ThreadAutomationAutomaticProcess;
+import cataovo.controllers.implement.automation.threads.callable.NewThreadAutomation;
+import cataovo.controllers.implement.automation.threads.callable.NewThreadAutomationAutomaticProcess;
 import cataovo.controllers.AutomaticProcessorController;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.resources.fileChooser.handler.FileExtension;

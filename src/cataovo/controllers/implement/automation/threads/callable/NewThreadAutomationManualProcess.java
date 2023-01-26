@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package cataovo.controllers.automation.threads.callable;
+package cataovo.controllers.implement.automation.threads.callable;
 
 import cataovo.constants.Constants;
 import cataovo.entities.Palette;

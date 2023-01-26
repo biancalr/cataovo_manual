@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package cataovo.controllers.automation.threads.callable.automaticImageProcess;
+package cataovo.controllers.implement.automation.threads.callable.automaticImageProcess;
 
 import cataovo.constants.Constants;
 import cataovo.entities.Frame;
@@ -79,7 +79,7 @@ public class ThreadAutomaticFramesProcessor implements Callable<StringBuffer> {
      * @return the folder where the images and the relatory ware saved.
      * @throws Exception
      * @see
-     * cataovo.controllers.automation.threads.callable.NewThreadAutomationAutomaticProcess
+     * cataovo.controllers.implement.automation.threads.callable.NewThreadAutomationAutomaticProcess
      */
     @Override
     public StringBuffer call() throws Exception {

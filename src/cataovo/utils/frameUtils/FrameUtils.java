@@ -20,8 +20,8 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 /**
- * Define the actions to do in a {@link cataovo.entities.Frame}.
- * 
+ * Define the actions to do in a {@link Frame}.
+ *
  * @author Bianca Leopoldo Ramos
  */
 public abstract class FrameUtils {
@@ -62,73 +62,99 @@ public abstract class FrameUtils {
 
     /**
      * Draws a circle based on a point click.
-     * @param pw Opencv {@link org.opencv.core.Point} Wrapper
+     *
+     * @param pw the Opencv {@link org.opencv.core.Point Point} Wrapper
      * @return a image with a drawn point circle.
+     * @see ImageUtils#circle(org.opencv.core.Point, org.opencv.core.Mat)
      */
     protected abstract Icon drawCircle(PointWrapper pw);
 
     /**
      * Draws a rectangle based on two point clicks.
-     * @param rw Opencv {@link org.opencv.core.Rect} Wrapper
+     *
+     * @param rw the Opencv {@link org.opencv.core.Rect Rect} Wrapper
      * @return a image with a drawn rectangle.
+     * @see ImageUtils#rectangle(org.opencv.core.Point, org.opencv.core.Point,
+     * org.opencv.core.Mat)
      */
     protected abstract Icon drawRectangle(RectWrapper rw);
-    
+
     /**
-     * Captures a subgrid based on a {@link cataovo.entities.Region} between two point clicks.
-     * 
-     * @param beginGrid a point to start calculating the {@link org.opencv.core.Rect}.
-     * @param endGrid a point to delimitate {@link org.opencv.core.Rect}.
-     * @return a subGrid captured on a image {@link org.opencv.core.Mat}
+     * Captures a subgrid based on a {@link cataovo.entities.Region Region}
+     * within two point clicks.
+     *
+     * @param beginGrid a point to start calculating the
+     * {@link org.opencv.core.Rect Rect}.
+     * @param endGrid a point to delimitate {@link org.opencv.core.Rect Rect}.
+     * @return a subGrid captured on a image {@link org.opencv.core.Mat Rect}
+     * @see org.opencv.core.Mat#submat(org.opencv.core.Rect)
      */
     protected abstract Region captureGridSubmat(PointWrapper beginGrid, PointWrapper endGrid);
-    
+
     /**
-     * Updates a grid if there's already denmarked {@link cataovo.entities.Region}s
-     * 
-     * @return the updated grid.
+     * Updates a grid if there's already denmarked
+     * {@link cataovo.entities.Region Regions}
+     *
+     * @return the updated image with the proper number of grids.
+     * @see ImageUtils#rectangle(org.opencv.core.Point, org.opencv.core.Point, org.opencv.core.Mat) 
      */
     protected abstract MatWrapper prepareGrids();
-    
+
     /**
-     * 
-     * @param pw
-     * @return 
+     * Create a dot.
+     *
+     * @param pw the Opencv {@link org.opencv.core.Point Point} Wrapper
+     * @return a image with a drawn point circle.
      */
-    protected Icon dot(PointWrapper pw){
+    protected Icon dot(PointWrapper pw) {
         return drawDot(pw);
     }
-    
+
     /**
-     * 
-     * @param rw
-     * @return 
+     * Create a rectangle.
+     *
+     * @param rw the Opencv {@link org.opencv.core.Rect Rect} Wrapper
+     * @return a image with a drawn rectangle.
      */
-    protected Icon rectangle(RectWrapper rw){
+    protected Icon rectangle(RectWrapper rw) {
         return drawSquare(rw);
     }
-    
+
     /**
-     * 
-     * @param beginGrid
-     * @param endGrid
-     * @return 
+     * Captures a submat.
+     *
+     * @param beginGrid a point to start calculating the
+     * {@link org.opencv.core.Rect Rect}.
+     * @param endGrid a point to delimitate {@link org.opencv.core.Rect Rect}.
+     * @return a subGrid captured on a image {@link org.opencv.core.Mat Rect}
+     * @see org.opencv.core.Mat#submat(org.opencv.core.Rect)
      */
-    protected Region captureGrid(PointWrapper beginGrid, PointWrapper endGrid){
+    protected Region captureGrid(PointWrapper beginGrid, PointWrapper endGrid) {
         return captureSubmat(beginGrid, endGrid);
     }
-    
+
     /**
-     * 
-     * @return 
+     * Updates a grid.
+     *
+     * @return the updated image with the proper number of grids.
+     * @see ImageUtils#rectangle(org.opencv.core.Point, org.opencv.core.Point,
+     * org.opencv.core.Mat)
      */
-    protected MatWrapper updateGrids(){
+    protected MatWrapper updateGrids() {
         return preprareRegions();
     }
 
+    /**
+     * Using the coordinates of a given {@link org.opencv.core.Point Point},
+     * creates a dot to denmark the first click to start a region that locates
+     * an object Egg.
+     *
+     * @param pw the Opencv {@link org.opencv.core.Point Point} Wrapper
+     * @return a image with a drawn point circle.
+     * @see ImageUtils#circle(org.opencv.core.Point, org.opencv.core.Mat)
+     */
     private Icon drawDot(PointWrapper pw) {
         LOG.log(Level.INFO, "Starting..");
-//        mockRegionsInFrame();
         if (!this.frame.getRegionsContainingEggs().isEmpty()) {
             this.matWrapper = preprareRegions();
         } else {
@@ -138,9 +164,17 @@ public abstract class FrameUtils {
         return new ImageIcon(Converter.getInstance().convertMatToImg(matWrapper).get());
     }
 
+    /**
+     * Using the first point plus width and height based on a second point,
+     * creates a rectangle to denmark the region that locates an object Egg.
+     *
+     * @param rw the Opencv {@link org.opencv.core.Rect Rect} Wrapper
+     * @return a image with a drawn rectangle.
+     * @see ImageUtils#rectangle(org.opencv.core.Point, org.opencv.core.Point,
+     * org.opencv.core.Mat)
+     */
     private Icon drawSquare(RectWrapper rw) {
         LOG.log(Level.INFO, "Starting..");
-//        mockRegionsInFrame();
         if (!this.frame.getRegionsContainingEggs().isEmpty()) {
             this.matWrapper = preprareRegions();
         }
@@ -157,10 +191,13 @@ public abstract class FrameUtils {
     }
 
     /**
+     * Captures a submat.
      *
-     * @param beginGrid
-     * @param endGrid
-     * @return
+     * @param beginGrid a point to start calculating the
+     * {@link org.opencv.core.Rect Rect}.
+     * @param endGrid a point to delimitate {@link org.opencv.core.Rect Rect}.
+     * @return a subGrid captured on a image {@link org.opencv.core.Mat Rect}
+     * @see org.opencv.core.Mat#submat(org.opencv.core.Rect)
      */
     private Region captureSubmat(PointWrapper beginGrid, PointWrapper endGrid) {
         return new RectWrapper(imageUtils.captureGridMat(beginGrid.getOpencvPoint(), endGrid.getOpencvPoint())).getRegion();
@@ -169,7 +206,9 @@ public abstract class FrameUtils {
     /**
      * Draws dinamically each grid of the regions in the frame
      *
-     * @return
+     * @return the updated image with the proper number of grids.
+     * @see ImageUtils#rectangle(org.opencv.core.Point, org.opencv.core.Point,
+     * org.opencv.core.Mat)
      */
     private MatWrapper preprareRegions() {
         MatWrapper mw = new MatWrapper(this.frame);
@@ -186,11 +225,6 @@ public abstract class FrameUtils {
                     pw1.getOpencvPoint(), pw2.getOpencvPoint(), wrapper.getOpencvMat()).clone());
         });
         return mw;
-    }
-
-    private void mockRegionsInFrame() {
-        this.frame.getRegionsContainingEggs().add(new Region(75, 83, new Point(268, 459)));
-        this.frame.getRegionsContainingEggs().add(new Region(65, -40, new Point(300, -169)));
     }
 
 }

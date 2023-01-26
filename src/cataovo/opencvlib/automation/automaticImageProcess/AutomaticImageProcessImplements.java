@@ -139,9 +139,9 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
     /**
      * Saves the resulted image from any step.
      *
-     * @param dstn
-     * @param savingPath
-     * @return
+     * @param dstn the image transformed.
+     * @param savingPath directory where the transformed image will be saved.
+     * @return <code>True</code> if the saving was ok, <code>False</code> otherwise.
      */
     private boolean saveImage(Mat dstn, String savingPath) {
         try {
@@ -155,7 +155,7 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
     }
 
     /**
-     * Look for objectd detecting each boundary from the image
+     * Look for object detecting each boundary from the image
      *
      * @param src the image to find the contours.
      * @return the list of found contours

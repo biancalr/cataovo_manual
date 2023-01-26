@@ -29,16 +29,22 @@ import org.opencv.imgcodecs.Imgcodecs;
  * This class is responsable for the conversion between image formats to show
  * them on frame.
  *
- * @author bibil
+ * @author Bianca Leopoldo Ramos
  */
 public final class Converter {
 
+    /**
+     * Logging
+     */
     private static final Logger LOG = Logger.getLogger(Converter.class.getName());
+    /**
+     * Instance
+     */
     private static volatile Converter CONVERTER;
 
     /**
-     * 
-     * @return start the operation of converting types
+     *
+     * @return rules the operations of converting types
      */
     public static Converter getInstance() {
         Converter FORMAT_CONVERTER = Converter.CONVERTER;
@@ -54,23 +60,30 @@ public final class Converter {
     }
 
     /**
-     * 
+     * Converts a {@link org.opencv.core.MatOfPoint MatOfPoint} to a list of
+     * {@link cataovo.entities.Point Point}
+     *
      * @param matOfPoint
-     * @return 
+     * @return a list of {@link cataovo.entities.Point Point}
      */
-    public List<Point> convertMatOfPointToList(MatOfPoint matOfPoint){
+    public List<Point> convertMatOfPointToList(MatOfPoint matOfPoint) {
         List<Point> points = new ArrayList<>();
         for (org.opencv.core.Point point : matOfPoint.toList()) {
-            points.add(new Point((int)point.x, (int)point.y));
+            points.add(new Point((int) point.x, (int) point.y));
         }
         return points;
     }
-    
+
     /**
-     * Converts an image Frame to an OpenCV Mat.
+     * Converts an image Frame to a
+     * {@link cataovo.opencvlib.wrappers.MatWrapper Mat} in order to make
+     * operations with a {@link org.opencv.core.Mat Opencv.Mat}.
      *
-     * @param current
-     * @return
+     * @param current the Frame to make the
+     * conversion.
+     * @return a {@link cataovo.opencvlib.wrappers.MatWrapper MatWrapper} that
+     * encapsulates a {@link org.opencv.core.Mat Mat}
+     * @see org.opencv.imgcodecs.Imgcodecs#imread(java.lang.String)
      */
     public MatWrapper convertImageFrameToMat(Frame current) {
         Mat m = new Mat();
@@ -82,29 +95,38 @@ public final class Converter {
     }
 
     /**
-     * Converts the current frame to a PNG file.
+     * Converts the current {@link cataovo.opencvlib.wrappers.MatWrapper Mat} to
+     * a JPG file.
      *
-     * @param current the curent frame.
-     * @return an Optional of the BufferedImage as ".jpg"
+     * @param current the current frame as
+     * {@link cataovo.opencvlib.wrappers.MatWrapper MatWrapper}
+     * @return an Optional of the BufferedImage ".jpg"
+     * @see #matToBuffedImageConvert(cataovo.opencvlib.wrappers.MatWrapper,
+     * cataovo.resources.fileChooser.handler.FileExtension)
      */
     public Optional<Image> convertMatToImg(MatWrapper current) {
         return Optional.ofNullable(matToBuffedImageConvert(current, FileExtension.JPG));
     }
 
     /**
-     * Converts the current frame to a PNG file.
+     * Converts the current {@link cataovo.opencvlib.wrappers.MatWrapper Mat} to
+     * a PNG file.
      *
-     * @param current the current frame as Opencv.Mat
-     * @return an Optional of the BufferedImage as ".png"
+     * @param current the current frame as
+     * {@link cataovo.opencvlib.wrappers.MatWrapper MatWrapper}
+     * @return an Optional of the BufferedImage ".png"
+     * @see #matToBuffedImageConvert(cataovo.opencvlib.wrappers.MatWrapper,
+     * cataovo.resources.fileChooser.handler.FileExtension)
      */
     public Optional<BufferedImage> convertMatToPng(MatWrapper current) {
         return Optional.ofNullable(matToBuffedImageConvert(current, FileExtension.PNG));
     }
 
     /**
-     * Converts the current frame to a image of given extension.
+     * Encodes an image into a memory buffer.
      *
-     * @param current the current frame as Opencv.Mat
+     * @param current the current frame as
+     * {@link cataovo.opencvlib.wrappers.MatWrapper MatWrapper}
      * @param extension the type of desired extension for the frame.
      * @return the image as given extension.
      */
@@ -118,10 +140,13 @@ public final class Converter {
     }
 
     /**
+     * Converts the current frame to a image of given extension.
      *
-     * @param codeOk
-     * @param ofBytesWrapper
-     * @param extension
+     * @param codeOk <code>true</code> if the encoding into a given extension
+     * ran ok, <code>false</code> otherwise.
+     * @param ofBytesWrapper compressor of the image and store it in the
+     * internal memory buffer that is resized to fit the result
+     * @param extension extension of the image
      * @return the image converted
      */
     private BufferedImage makeConversion(boolean codeOk, MatOfBytesWrapper ofBytesWrapper, FileExtension extension) {
