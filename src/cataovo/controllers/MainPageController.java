@@ -11,6 +11,7 @@ import cataovo.exceptions.ImageNotValidException;
 import java.awt.Component;
 import javax.swing.Icon;
 import javax.swing.JLabel;
+import javax.swing.JTabbedPane;
 /**
  * Controls how the frames are demonstrated on screen and how to move from one to the other
  *
@@ -27,6 +28,16 @@ public interface MainPageController {
      * @throws DirectoryNotValidException
      */
     public void toNextFrame(JLabel parentName, JLabel parent) throws ImageNotValidException, DirectoryNotValidException;
+    
+    /**
+     * Set to the next frame
+     *
+     * @param parentName
+     * @param jTabbedPane
+     * @throws ImageNotValidException
+     * @throws DirectoryNotValidException
+     */
+    public void toNextFrame(JLabel parentName, JTabbedPane jTabbedPane) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException;
        
     /**
      * When a Frame was finished its analysis, go to next Frame on Queue.
@@ -58,6 +69,16 @@ public interface MainPageController {
      * @throws cataovo.exceptions.DirectoryNotValidException 
      */
     public void showSubFrameOnSelectedTabScreen(JLabel subframeNameLabel, JLabel subframeLabel, Icon frame, Point point) throws DirectoryNotValidException;
+
+    /**
+     * 
+     * @param jLabel4
+     * @param jTabbedPane2
+     * @throws ImageNotValidException
+     * @throws DirectoryNotValidException
+     * @throws ArrayIndexOutOfBoundsException 
+     */
+    public void toPreviousFrame(JLabel jLabel4, JTabbedPane jTabbedPane2) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException;
 
 
 }

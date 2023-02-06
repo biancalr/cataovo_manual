@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.controllers.implement.automation.threads.runnable;
+package cataovo.processment.automation.threads.runnable;
 
 import cataovo.constants.Constants;
 import java.util.logging.Logger;

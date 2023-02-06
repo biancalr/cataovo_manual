@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package cataovo.controllers.implement.automation.threads.callable.automaticImageProcess;
+package cataovo.processment.automation.threads.callable.automaticImageProcess;
 
 import cataovo.constants.Constants;
 import cataovo.entities.Frame;
@@ -79,7 +79,7 @@ public class ThreadAutomaticFramesProcessor implements Callable<StringBuffer> {
      * @return the folder where the images and the relatory ware saved.
      * @throws Exception
      * @see
-     * cataovo.controllers.implement.automation.threads.callable.NewThreadAutomationAutomaticProcess
+     * cataovo.processment.automation.threads.callable.NewThreadAutomationAutomaticProcess
      */
     @Override
     public StringBuffer call() throws Exception {
@@ -96,6 +96,8 @@ public class ThreadAutomaticFramesProcessor implements Callable<StringBuffer> {
      * <p>
      * Sequence that processes each {@link cataovo.entities.Frame} of a
      * {@link cataovo.entities.Palette}.</p>
+     * 
+     * <p> Explicação das operações a serem aplicadas. </p>
      *
      * @return a text containing the quanity of eggs of Aedes found in the
      * frame, and a List of some of the points that make part of the eggs
@@ -107,21 +109,25 @@ public class ThreadAutomaticFramesProcessor implements Callable<StringBuffer> {
         MatWrapper current = new MatWrapper(frame);
         String dstny = destination + "/" + frame.getName();
         // blur
-        current.setOpencvMat(imageProcess.applyBlurOnImage(dstny + "/blur.png",
+        current.setOpencvMat(imageProcess.applyBlurOnImage(dstny + Constants.BLUR_PNG,
                 current.getOpencvMat(), 5, 5));
 
         // binary
-        current.setOpencvMat(imageProcess.applyBinaryOnImage(dstny + "/binary.png",
+        current.setOpencvMat(imageProcess.applyBinaryOnImage(dstny + Constants.BINARY_PNG,
                 Converter.getInstance().convertMatToPng(current).get()));
 
         // morphology
-        current.setOpencvMat(imageProcess.applyMorphOnImage(dstny + "/morph.png",
+        current.setOpencvMat(imageProcess.applyMorphOnImage(dstny + Constants.MORPH_PNG,
                 17, 30, 2, current.getOpencvMat()));
-        current.setOpencvMat(imageProcess.applyMorphOnImage(dstny + "/morph.png",
+        current.setOpencvMat(imageProcess.applyMorphOnImage(dstny + Constants.MORPH_PNG,
+                30, 17, 2, current.getOpencvMat()));       
+        current.setOpencvMat(imageProcess.applyMorphOnImage(dstny + Constants.MORPH_PNG,
+                17, 30, 2, current.getOpencvMat()));
+        current.setOpencvMat(imageProcess.applyMorphOnImage(dstny + Constants.MORPH_PNG,
                 30, 17, 2, current.getOpencvMat()));
-
+                
         // contours
-        current.setOpencvMat(imageProcess.drawContoursOnImage(dstny + "/contours.png",
+        current.setOpencvMat(imageProcess.drawContoursOnImage(dstny + Constants.CONTOURS_PNG,
                 new MatWrapper(frame).getOpencvMat(), current.getOpencvMat(), 780, 4800));
 
         return imageProcess.generateAutomaticRelatory();

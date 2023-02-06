@@ -2,13 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package cataovo.controllers.implement.automation.threads.callable;
+package cataovo.processment.automation.threads.callable;
 
 import cataovo.constants.Constants;
 import cataovo.entities.Frame;
 import cataovo.entities.Palette;
 import cataovo.resources.fileChooser.handler.FileExtension;
-import cataovo.controllers.implement.automation.threads.callable.automaticImageProcess.ThreadAutomaticFramesProcessor;
+import cataovo.processment.automation.threads.callable.automaticImageProcess.ThreadAutomaticFramesProcessor;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -70,7 +70,7 @@ public class NewThreadAutomationAutomaticProcess extends NewThreadAutomation {
         Queue<Frame> splitted;
         String destination = imagesDestination.toString();
         do {
-            splitted = split(palette.getFrames(), 4);
+            splitted = split(palette.getFrames(), 5);
             try {
                 for (Frame frame : splitted) {
                     destination = imagesDestination.toString() + "/" + frame.getName();

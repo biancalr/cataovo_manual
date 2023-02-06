@@ -33,6 +33,10 @@ public class Constants {
      * TAB NAME AUTOMATICO
      */
     public static final String TAB_NAME_AUTOMATICO = "Automático";
+    /**
+     * TAB NAME AVALIACAO
+     */
+    public static final String TAB_NAME_AVALIACAO = "Avaliação";
     
     /**
      * NO PALETTE SELECTED
@@ -43,5 +47,26 @@ public class Constants {
      * QUEBRA DE LINHA
      */
     public static final String QUEBRA_LINHA = "\n";
+    
+    /**
+     * ORIGINAL.PNG
+     */
+    public static final String ORIGINAL_PNG = "/original.png";
+    /**
+     * BLUR.PNG
+     */
+    public static final String BLUR_PNG = "/blur.png";
+    /**
+     * BINARY.PNG
+     */
+    public static final String BINARY_PNG = "/binary.png";
+    /**
+     * MORPH.PNG
+     */
+    public static final String MORPH_PNG = "/morph.png";
+    /**
+     * CONTOURS.PNG
+     */
+    public static final String CONTOURS_PNG = "/contours.png";
     
 }

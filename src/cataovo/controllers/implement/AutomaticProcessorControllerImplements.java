@@ -4,10 +4,10 @@
  */
 package cataovo.controllers.implement;
 
-import cataovo.controllers.implement.automation.threads.runnable.ThreadAutomation;
-import cataovo.controllers.implement.automation.threads.runnable.ThreadAutomationAutomaticProcess;
-import cataovo.controllers.implement.automation.threads.callable.NewThreadAutomation;
-import cataovo.controllers.implement.automation.threads.callable.NewThreadAutomationAutomaticProcess;
+import cataovo.processment.automation.threads.runnable.ThreadAutomation;
+import cataovo.processment.automation.threads.runnable.ThreadAutomationAutomaticProcess;
+import cataovo.processment.automation.threads.callable.NewThreadAutomation;
+import cataovo.processment.automation.threads.callable.NewThreadAutomationAutomaticProcess;
 import cataovo.controllers.AutomaticProcessorController;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.resources.fileChooser.handler.FileExtension;
@@ -61,6 +61,7 @@ public class AutomaticProcessorControllerImplements implements AutomaticProcesso
                     MainResources.getInstance().getSavingFolder().getPath(),
                     FileExtension.CSV,
                     MainResources.getInstance().getPanelTabHelper().getTabName());
+            MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(true);
             task = executorService.submit(automation);
             result = task.get();
             executorService.awaitTermination(1, TimeUnit.MILLISECONDS);

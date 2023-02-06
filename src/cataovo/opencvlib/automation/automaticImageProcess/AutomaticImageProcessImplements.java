@@ -4,6 +4,7 @@
  */
 package cataovo.opencvlib.automation.automaticImageProcess;
 
+import cataovo.constants.Constants;
 import cataovo.resources.fileChooser.handler.FileExtension;
 import cataovo.opencvlib.converters.Converter;
 import cataovo.opencvlib.wrappers.MatWrapper;
@@ -39,11 +40,11 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
     /**
      * Represents white the color.
      */
-    private static final double[] WHITE = {255, 255, 255};
+    private final double[] WHITE;
     /**
      * Represents the black color.
      */
-    private static final double[] BLACK = {0, 0, 0};
+    private final double[] BLACK;
     /**
      * Quantity of eggs in a frame.
      */
@@ -54,9 +55,14 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
      */
     private List<MatOfPoint> eggsContours = new ArrayList<>();
 
+    public AutomaticImageProcessImplements() {
+        this.BLACK = new double[]{0, 0, 0};
+        this.WHITE = new double[]{255, 255, 255};
+    }
+
     @Override
     public Mat applyBlurOnImage(String savingPath, Mat imageMatToBlur, int ksize_width, int ksize_height) {
-        saveImage(imageMatToBlur, savingPath.replace("/blur.png", "/original.png"));
+        saveImage(imageMatToBlur, savingPath.replace(Constants.BLUR_PNG, Constants.ORIGINAL_PNG));
         LOG.log(Level.INFO, "Applying blur...");
         Mat dstn = Mat.zeros(imageMatToBlur.size(), CvType.CV_8U);
         Imgproc.cvtColor(imageMatToBlur.clone(), dstn, Imgproc.COLOR_BGR2GRAY);

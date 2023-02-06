@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package cataovo.controllers.implement.automation.threads.callable;
+package cataovo.processment.automation.threads.callable;
 
 import cataovo.constants.Constants;
 import cataovo.entities.Palette;
@@ -77,8 +77,8 @@ public abstract class NewThreadAutomation implements Callable<String> {
      * resulted products
      *
      * @return the content of the file;
-     * @see cataovo.controllers.implement.automation.threads.callable.NewThreadAutomationAutomaticProcess
-     * @see cataovo.controllers.implement.automation.threads.callable.NewThreadAutomationManualProcess
+     * @see cataovo.processment.automation.threads.callable.NewThreadAutomationAutomaticProcess
+     * @see cataovo.processment.automation.threads.callable.NewThreadAutomationManualProcess
      */
     protected abstract StringBuffer createContent();
 
@@ -91,16 +91,16 @@ public abstract class NewThreadAutomation implements Callable<String> {
     private synchronized String createFile() {
         StringBuffer sb = new StringBuffer();
         String processingMode = (this.parentTabName == null ? Constants.TAB_NAME_MANUAL == null : this.parentTabName.equals(Constants.TAB_NAME_MANUAL)) ? "manual" : (this.parentTabName == null ? Constants.TAB_NAME_AUTOMATICO == null : this.parentTabName.equals(Constants.TAB_NAME_AUTOMATICO)) ? "auto" : "result";
-        String dstn = palette.getDirectory().getName() + "/" + processingMode + "/" + getDateTime("dd-MM-yyyy_HH-mm") + "/" + "Relatory";
+        String dstn = palette.getDirectory().getName() + "/" + processingMode + "/" + getDateTime("dd-MM-yyyy_HH-mm");
         File directory = new File(savingDirectory + "/cataovo/" + palette.getDirectory().getName() + "/" + processingMode + "/" + getDateTime("dd-MM-yyyy_HH-mm"));
         if (!directory.exists()) {
             directory.mkdirs();
         }
-        try ( FileWriter csvWriter = new FileWriter(savingDirectory + "/cataovo/" + dstn + "." + this.fileExtension.toString().toLowerCase());  PrintWriter csvPrinter = new PrintWriter(csvWriter);) {
+        try ( FileWriter csvWriter = new FileWriter(savingDirectory + "/cataovo/" + dstn + "/Relatory." + this.fileExtension.toString().toLowerCase());  PrintWriter csvPrinter = new PrintWriter(csvWriter);) {
 
             sb.append(createContent());
             csvPrinter.print(sb);
-            LOG.log(Level.INFO, "The file will be saved under the name: {0}", savingDirectory + "/cataovo/" + dstn + "." + this.fileExtension.toString().toLowerCase());
+            LOG.log(Level.INFO, "The file will be saved under the name: {0}", savingDirectory + "/cataovo/" + dstn);
             return directory.getPath();
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());
