@@ -4,8 +4,6 @@
  */
 package cataovo.controllers.implement;
 
-import cataovo.processment.automation.threads.runnable.ThreadAutomation;
-import cataovo.processment.automation.threads.runnable.ThreadAutomationAutomaticProcess;
 import cataovo.processment.automation.threads.callable.NewThreadAutomation;
 import cataovo.processment.automation.threads.callable.NewThreadAutomationAutomaticProcess;
 import cataovo.controllers.AutomaticProcessorController;
@@ -29,24 +27,6 @@ import javax.swing.JLabel;
 public class AutomaticProcessorControllerImplements implements AutomaticProcessorController {
 
     private static final Logger LOG = Logger.getLogger(AutomaticProcessorControllerImplements.class.getName());
-    
-    @Override
-    public boolean onAutoProcessPalette(JLabel jLabelImageName, JLabel jLabelImageFrame) {
-        try {
-            ThreadAutomation automation = 
-                    new ThreadAutomationAutomaticProcess(
-                            MainResources.getInstance().getPalette(), 
-                            MainResources.getInstance().getSavingFolder().getPath(), 
-                            FileExtension.CSV, 
-                            MainResources.getInstance().getPanelTabHelper().getTabName());
-            automation.start();
-            automation.join();
-            return true;
-        } catch (DirectoryNotValidException | InterruptedException ex) {
-            LOG.log(Level.SEVERE, null, ex);
-        }
-        return false;
-    }
 
     @Override
     public String onNewAutoProcessPalette(JLabel jLabelImageName, JLabel jLabelImageFrame) {

@@ -257,6 +257,13 @@ public class MainPageControllerImplements implements MainPageController {
                     this.frameCounter = -1;
                     showFrameOnScreen(parentNameLabel, parentLabel, frame);
                 }
+                case 2 -> {
+                    parentLabel.setText(null);
+                    parentLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                    parentLabel.setVisible(true);
+                    this.frameCounter = 0;
+                    showFrameOnScreen(parentNameLabel, parentLabel, frame);
+                }
                 default ->
                     throw new AssertionError("No tab with such index");
             }

@@ -39,20 +39,6 @@ public final class Frame implements Cloneable, Serializable{
     /**
      *
      * @param filePath the file path of this image
-     * @param regionsWithEggs the regions containg eggs of mosquito
-     * @throws cataovo.exceptions.ImageNotValidException
-     */
-    public Frame(String filePath, Set<Region> regionsWithEggs) throws ImageNotValidException {
-        if (verifyFileIsAValidImage(filePath)) {
-            this.paletteFrame = new File(filePath);
-            this.name = chopName(filePath);
-            this.regionsContainingEggs = regionsWithEggs;
-        }
-    }
-
-    /**
-     *
-     * @param filePath the file path of this image
      * @throws cataovo.exceptions.ImageNotValidException
      */
     public Frame(String filePath) throws ImageNotValidException {
@@ -84,20 +70,11 @@ public final class Frame implements Cloneable, Serializable{
     }
 
     /**
-     *
-     * @param regionsContainingEggs
+     * 
+     * @param name
      * @param paletteFrame
-     * @throws cataovo.exceptions.ImageNotValidException
+     * @throws ImageNotValidException 
      */
-    public Frame(Set<Region> regionsContainingEggs, File paletteFrame) throws ImageNotValidException {
-        if (verifyFileIsAValidImage(paletteFrame.getAbsolutePath())) {
-            this.regionsContainingEggs = regionsContainingEggs;
-            this.paletteFrame = paletteFrame;
-            this.name = chopName(paletteFrame.getAbsolutePath());
-        }
-
-    }
-
     public Frame(String name, File paletteFrame) throws ImageNotValidException {
         if (verifyFileIsAValidImage(name)) {
             this.paletteFrame = paletteFrame;

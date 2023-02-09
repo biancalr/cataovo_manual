@@ -12,16 +12,7 @@ import javax.swing.JLabel;
  * @author Bianca Leopoldo Ramos
  */
 public interface AutomaticProcessorController {
-    
-    /**
-     * Starts the automatic processing of the {@link cataovo.entities.Palette} as a {@link Thread}.
-     * 
-     * @param jLabelImageName
-     * @param jLabelImageFrame
-     * @return the final relatory's path
-     */
-    public boolean onAutoProcessPalette(JLabel jLabelImageName, JLabel jLabelImageFrame);
-    
+       
     /**
      * Starts the automatic processing of the {@link cataovo.entities.Palette} as a {@link java.util.concurrent.Callable}.
      * 

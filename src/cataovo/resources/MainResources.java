@@ -33,15 +33,12 @@ public class MainResources {
     private File savingFolder;
     private static volatile MainResources MAIN_PAGE_RESOURCES;
     private final PanelTabHelper panelTabHelper;
+    private File[] reports;
 
     public MainResources() throws DirectoryNotValidException {
         current = FileSystemView.getFileSystemView().getHomeDirectory().getPath();
-        fileChooserUI = new MyFileChooserUI(new File(current));
         savingFolder = getFileFolder(new File(current));
-        fileListHandler = new MyFileListHandler();
-        palette = new Palette();
-        paletteToSave = new Palette();
-        currentFrame = new Frame();
+        fileChooserUI = new MyFileChooserUI(new File(current));
         panelTabHelper = new PanelTabHelper(false, 0, "Manual");
     }
     
@@ -58,7 +55,7 @@ public class MainResources {
         return PAGE_RESOURCES;
     }
 
-    public File getSavingFolder() {
+    public File getSavingFolder() throws DirectoryNotValidException {
         return savingFolder;
     }
 
@@ -79,39 +76,88 @@ public class MainResources {
     }
 
     public MyFileListHandler getFileListHandler() {
+        if (this.fileListHandler == null) {
+            this.fileListHandler = new MyFileListHandler();
+        }
         return fileListHandler;
     }
 
     public void setFileListHandler(MyFileListHandler fileListHandler) {
+        if (this.fileListHandler == null) {
+            this.fileListHandler = new MyFileListHandler();
+        }
         this.fileListHandler = fileListHandler;
     }
 
     public Palette getPalette() {
+        if (this.palette == null) {
+            this.palette = new Palette();
+        }
         return palette;
     }
 
     public void setPalette(Palette palette) {
+        if (this.palette == null) {
+            this.palette = new Palette();
+        }
         this.palette = palette;
     }
 
     public Palette getPaletteToSave() {
+        if (this.paletteToSave == null) {
+            this.paletteToSave = new Palette();
+        }
         return paletteToSave;
     }
 
     public void setPaletteToSave(Palette paletteToSave) {
+        if (this.paletteToSave == null) {
+            this.paletteToSave = new Palette();
+        }
         this.paletteToSave = paletteToSave;
     }
 
     public Frame getCurrentFrame() {
+        if (this.currentFrame == null) {
+            this.currentFrame = new Frame();
+        }
         return currentFrame;
     }
 
     public void setCurrentFrame(Frame currentFrame) {
+        if (this.currentFrame == null) {
+            this.currentFrame = new Frame();
+        }
         this.currentFrame = currentFrame;
     }
 
     public PanelTabHelper getPanelTabHelper() {
         return panelTabHelper;
+    }
+
+    public File[] getReports() {
+        if (this.reports == null) {
+            this.reports = new File[2];
+        }
+        return reports;
+    }
+
+    public void setReports(File[] reports) {
+        if (this.reports == null) {
+            this.reports = new File[2];
+        }
+        this.reports = reports;
+    }
+    
+    public void addReport(File report) throws ArrayIndexOutOfBoundsException{
+        if (this.reports == null) {
+            this.reports = new File[2];
+        }
+        if (reports.length < 2) {
+            reports[reports.length] = report;
+        } else {
+            throw new ArrayIndexOutOfBoundsException("Relatórios já foram selecionados.");
+        }
     }
     
     public void adjustPanelTab(JTabbedPane pane, boolean isActualTabProcessing){

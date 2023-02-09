@@ -16,8 +16,6 @@ import cataovo.exceptions.ImageNotValidException;
 import cataovo.resources.fileChooser.UI.MyFileChooserUI;
 import cataovo.resources.fileChooser.handler.FileExtension;
 import cataovo.resources.MainResources;
-import cataovo.processment.automation.threads.runnable.ThreadAutomation;
-import cataovo.processment.automation.threads.runnable.ThreadAutomationManualProcess;
 import java.awt.Component;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -43,7 +41,6 @@ public class FileSelectionControllerImplement implements FileSelectionController
 
     private static final Logger LOG = Logger.getLogger(FileSelectionControllerImplement.class.getName());
     private final MyFileChooserUI fileChooser;
-    private ThreadAutomation createRelatories;
     private NewThreadAutomation newCreateRelatories;
     private String finalRelatoryDestination;
 
@@ -187,28 +184,6 @@ public class FileSelectionControllerImplement implements FileSelectionController
             LOG.log(Level.INFO, "Adding following frame: {0}", frame.getName());
         }
         return frames;
-    }
-
-    /**
-     * Save the final relatories in the computer.
-     *
-     * @return <code>True</code> in case of success. <code> False </code>
-     * otherwise.
-     */
-    private boolean actionCommandSaveFinalFile(String parent) throws DirectoryNotValidException {
-        try {
-            LOG.log(Level.INFO, "Final file save: start");
-            this.createRelatories = new ThreadAutomationManualProcess(
-                    MainResources.getInstance().getPaletteToSave(),
-                    MainResources.getInstance().getSavingFolder().getPath(),
-                    FileExtension.CSV, parent);
-            createRelatories.start();
-            createRelatories.join();
-            return true;
-        } catch (InterruptedException ex) {
-            LOG.log(Level.SEVERE, null, ex);
-            return false;
-        }
     }
 
     /**

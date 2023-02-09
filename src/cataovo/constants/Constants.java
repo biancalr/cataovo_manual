@@ -15,7 +15,7 @@ public class Constants {
     /**
      * ACTION COMMAND ABRIR PASTA
      */
-    public static final String ITEM_ACTION_COMMAND_ABRIR_PASTA = "Abrir Pasta";
+    public static final String ITEM_ACTION_COMMAND_ABRIR_PASTA = "Abrir Paleta";
     /**
      * ACTION COMMAND SELECIONAR PASTA DESTINO
      */
@@ -24,6 +24,10 @@ public class Constants {
      * ACTION COMMAND SALVAR ARQUIVO FINAL
      */
     public static final String ITEM_ACTION_COMMAND_SALVAR_ARQUIVO_FINAL = "Salvar Arquivo";
+    /**
+     * ACTION COMMAND SELECIONAR RELATORIO
+     */
+    public static final String ITEM_ACTION_COMMAND_SELECIONAR_RELATORIO = "Selecionar Relatório";
     
     /**
      * TAB NAME MANUAL

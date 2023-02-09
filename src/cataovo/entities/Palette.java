@@ -32,25 +32,6 @@ public final class Palette implements Cloneable, Serializable{
      * The the directory as a file;
      */
     private File directory;
-    
-    /**
-     *
-     * @param pathName The path where the palette is localized. <strong>The file
-     * has to be a directory</strong>
-     * @param frames The frames that composes a palette.
-     * @throws cataovo.exceptions.DirectoryNotValidException if the file is not
-     * a directory.
-     */
-    public Palette(String pathName, Queue<Frame> frames) throws DirectoryNotValidException {
-        if (verifyPathIsDirectory(pathName)) {
-            this.frames = frames;
-            this.pathName = pathName;
-            this.directory = new File(pathName);
-        } else {
-            throw new DirectoryNotValidException("This file path does not represent a valid directory. Must choose another one");
-        }
-
-    }
 
     /**
      *
@@ -83,23 +64,6 @@ public final class Palette implements Cloneable, Serializable{
         } else {
             throw new DirectoryNotValidException("This file path does not represent a valid directory. Must choose another one");
         }
-    }
-
-    /**
-     *
-     * @param frames
-     * @param directory
-     * @throws DirectoryNotValidException if the file is not a directory.
-     */
-    public Palette(Queue<Frame> frames, File directory) throws DirectoryNotValidException {
-        if (verifyPathIsDirectory(directory.getAbsolutePath())) {
-            this.frames = frames;
-            this.pathName = directory.getAbsolutePath();
-            this.directory = directory;
-        } else {
-            throw new DirectoryNotValidException("This file path does not represent a valid directory. Must choose another one");
-        }
-
     }
 
     /**
