@@ -27,7 +27,9 @@ import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import org.opencv.core.Core;
 import cataovo.controllers.FrameActionsController;
+import java.awt.HeadlessException;
 import java.io.File;
+import java.util.Arrays;
 
 /**
  * Module that interacts with the user. This is the main face of this
@@ -526,6 +528,11 @@ public class MainPage extends javax.swing.JFrame {
 
         jButton6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton6.setText("< Anterior");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         jButton7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton7.setText("Próximo >");
@@ -586,6 +593,11 @@ public class MainPage extends javax.swing.JFrame {
 
         jButton8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jButton8.setText("Extrair Relatório das métricas");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
 
         jDesktopPane3.setLayer(jPanel8, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane3.setLayer(jLabel13, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -759,9 +771,9 @@ public class MainPage extends javax.swing.JFrame {
         jTabbedPane1.addTab("Avaliação", jDesktopPane3);
 
         jMenu1.setText("File");
-        jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jMenu1MouseClicked(evt);
+        jMenu1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu1ActionPerformed(evt);
             }
         });
 
@@ -782,6 +794,11 @@ public class MainPage extends javax.swing.JFrame {
         jMenu1.add(jMenuItem5);
 
         jMenuItem6.setText("Selecionar Relatório");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem6);
 
         jMenuBar1.add(jMenu1);
@@ -831,10 +848,6 @@ public class MainPage extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jMenu1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu1MouseClicked
-        LOG.log(Level.INFO, evt.paramString());
-    }//GEN-LAST:event_jMenu1MouseClicked
-
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         try {
             LOG.log(Level.INFO, evt.getActionCommand());
@@ -864,7 +877,7 @@ public class MainPage extends javax.swing.JFrame {
                 }
 
             }
-        } catch (DirectoryNotValidException | FileNotFoundException | ImageNotValidException ex) {
+        } catch (DirectoryNotValidException | FileNotFoundException | ImageNotValidException | HeadlessException ex) {
             LOG.log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
         }
@@ -878,7 +891,7 @@ public class MainPage extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(jPanel1, "Diretório não foi alterado. Por favor, verifique algumas possibilidades: a seleção da pasta foi cancelada, tentando alterar a pasta durante o processamento ou erro na seleção da pasta.");
             }
-        } catch (DirectoryNotValidException | FileNotFoundException | ImageNotValidException ex) {
+        } catch (DirectoryNotValidException | FileNotFoundException | ImageNotValidException | HeadlessException ex) {
             LOG.log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
         }
@@ -906,10 +919,10 @@ public class MainPage extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(jPanel1, "It wasn't possible to seve the Palette on a file");
                 } else {
                     LOG.log(Level.INFO, "The palette was saved successfully!");
-                    JOptionPane.showMessageDialog(jPanel1, "A paleta foi salva com sucesso em: " + fileSelectionController.getFinalRelatoryDestination());
+                    JOptionPane.showMessageDialog(jPanel1, "A paleta foi salva com sucesso em: " + fileSelectionController.getManualReportDestination());
                 }
             }
-        } catch (ImageNotValidException | DirectoryNotValidException | FileNotFoundException ex) {
+        } catch (ImageNotValidException | DirectoryNotValidException | FileNotFoundException | HeadlessException ex) {
             LOG.log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
         }
@@ -998,6 +1011,38 @@ public class MainPage extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton7ActionPerformed
 
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        LOG.log(Level.INFO, evt.getActionCommand());
+        try {
+            boolean result = this.fileSelectionController.fileSelectionEvent(evt.getActionCommand(), jTabbedPane1, false);
+            // Os critérios de seleção de um arquivo são: 
+            //     primeiro se seleciona uma paleta em Abrir Paleta
+            //     depois seleciona os dois relatórios
+            //         O primeiro relatório deve ser o da contagem manual
+            //         O segundo deve ser o da contagem automática.
+            if (!result) {
+                JOptionPane.showMessageDialog(jTabbedPane1, "O arquivo não foi selecionado. Vale revisar os critérios de seleção.");
+                MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
+            }
+            System.out.println(Arrays.toString(MainResources.getInstance().getReports()));
+        } catch (DirectoryNotValidException | ImageNotValidException | FileNotFoundException | HeadlessException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
+        }
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenu1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1012,10 +1057,12 @@ public class MainPage extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainPage.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 

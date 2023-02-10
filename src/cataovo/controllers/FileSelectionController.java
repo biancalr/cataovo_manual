@@ -38,6 +38,12 @@ public interface FileSelectionController {
      *
      * @return the final relatory's path.
      */
-    public String getFinalRelatoryDestination();
+    public String getManualReportDestination();
+    
+    /**
+     * 
+     * @return 
+     */
+    public int getEvaluationReportsFilePosition();
 
 }

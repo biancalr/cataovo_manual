@@ -11,7 +11,7 @@ package cataovo.constants;
  * @author Bianca Leopoldo Ramos
  */
 public class Constants {
-    
+
     /**
      * ACTION COMMAND ABRIR PASTA
      */
@@ -28,6 +28,8 @@ public class Constants {
      * ACTION COMMAND SELECIONAR RELATORIO
      */
     public static final String ITEM_ACTION_COMMAND_SELECIONAR_RELATORIO = "Selecionar Relatório";
+
+    
     
     /**
      * TAB NAME MANUAL
@@ -41,16 +43,22 @@ public class Constants {
      * TAB NAME AVALIACAO
      */
     public static final String TAB_NAME_AVALIACAO = "Avaliação";
+
+    
     
     /**
      * NO PALETTE SELECTED
      */
     public static final String NO_PALETTE_SELECTED = "Escolha uma pasta";
+
+    
     
     /**
      * QUEBRA DE LINHA
      */
     public static final String QUEBRA_LINHA = "\n";
+
+    
     
     /**
      * ORIGINAL.PNG
@@ -72,5 +80,20 @@ public class Constants {
      * CONTOURS.PNG
      */
     public static final String CONTOURS_PNG = "/contours.png";
+
     
+    
+    /**
+     * NAME MANUAL
+     */
+    public static final String NAME_MANUAL = "manual";
+    /**
+     * NAME AUTOMATICO
+     */
+    public static final String NAME_AUTOMATICO = "auto";
+    /**
+     * NAME AVALIACAO
+     */
+    public static final String NAME_AVALIACAO = "resut";
+
 }

@@ -22,7 +22,7 @@ import javax.swing.JTabbedPane;
  * @author Bianca Leopoldo Ramos
  */
 public class MainResources {
-    
+
     private static final Logger LOG = Logger.getLogger(MainResources.class.getName());
     private final MyFileChooserUI fileChooserUI;
     private MyFileListHandler fileListHandler;
@@ -33,6 +33,7 @@ public class MainResources {
     private File savingFolder;
     private static volatile MainResources MAIN_PAGE_RESOURCES;
     private final PanelTabHelper panelTabHelper;
+    // Fixar ordem dos relatórios: file[0] deve ser o relatório de contagem manual, file[1] deve ser o relatório de contagem automática
     private File[] reports;
 
     public MainResources() throws DirectoryNotValidException {
@@ -41,11 +42,11 @@ public class MainResources {
         fileChooserUI = new MyFileChooserUI(new File(current));
         panelTabHelper = new PanelTabHelper(false, 0, "Manual");
     }
-    
-    public static MainResources getInstance() throws DirectoryNotValidException{
+
+    public static MainResources getInstance() throws DirectoryNotValidException {
         MainResources PAGE_RESOURCES = MainResources.MAIN_PAGE_RESOURCES;
         if (PAGE_RESOURCES == null) {
-            synchronized (MainResources.class){
+            synchronized (MainResources.class) {
                 PAGE_RESOURCES = MainResources.MAIN_PAGE_RESOURCES;
                 if (PAGE_RESOURCES == null) {
                     MainResources.MAIN_PAGE_RESOURCES = PAGE_RESOURCES = new MainResources();
@@ -148,24 +149,28 @@ public class MainResources {
         }
         this.reports = reports;
     }
-    
-    public void addReport(File report) throws ArrayIndexOutOfBoundsException{
+
+    public void addReport(File report, int position) throws ArrayIndexOutOfBoundsException {
         if (this.reports == null) {
             this.reports = new File[2];
         }
-        if (reports.length < 2) {
-            reports[reports.length] = report;
+        if (position < reports.length) {
+            if (reports[position] == null) {
+                reports[position] = report;
+            } else {
+                throw new ArrayIndexOutOfBoundsException("Posição ocupada");
+            }
         } else {
             throw new ArrayIndexOutOfBoundsException("Relatórios já foram selecionados.");
         }
     }
-    
-    public void adjustPanelTab(JTabbedPane pane, boolean isActualTabProcessing){
+
+    public void adjustPanelTab(JTabbedPane pane, boolean isActualTabProcessing) {
         panelTabHelper.setIsActualTabProcessing(isActualTabProcessing);
         panelTabHelper.setTabIndex(pane.getSelectedIndex());
         panelTabHelper.setTabName(pane.getTitleAt(pane.getSelectedIndex()));
     }
-    
+
     public final File getFileFolder(File file) throws DirectoryNotValidException {
         if (!file.exists()) {
             LOG.log(Level.SEVERE, "This method needs an existing file. The parameter cannot be null or inexistent");
@@ -181,5 +186,5 @@ public class MainResources {
             }
         }
     }
-    
+
 }

@@ -77,8 +77,10 @@ public abstract class NewThreadAutomation implements Callable<String> {
      * resulted products
      *
      * @return the content of the file;
-     * @see cataovo.processment.automation.threads.callable.NewThreadAutomationAutomaticProcess
-     * @see cataovo.processment.automation.threads.callable.NewThreadAutomationManualProcess
+     * @see
+     * cataovo.processment.automation.threads.callable.NewThreadAutomationAutomaticProcess
+     * @see
+     * cataovo.processment.automation.threads.callable.NewThreadAutomationManualProcess
      */
     protected abstract StringBuffer createContent();
 
@@ -90,7 +92,7 @@ public abstract class NewThreadAutomation implements Callable<String> {
      */
     private synchronized String createFile() {
         StringBuffer sb = new StringBuffer();
-        String processingMode = (this.parentTabName == null ? Constants.TAB_NAME_MANUAL == null : this.parentTabName.equals(Constants.TAB_NAME_MANUAL)) ? "manual" : (this.parentTabName == null ? Constants.TAB_NAME_AUTOMATICO == null : this.parentTabName.equals(Constants.TAB_NAME_AUTOMATICO)) ? "auto" : "result";
+        String processingMode = (this.parentTabName == null ? Constants.TAB_NAME_MANUAL == null : this.parentTabName.equals(Constants.TAB_NAME_MANUAL)) ? Constants.NAME_MANUAL : (this.parentTabName == null ? Constants.TAB_NAME_AUTOMATICO == null : this.parentTabName.equals(Constants.TAB_NAME_AUTOMATICO)) ? Constants.NAME_AUTOMATICO : Constants.NAME_AVALIACAO;
         String dstn = palette.getDirectory().getName() + "/" + processingMode + "/" + getDateTime("dd-MM-yyyy_HH-mm");
         File directory = new File(savingDirectory + "/cataovo/" + palette.getDirectory().getName() + "/" + processingMode + "/" + getDateTime("dd-MM-yyyy_HH-mm"));
         if (!directory.exists()) {

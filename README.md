@@ -20,5 +20,10 @@ de visão computacional.</p>
 <li>Servir como parâmetro medidor da eficiência de políticas públicas de combate ao mosquito</li>
 <li>Disponibilizar um banco de dados contendo as planilhas e as imagens resultantes do processamento</li>
 </ul>
-<img src="https://user-images.githubusercontent.com/33333728/210036805-0be7ecef-03b6-4d52-8dd1-aeaacbd6c546.png" />
-<img src="https://user-images.githubusercontent.com/33333728/210036813-9589cbd2-1d99-4020-bbac-e95a1add975f.png" />
+
+<img src="/images/mod_manual_1.png" />
+<img src="/images/mod_auto_1.png" />
+<img src="/images/mod_result_1.png" />
+
+<!--img src="https://user-images.githubusercontent.com/33333728/210036805-0be7ecef-03b6-4d52-8dd1-aeaacbd6c546.png" />
+<img src="https://user-images.githubusercontent.com/33333728/210036813-9589cbd2-1d99-4020-bbac-e95a1add975f.png" /-->
