@@ -5,8 +5,13 @@
  */
 package cataovo.controllers;
 
+import cataovo.entities.Frame;
 import cataovo.entities.Point;
 import cataovo.exceptions.DirectoryNotValidException;
+import cataovo.opencvlib.wrappers.PointWrapper;
+import cataovo.opencvlib.wrappers.RectWrapper;
+import java.util.Collection;
+import java.util.List;
 import javax.swing.Icon;
 
 /**
@@ -47,5 +52,14 @@ public interface FrameActionsController {
      * @see cataovo.utils.frameUtils.FrameActionsUtils#captureSubframe(cataovo.entities.Point, cataovo.entities.Point) 
      */
     public Icon captureSubframe(Point pointClick) throws DirectoryNotValidException;
+
+    /**
+     * 
+     * @param currentFrame
+     * @param regions
+     * @param points
+     * @return 
+     */
+    public Icon paintFormatsOnFrameOnEvaluation(Frame currentFrame, Collection<RectWrapper> regions, Collection<PointWrapper> points);
 
 }

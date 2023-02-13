@@ -34,7 +34,7 @@ public class MainResources {
     private static volatile MainResources MAIN_PAGE_RESOURCES;
     private final PanelTabHelper panelTabHelper;
     // Fixar ordem dos relatórios: file[0] deve ser o relatório de contagem manual, file[1] deve ser o relatório de contagem automática
-    private File[] reports;
+    private String[] reports;
 
     public MainResources() throws DirectoryNotValidException {
         current = FileSystemView.getFileSystemView().getHomeDirectory().getPath();
@@ -136,23 +136,23 @@ public class MainResources {
         return panelTabHelper;
     }
 
-    public File[] getReports() {
+    public String[] getReports() {
         if (this.reports == null) {
-            this.reports = new File[2];
+            this.reports = new String[2];
         }
         return reports;
     }
 
-    public void setReports(File[] reports) {
+    public void setReports(String[] reports) {
         if (this.reports == null) {
-            this.reports = new File[2];
+            this.reports = new String[2];
         }
         this.reports = reports;
     }
 
-    public void addReport(File report, int position) throws ArrayIndexOutOfBoundsException {
+    public void addReport(String report, int position) throws ArrayIndexOutOfBoundsException {
         if (this.reports == null) {
-            this.reports = new File[2];
+            this.reports = new String[2];
         }
         if (position < reports.length) {
             if (reports[position] == null) {

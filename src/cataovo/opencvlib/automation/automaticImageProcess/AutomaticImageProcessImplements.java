@@ -211,15 +211,12 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
             auxlist = get.toList();
             for (int j = 0; j < auxlist.size(); j++) {
 
-                // Saves a point each fifty steps
-                if ((j % 50) == 0) {
+                // Saves a point each given steps
+                if ((j % Constants.SAVING_STEPS) == 0) {
                     mainPoints.add(auxlist.get(j));
                 }
-
             }
-
         }
-
         mainPoints.stream().forEach((p) -> {
             builder.append(",");
             builder.append(p.x);

@@ -16,6 +16,9 @@ import cataovo.resources.MainResources;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import cataovo.controllers.FrameActionsController;
+import cataovo.entities.Frame;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Implements the frame actions controller.
@@ -133,6 +136,19 @@ public class FrameActionsControllerImplements implements FrameActionsController 
             subframeImage = this.frameUtils.captureSubframe(this.initialPoint, pointClick);
         }
         return subframeImage;
+    }
+
+    /**
+     * 
+     * @param currentFrame
+     * @param regions
+     * @param points
+     * @return 
+     */
+    @Override
+    public Icon paintFormatsOnFrameOnEvaluation(Frame currentFrame, Collection<RectWrapper> regions, Collection<PointWrapper> points) {
+        this.frameUtils = new FrameActionsUtils(currentFrame);        
+        return this.frameUtils.drawFormatsOnFrame(regions, points);
     }
 
 }

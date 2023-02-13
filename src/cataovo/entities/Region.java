@@ -31,12 +31,12 @@ public final class Region implements Cloneable, Serializable{
 
     /**
      *
-     * @param length
+     * @param height
      * @param width
      * @param initialPoint
      */
-    public Region(int length, int width, Point initialPoint) {
-        this.height = length;
+    public Region(int height, int width, Point initialPoint) {
+        this.height = height;
         this.width = width;
         this.initialPoint = initialPoint;
     }

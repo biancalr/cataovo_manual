@@ -47,7 +47,7 @@ public class MainPageControllerImplements implements MainPageController {
      * @throws DirectoryNotValidException
      */
     @Override
-    public void toNextFrame(JLabel parentName, JLabel parent) throws ImageNotValidException, DirectoryNotValidException {
+    public void toNextFrameOnManual(JLabel parentName, JLabel parent) throws ImageNotValidException, DirectoryNotValidException, AssertionError {
         if (!MainResources.getInstance().getPalette().getFrames().isEmpty()) {
             Frame frame = MainResources.getInstance().getPalette().getFrames().poll();
             MainResources.getInstance().setCurrentFrame(frame);
@@ -57,6 +57,81 @@ public class MainPageControllerImplements implements MainPageController {
             parentName.setText(Constants.NO_PALETTE_SELECTED);
             parent.setIcon(null);
             parent.setBorder(null);
+        }
+
+    }
+
+    @Override
+    public int toPreviousFrameOnEvaluation(JLabel parentName, JLabel parent) throws DirectoryNotValidException, ImageNotValidException {
+        if (isReportValid()) { //verifica senão foi selecionada uma paleta diferente
+            File[] frameResults = MainResources.getInstance().getPalette().getDirectory().listFiles((pathname) -> pathname.isFile());
+            LOG.log(Level.INFO, "Tamanho da paleta: ", String.valueOf(MainResources.getInstance().getSavingFolder().length()));
+            if (frameResults.length > 0) {
+                if (this.frameCounter > 0) {
+                    this.frameCounter--;
+                    setCurrentFrameOnEvaluationScreen(frameResults[this.frameCounter], parentName, parent);
+                    return this.frameCounter;
+                } else {
+                    this.frameCounter = 0;
+                    throw new ArrayIndexOutOfBoundsException("Atingiu o início da paleta");
+                }
+            }
+        } else {
+            StringBuilder sb = new StringBuilder();
+            sb.append("Não foram encontradas as pastas correspondentes ao processamento automático");
+            sb.append(Constants.QUEBRA_LINHA);
+            sb.append("É possível que uma nova paleta ou nenhuma tenha sido selecionada, portanto o diretório foi alterado ou ainda não existe.");
+            sb.append(Constants.QUEBRA_LINHA);
+            sb.append("Reinicie processamento para assim poder visualizar os devidos resultados.");
+            throw new DirectoryNotValidException(sb.toString());
+
+        }
+        return -1;
+    }
+
+    /**
+     *
+     * @param frameResult
+     * @param parentName
+     * @param parent
+     * @throws ImageNotValidException
+     * @throws DirectoryNotValidException
+     */
+    private void setCurrentFrameOnEvaluationScreen(File frameResult, JLabel parentName, JLabel parent) throws ImageNotValidException, DirectoryNotValidException {
+        Frame current = new Frame(frameResult.getAbsolutePath());
+        MainResources.getInstance().setCurrentFrame(current);
+        showFrameOnScreen(parentName, parent, current);
+        LOG.log(Level.INFO, "Image Position: {0}", this.frameCounter);
+    }
+
+    /**
+     *
+     * @param parentName
+     * @param parent
+     * @throws DirectoryNotValidException
+     */
+    @Override
+    public void toNextFrameOnEvaluation(JLabel parentName, JLabel parent) throws DirectoryNotValidException, ImageNotValidException {
+        if (isReportValid()) { //verifica senão foi selecionada uma paleta diferente
+            File[] frameResults = MainResources.getInstance().getPalette().getDirectory().listFiles((pathname) -> pathname.isFile());
+            LOG.log(Level.INFO, "Tamanho da paleta: {0}", String.valueOf(MainResources.getInstance().getSavingFolder().length()));
+            if (frameResults.length > 0) {
+                if (this.frameCounter < (frameResults.length - 1)) {
+                    this.frameCounter++;
+                    setCurrentFrameOnEvaluationScreen(frameResults[this.frameCounter], parentName, parent);
+                } else {
+                    this.frameCounter = frameResults.length - 1;
+                    throw new ArrayIndexOutOfBoundsException("Atingiu o fim da paleta");
+                }
+            } else {
+                StringBuilder sb = new StringBuilder();
+                sb.append("Não foram encontradas as pastas correspondentes ao processamento automático");
+                sb.append(Constants.QUEBRA_LINHA);
+                sb.append("É possível que uma nova paleta ou nenhuma tenha sido selecionada, portanto o diretório foi alterado ou ainda não existe.");
+                sb.append(Constants.QUEBRA_LINHA);
+                sb.append("Reinicie processamento para assim poder visualizar os devidos resultados.");
+                throw new DirectoryNotValidException(sb.toString());
+            }
         }
     }
 
@@ -68,7 +143,7 @@ public class MainPageControllerImplements implements MainPageController {
      * @throws DirectoryNotValidException
      */
     @Override
-    public void toNextFrame(JLabel parentName, JTabbedPane jTabbedPane) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException {
+    public void toNextFrameOnAutomatic(JLabel parentName, JTabbedPane jTabbedPane) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException {
         // Verificar as palavras-chave que formam o caminho de um diretório do processamento automático no projeto: (nome da paleta) e "auto". 
         if (!MainResources.getInstance().getSavingFolder().getAbsolutePath().contains(MainResources.getInstance().getPalette().getDirectory().getName())
                 || !MainResources.getInstance().getSavingFolder().getAbsolutePath().contains("auto")) {
@@ -81,7 +156,7 @@ public class MainPageControllerImplements implements MainPageController {
             File[] frameResults = MainResources.getInstance().getSavingFolder().listFiles((pathname) -> pathname.isDirectory());
             if (frameResults.length > 0) {
                 if (this.frameCounter < (frameResults.length - 1)) {
-                    addOneAtFrameCounting();
+                    this.frameCounter++;
                     // Buscar o diretório correspondente ao frame atual
                     File currentFrameDirectory = frameResults[this.frameCounter];
                     Frame current = putFileOnFrame(jTabbedPane, currentFrameDirectory, parentName);
@@ -98,20 +173,20 @@ public class MainPageControllerImplements implements MainPageController {
     }
 
     @Override
-    public void toPreviousFrame(JLabel parentName, JTabbedPane jTabbedPane) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException {
+    public void toPreviousFrameOnAutomatic(JLabel parentName, JTabbedPane jTabbedPane) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException {
         // Verificar as palavras-chave que formam o caminho de um diretório do processamento automático no projeto: (nome da paleta) e "auto". 
         if (!MainResources.getInstance().getSavingFolder().getAbsolutePath().contains(MainResources.getInstance().getPalette().getDirectory().getName())
                 || !MainResources.getInstance().getSavingFolder().getAbsolutePath().contains("auto")) {
-            StringBuilder sb = new StringBuilder("Inicie um novo processamento para assim poder visualizar os devidos resultados.");
+            StringBuilder sb = new StringBuilder("É possível que uma nova paleta ou nenhuma tenha sido selecionada, portanto o diretório de salvamento foi alterado ou ainda não existe.");
             sb.append(Constants.QUEBRA_LINHA);
-            sb.append("Altere a pasta de destino para '../cataovo/(nome-da-paleta)/auto/(data-e-hora-da-análise)' ou inicie um novo processamento e assim ver os resultados do processamento automático.");
+            sb.append("Inicie um novo processamento para assim poder visualizar os devidos resultados.");
             throw new DirectoryNotValidException(sb.toString());
         } else {
             // Listando os diretórios correspondentes a cada frame
             File[] frameResults = MainResources.getInstance().getSavingFolder().listFiles((pathname) -> pathname.isDirectory());
             if (frameResults.length > 0) {
                 if (this.frameCounter > 0) {
-                    subOneAtFrameCounting();
+                    this.frameCounter--;
                     // Buscar o diretório correspondente ao frame atual
                     File currentFrameDirectory = frameResults[this.frameCounter];
                     Frame current = putFileOnFrame(jTabbedPane, currentFrameDirectory, parentName);
@@ -127,7 +202,7 @@ public class MainPageControllerImplements implements MainPageController {
         }
     }
 
-   /**
+    /**
      *
      * @param jTabbedPane
      * @param currentFrameDirectory
@@ -160,7 +235,8 @@ public class MainPageControllerImplements implements MainPageController {
      * @param frame
      * @return
      */
-    private boolean showFrameOnScreen(JLabel parentName, JLabel parent, Object frame) throws ImageNotValidException {
+    @Override
+    public boolean showFrameOnScreen(JLabel parentName, JLabel parent, Object frame) throws ImageNotValidException {
         if (frame instanceof Frame fr) {
             LOG.log(Level.INFO, "Presenting the image {0} on screen...", fr.getName());
             if (presentImageFrameOnScreen(parent, parentName, fr)) {
@@ -230,7 +306,7 @@ public class MainPageControllerImplements implements MainPageController {
         LOG.log(Level.INFO, "The frame was analysed. Charging next...");
         MainResources.getInstance().getPaletteToSave().getFrames()
                 .offer(MainResources.getInstance().getCurrentFrame());
-        toNextFrame(jLabel1, jLabel2);
+        toNextFrameOnManual(jLabel1, jLabel2);
     }
 
     /**
@@ -250,7 +326,7 @@ public class MainPageControllerImplements implements MainPageController {
                     parentLabel.setText(null);
                     parentLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                     parentLabel.setVisible(true);
-                    this.frameCounter = 0;
+                    this.frameCounter = -1;
                     showFrameOnScreen(parentNameLabel, parentLabel, frame);
                 }
                 case 1 -> {
@@ -261,7 +337,7 @@ public class MainPageControllerImplements implements MainPageController {
                     parentLabel.setText(null);
                     parentLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                     parentLabel.setVisible(true);
-                    this.frameCounter = 0;
+                    this.frameCounter = -1;
                     showFrameOnScreen(parentNameLabel, parentLabel, frame);
                 }
                 default ->
@@ -280,16 +356,17 @@ public class MainPageControllerImplements implements MainPageController {
         setLabelText(subframeNameLabel, text);
     }
 
-    public int getFrameCounter() {
-        return frameCounter;
-    }
-
-    public void addOneAtFrameCounting() {
-        frameCounter++;
-    }
-
-    public void subOneAtFrameCounting() {
-        frameCounter--;
+    /**
+     *
+     * @return @throws DirectoryNotValidException
+     */
+    private boolean isReportValid() throws DirectoryNotValidException {
+        for (String report : MainResources.getInstance().getReports()) {
+            if (!report.contains(MainResources.getInstance().getPalette().getDirectory().getName())) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

@@ -14,10 +14,12 @@ import cataovo.opencvlib.imageFrameUtils.ImageUtilsImplements;
 import cataovo.opencvlib.wrappers.MatWrapper;
 import cataovo.opencvlib.wrappers.PointWrapper;
 import cataovo.opencvlib.wrappers.RectWrapper;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import org.opencv.core.Mat;
 
 /**
  * Define the actions to do in a {@link Frame}.
@@ -96,7 +98,8 @@ public abstract class FrameUtils {
      * {@link cataovo.entities.Region Regions}
      *
      * @return the updated image with the proper number of grids.
-     * @see ImageUtils#rectangle(org.opencv.core.Point, org.opencv.core.Point, org.opencv.core.Mat) 
+     * @see ImageUtils#rectangle(org.opencv.core.Point, org.opencv.core.Point,
+     * org.opencv.core.Mat)
      */
     protected abstract MatWrapper prepareGrids();
 
@@ -142,6 +145,24 @@ public abstract class FrameUtils {
      */
     protected MatWrapper updateGrids() {
         return preprareRegions();
+    }
+
+    /**
+     *
+     * @param rects
+     * @return
+     */
+    protected MatWrapper drawMultipleRectangles(Collection<RectWrapper> rects) {
+        return drawMultipleRects(rects);
+    }
+
+    /**
+     *
+     * @param circles
+     * @return
+     */
+    protected MatWrapper drawMultiplePoints(Collection<PointWrapper> circles) {
+        return drawMultipleCircles(circles);
     }
 
     /**
@@ -227,4 +248,40 @@ public abstract class FrameUtils {
         return mw;
     }
 
+    /**
+     *
+     * @param rects
+     * @return
+     */
+    private MatWrapper drawMultipleRects(Collection<RectWrapper> rects) {
+        MatWrapper mw = new MatWrapper(this.frame);
+        rects.stream().forEach((r) -> {
+            PointWrapper beginPoint = new PointWrapper(
+                    new Point(r.getRegion().getInitialPoint().getX(),
+                            r.getRegion().getInitialPoint().getY()));
+            PointWrapper endPoint = new PointWrapper(new Point(
+                    Math.abs(r.getRegion().getInitialPoint().getX() - r.getRegion().getWidth()),
+                    Math.abs(r.getRegion().getInitialPoint().getY() - r.getRegion().getHeight())));
+            MatWrapper wrapper = new MatWrapper();
+            wrapper.setOpencvMat(mw.getOpencvMat());
+            mw.setOpencvMat(imageUtils.rectangle(
+                    beginPoint.getOpencvPoint(),
+                    endPoint.getOpencvPoint(),
+                    wrapper.getOpencvMat()).clone());
+        });
+        return mw;
+    }
+
+    /**
+     *
+     * @param circles
+     * @return
+     */
+    private MatWrapper drawMultipleCircles(Collection<PointWrapper> circles) {
+        MatWrapper mw = this.matWrapper;
+        circles.stream().forEach((c) -> {
+            mw.setOpencvMat(imageUtils.circle(c.getOpencvPoint(), mw.getOpencvMat()).clone());
+        });
+        return mw;
+    }
 }

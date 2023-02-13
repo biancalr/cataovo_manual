@@ -12,6 +12,7 @@ import cataovo.opencvlib.converters.Converter;
 import cataovo.opencvlib.wrappers.MatWrapper;
 import cataovo.opencvlib.wrappers.PointWrapper;
 import cataovo.opencvlib.wrappers.RectWrapper;
+import java.util.Collection;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
@@ -100,8 +101,15 @@ public class FrameActionsUtils extends FrameUtils {
      * @return a Image within these clicks.
      */
     public Icon captureSubframe(Point initialPoint, Point pointClick) {
-        rectWrapper = new RectWrapper(captureGrid(new PointWrapper(initialPoint), new PointWrapper(pointClick)));
+        rectWrapper = new RectWrapper(super.captureGrid(new PointWrapper(initialPoint), new PointWrapper(pointClick)));
         matWrapper = new MatWrapper(imageUtils.captureSubmat(rectWrapper.getOpencvRect(), Converter.getInstance().convertImageFrameToMat(frame).getOpencvMat()), null);
+        return new ImageIcon(Converter.getInstance().convertMatToImg(matWrapper).get());
+    }
+
+    public Icon drawFormatsOnFrame(Collection<RectWrapper> rects, Collection<PointWrapper> circles) {
+        matWrapper = new MatWrapper(frame);
+        matWrapper.setOpencvMat(super.drawMultipleRectangles(rects).getOpencvMat());
+        matWrapper.setOpencvMat(super.drawMultiplePoints(circles).getOpencvMat());
         return new ImageIcon(Converter.getInstance().convertMatToImg(matWrapper).get());
     }
 

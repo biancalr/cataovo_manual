@@ -95,5 +95,8 @@ public class Constants {
      * NAME AVALIACAO
      */
     public static final String NAME_AVALIACAO = "resut";
+    
+    
+    public static final int SAVING_STEPS = 15;
 
 }

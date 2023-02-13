@@ -136,14 +136,11 @@ public class FileSelectionControllerImplement implements FileSelectionController
      */
     private boolean actionCommandSelectReport(boolean isADirectoryOnly, Component parent) throws DirectoryNotValidException, HeadlessException {
         this.fileChooser.addChoosableFileFilter(new FileFilterExtensions(FileExtension.CSV));
+        this.fileChooser.setFileFilter(new FileFilterExtensions(FileExtension.CSV));
+        this.fileChooser.setExtensionType(FileExtension.CSV);
         File file = this.fileChooser.dialogs(JFileChooser.OPEN_DIALOG, isADirectoryOnly, parent);
         String msgErro = "Por favor, revisar os arquivos selecionados." + Constants.QUEBRA_LINHA + "Primeiro deve-se selecionar a pasta da Paleta na Opçao 'Abrir Paleta' e depois selecionar os dois relatórios CSV desta mesma Paleta em 'Selecionar Relatório'." + Constants.QUEBRA_LINHA + "O primeiro deve ser o relatório da contagem Manual e o segundo o relatório da contagem Automática.";
-        if (file != null && file.exists() && file.isFile()
-                && (MainResources.getInstance().getPalette() != null
-                && MainResources.getInstance().getPalette().getDirectory() != null
-                && !MainResources.getInstance().getPalette().getDirectory().getName().isBlank())
-                && file.getAbsolutePath().contains(FileExtension.CSV.toString().toLowerCase())
-                && (file.getAbsolutePath().contains(MainResources.getInstance().getPalette().getDirectory().getName()))) {
+        if (isAValidFileReport(file)) {
             // Fixar ordem dos relatórios: o primeiro deve ser o relatório de contagem manual
             // verificar se o primeiro relatório corresponde ao relatório da contagem manual
             switch (this.evaluationReportsFilePosition) {
@@ -165,6 +162,15 @@ public class FileSelectionControllerImplement implements FileSelectionController
         return false;
     }
 
+    private boolean isAValidFileReport(File file) throws DirectoryNotValidException {
+        return file != null && file.exists() && file.isFile()
+                && file.getAbsolutePath().contains(FileExtension.CSV.toString().toLowerCase())
+                && (MainResources.getInstance().getPalette() != null
+                && MainResources.getInstance().getPalette().getDirectory() != null
+                && !MainResources.getInstance().getPalette().getDirectory().getName().isBlank())
+                && (file.getAbsolutePath().contains(MainResources.getInstance().getPalette().getDirectory().getName()));
+    }
+
     /**
      *
      * @param nameReport
@@ -176,7 +182,7 @@ public class FileSelectionControllerImplement implements FileSelectionController
     private boolean evaluationReportsFile(String nameReport, File file, Component parent) throws DirectoryNotValidException {
         String msg = "Relatório para " + nameReport.toUpperCase();
         if (file.getAbsolutePath().contains(nameReport)) {
-            MainResources.getInstance().addReport(file, this.evaluationReportsFilePosition);
+            MainResources.getInstance().addReport(file.getAbsolutePath(), this.evaluationReportsFilePosition);
             this.evaluationReportsFilePosition++;
             LOG.log(Level.INFO, "{0} foi adicionado: {1}", new Object[]{msg, file.getPath()});
             JOptionPane.showMessageDialog(parent, msg + " foi adicionado.");

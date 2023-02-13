@@ -8,7 +8,6 @@ package cataovo.controllers;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
 import java.awt.Component;
-import java.io.File;
 import java.io.FileNotFoundException;
 
 /**

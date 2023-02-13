@@ -38,8 +38,8 @@ public class ImageUtilsImplements implements ImageUtils {
         LOG.log(Level.INFO, "Draw the circle...");
         Imgproc.circle(imagePointed,
                 point,
-                2,
-                new Scalar(255, 0, 255),
+                3,
+                new Scalar(0, 0, 255),
                 Core.FILLED);
         return imagePointed;
     }
@@ -60,7 +60,7 @@ public class ImageUtilsImplements implements ImageUtils {
         Imgproc.rectangle(imageGrid,
                 beginPoint,
                 endPoint,
-                new Scalar(0, 255, 0));
+                new Scalar(0, 255, 0),Core.BORDER_REFLECT);
         return imageGrid;
     }
 

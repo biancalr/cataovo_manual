@@ -27,9 +27,13 @@ import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import org.opencv.core.Core;
 import cataovo.controllers.FrameActionsController;
+import cataovo.controllers.implement.FileReaderControllerImplements;
+import cataovo.opencvlib.wrappers.PointWrapper;
+import cataovo.opencvlib.wrappers.RectWrapper;
 import java.awt.HeadlessException;
 import java.io.File;
-import java.util.Arrays;
+import java.util.List;
+import cataovo.controllers.FileReaderController;
 
 /**
  * Module that interacts with the user. This is the main face of this
@@ -44,6 +48,7 @@ public class MainPage extends javax.swing.JFrame {
     private MainPageController mainPageController = null;
     private FrameActionsController frameActionsController = null;
     private AutomaticProcessorController automaticProcessorController = null;
+    private FileReaderController fileReaderController = null;
 
     /**
      * Creates new form MainPage
@@ -55,6 +60,7 @@ public class MainPage extends javax.swing.JFrame {
             mainPageController = new MainPageControllerImplements();
             frameActionsController = new FrameActionsControllerImplements();
             automaticProcessorController = new AutomaticProcessorControllerImplements();
+            fileReaderController = new FileReaderControllerImplements();
             resetInitialComponents();
             centralizeComponent();
         } catch (DirectoryNotValidException ex) {
@@ -127,6 +133,21 @@ public class MainPage extends javax.swing.JFrame {
         jLabel7.setIcon(null);
         jLabel8.setIcon(null);
         jLabel9.setIcon(null);
+        jLabel12.setIcon(null);
+    }
+
+    /**
+     *
+     * @return @throws DirectoryNotValidException
+     * @throws CloneNotSupportedException
+     * @throws ImageNotValidException
+     */
+    public Icon showFileReportResultOnFrame() throws DirectoryNotValidException, CloneNotSupportedException, ImageNotValidException {
+        String file = MainResources.getInstance().getReports()[0];
+        List<RectWrapper> regions = fileReaderController.getRegionsInFrameFile(MainResources.getInstance().getCurrentFrame().getName(), file);
+        file = MainResources.getInstance().getReports()[1];
+        List<PointWrapper> points = fileReaderController.getPointsInFrameFile(MainResources.getInstance().getCurrentFrame().getName(), file);
+        return this.frameActionsController.paintFormatsOnFrameOnEvaluation(MainResources.getInstance().getCurrentFrame().clone(), regions, points);
     }
 
     /**
@@ -867,6 +888,8 @@ public class MainPage extends javax.swing.JFrame {
                         mainPageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel4, jLabel8, MainResources.getInstance().getCurrentFrame());
                     }
                     case 2 -> {
+                        cleanTabs();
+                        MainResources.getInstance().setReports(new String[2]);
                         jButton6.setEnabled(wasFileSelected);
                         jButton7.setEnabled(wasFileSelected);
                         jButton8.setEnabled(wasFileSelected);
@@ -949,7 +972,7 @@ public class MainPage extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         LOG.log(Level.INFO, evt.getActionCommand());
         try {
-            mainPageController.toPreviousFrame(jLabel4, jTabbedPane2);
+            mainPageController.toPreviousFrameOnAutomatic(jLabel4, jTabbedPane2);
         } catch (ImageNotValidException | DirectoryNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
@@ -962,7 +985,7 @@ public class MainPage extends javax.swing.JFrame {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         try {
             LOG.log(Level.INFO, evt.getActionCommand());
-            mainPageController.toNextFrame(jLabel4, jTabbedPane2);
+            mainPageController.toNextFrameOnAutomatic(jLabel4, jTabbedPane2);
         } catch (ImageNotValidException | DirectoryNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
@@ -984,7 +1007,7 @@ public class MainPage extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(jPanel1, "O diretório foi criado sob o nome: " + result);
             MainResources.getInstance().setSavingFolder(new File(result));
             MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
-            mainPageController.toNextFrame(jLabel4, jTabbedPane2);
+            mainPageController.toNextFrameOnAutomatic(jLabel4, jTabbedPane2);
         } catch (DirectoryNotValidException | ImageNotValidException | ArrayIndexOutOfBoundsException ex) {
             LOG.log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
@@ -1008,39 +1031,63 @@ public class MainPage extends javax.swing.JFrame {
     }//GEN-LAST:event_jTabbedPane1StateChanged
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
+        LOG.log(Level.INFO, evt.getActionCommand());
+        try {
+            if (this.fileSelectionController.getEvaluationReportsFilePosition() == 2) {
+                this.mainPageController.toNextFrameOnEvaluation(jLabel13, jLabel12);
+                mainPageController.showFrameOnScreen(jLabel13, jLabel12, showFileReportResultOnFrame());
+            }
+        } catch (DirectoryNotValidException | ImageNotValidException | HeadlessException | CloneNotSupportedException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            LOG.log(Level.SEVERE, "Atingiu o fim da paleta", ex);
+            JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
+        }
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
+        LOG.log(Level.INFO, evt.getActionCommand());
+        try {
+            if (this.fileSelectionController.getEvaluationReportsFilePosition() == 2) {
+                this.mainPageController.toPreviousFrameOnEvaluation(jLabel13, jLabel12);
+                mainPageController.showFrameOnScreen(jLabel13, jLabel12, showFileReportResultOnFrame());
+            }
+        } catch (DirectoryNotValidException | ImageNotValidException | HeadlessException | CloneNotSupportedException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            LOG.log(Level.SEVERE, "Atingiu o início da paleta", ex);
+            JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
+        }
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        // TODO add your handling code here:
+        LOG.log(Level.INFO, evt.getActionCommand());
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
         LOG.log(Level.INFO, evt.getActionCommand());
         try {
             boolean result = this.fileSelectionController.fileSelectionEvent(evt.getActionCommand(), jTabbedPane1, false);
-            // Os critérios de seleção de um arquivo são: 
-            //     primeiro se seleciona uma paleta em Abrir Paleta
-            //     depois seleciona os dois relatórios
-            //         O primeiro relatório deve ser o da contagem manual
-            //         O segundo deve ser o da contagem automática.
             if (!result) {
-                JOptionPane.showMessageDialog(jTabbedPane1, "O arquivo não foi selecionado. Vale revisar os critérios de seleção.");
                 MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
             }
-            System.out.println(Arrays.toString(MainResources.getInstance().getReports()));
-        } catch (DirectoryNotValidException | ImageNotValidException | FileNotFoundException | HeadlessException ex) {
-            LOG.log(Level.SEVERE, null, ex);
+
+            if (this.fileSelectionController.getEvaluationReportsFilePosition() == 2) {
+                this.mainPageController.toNextFrameOnEvaluation(jLabel13, jLabel12);
+                mainPageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel13, jLabel12, showFileReportResultOnFrame());
+//                StringBuilder fileContentManual = fileReaderController.readFullFileContent(MainResources.getInstance().getReports()[0]);
+            }
+
+        } catch (DirectoryNotValidException | ImageNotValidException | FileNotFoundException | HeadlessException | CloneNotSupportedException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage(), ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
         }
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
-        // TODO add your handling code here:
+        LOG.log(Level.INFO, evt.getActionCommand());
     }//GEN-LAST:event_jMenu1ActionPerformed
 
     /**
