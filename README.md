@@ -49,7 +49,7 @@ de visão computacional.</p>
 <li>Módulo de Contagem Automática</li>
 <li>Módulo de Avaliação</li>
 </ul>
-
+ 
 <div>
 <h4>Módulo de Contagem Manual</h4>
 <section>
