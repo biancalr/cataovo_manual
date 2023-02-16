@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package cataovo.processment.automation.threads.callable;
+package cataovo.automation.threads.dataSaving;
 
 import cataovo.constants.Constants;
 import cataovo.entities.Palette;
@@ -78,9 +78,9 @@ public abstract class NewThreadAutomation implements Callable<String> {
      *
      * @return the content of the file;
      * @see
-     * cataovo.processment.automation.threads.callable.NewThreadAutomationAutomaticProcess
+     * cataovo.automation.threads.dataSaving.NewThreadAutomationAutomaticProcess
      * @see
-     * cataovo.processment.automation.threads.callable.NewThreadAutomationManualProcess
+     * cataovo.automation.threads.dataSaving.NewThreadAutomationManualProcess
      */
     protected abstract StringBuffer createContent();
 

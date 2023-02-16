@@ -32,6 +32,11 @@ public interface FileReaderController {
      */
     public List<PointWrapper> getPointsInFrameFile(String frameName, String report);
 
+    /**
+     * 
+     * @param report
+     * @return 
+     */
     public StringBuilder readFullFileContent(String report);
     
         

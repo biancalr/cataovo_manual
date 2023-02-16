@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package cataovo.opencvlib.automation.automaticImageProcess;
+package cataovo.opencvlib.automation.imageProcessing;
 
 import cataovo.constants.Constants;
 import cataovo.resources.fileChooser.handler.FileExtension;
@@ -212,7 +212,7 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
             for (int j = 0; j < auxlist.size(); j++) {
 
                 // Saves a point each given steps
-                if ((j % Constants.SAVING_STEPS) == 0) {
+                if ((j % Constants.STEPS_TO_POINT_SAVING) == 0) {
                     mainPoints.add(auxlist.get(j));
                 }
             }

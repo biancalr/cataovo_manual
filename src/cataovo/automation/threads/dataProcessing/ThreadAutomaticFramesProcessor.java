@@ -2,12 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package cataovo.processment.automation.threads.callable.automaticImageProcess;
+package cataovo.automation.threads.dataProcessing;
 
 import cataovo.constants.Constants;
 import cataovo.entities.Frame;
-import cataovo.opencvlib.automation.automaticImageProcess.AutomaticImageProcess;
-import cataovo.opencvlib.automation.automaticImageProcess.AutomaticImageProcessImplements;
+import cataovo.opencvlib.automation.imageProcessing.AutomaticImageProcess;
+import cataovo.opencvlib.automation.imageProcessing.AutomaticImageProcessImplements;
 import cataovo.opencvlib.converters.Converter;
 import cataovo.opencvlib.wrappers.MatWrapper;
 import java.util.Queue;
@@ -79,7 +79,7 @@ public class ThreadAutomaticFramesProcessor implements Callable<StringBuffer> {
      * @return the folder where the images and the relatory ware saved.
      * @throws Exception
      * @see
-     * cataovo.processment.automation.threads.callable.NewThreadAutomationAutomaticProcess
+     * cataovo.automation.threads.dataSaving.NewThreadAutomationAutomaticProcess
      */
     @Override
     public StringBuffer call() throws Exception {
@@ -103,7 +103,7 @@ public class ThreadAutomaticFramesProcessor implements Callable<StringBuffer> {
      * frame, and a List of some of the points that make part of the eggs
      * contours.
      * @see
-     * cataovo.opencvlib.automation.automaticImageProcess.AutomaticImageProcess
+     * cataovo.opencvlib.automation.imageProcessing.AutomaticImageProcess
      */
     private StringBuffer startSequence(Frame frame) {
         MatWrapper current = new MatWrapper(frame);

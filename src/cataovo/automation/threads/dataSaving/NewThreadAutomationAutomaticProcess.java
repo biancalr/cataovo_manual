@@ -2,13 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package cataovo.processment.automation.threads.callable;
+package cataovo.automation.threads.dataSaving;
 
 import cataovo.constants.Constants;
 import cataovo.entities.Frame;
 import cataovo.entities.Palette;
 import cataovo.resources.fileChooser.handler.FileExtension;
-import cataovo.processment.automation.threads.callable.automaticImageProcess.ThreadAutomaticFramesProcessor;
+import cataovo.automation.threads.dataProcessing.ThreadAutomaticFramesProcessor;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -25,7 +25,7 @@ import javax.swing.JOptionPane;
  *
  * @author Bianca Leopoldo Ramos
  */
-public class NewThreadAutomationAutomaticProcess extends NewThreadAutomation {
+public final class NewThreadAutomationAutomaticProcess extends NewThreadAutomation {
 
     /**
      * Thread that actually rules the processment of the files.
@@ -70,7 +70,7 @@ public class NewThreadAutomationAutomaticProcess extends NewThreadAutomation {
         Queue<Frame> splitted;
         String destination = imagesDestination.toString();
         do {
-            splitted = split(palette.getFrames(), 5);
+            splitted = split(palette.getFrames(), Constants.FRAME_SLOT_TO_PROCESS_ON_PALETTE);
             try {
                 for (Frame frame : splitted) {
                     destination = imagesDestination.toString() + "/" + frame.getName();

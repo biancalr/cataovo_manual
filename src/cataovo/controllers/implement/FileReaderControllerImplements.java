@@ -10,7 +10,6 @@ import cataovo.entities.Region;
 import cataovo.opencvlib.wrappers.PointWrapper;
 import cataovo.opencvlib.wrappers.RectWrapper;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -24,7 +23,7 @@ import cataovo.controllers.FileReaderController;
 
 /**
  *
- * @author bianc
+ * @author Bianca Leopoldo Ramos
  */
 public class FileReaderControllerImplements implements FileReaderController {
 
@@ -64,10 +63,10 @@ public class FileReaderControllerImplements implements FileReaderController {
 
             }
 
-        } catch (FileNotFoundException ex) {
-            LOG.log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException | NumberFormatException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage(), ex);
         } catch (IOException ex) {
-            LOG.log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, ex.getMessage(), ex);
         }
         LOG.log(Level.INFO, "Regions size: {0}", regions.size());
         return regions;
@@ -90,7 +89,8 @@ public class FileReaderControllerImplements implements FileReaderController {
                 if (data.length > 3) {
                     // ignorando posição 0 pois representa o nome do frame, o qual não é necessário
                     // ignorando a posição 1 pois ela representa a quantidade de ovos no frame, o qual também não é necessário
-                    for (int i = 2; i < data.length; i += 2) {
+                    // Não é necessário ler todos os pontos salvos ou pode poluir o visual do frame por isso i pula 4
+                    for (int i = 2; i < data.length; i += 4) {
                         String string = data[i];
                         if (string != null) {
                             current = new PointWrapper(
@@ -103,10 +103,10 @@ public class FileReaderControllerImplements implements FileReaderController {
                 }
             }
 
-        } catch (FileNotFoundException ex) {
-            LOG.log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException | NumberFormatException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage(), ex);
         } catch (IOException ex) {
-            LOG.log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, ex.getMessage(), ex);
         }
         LOG.log(Level.INFO, "Points size: {0}", points.size());
         return points;
@@ -116,17 +116,18 @@ public class FileReaderControllerImplements implements FileReaderController {
     public StringBuilder readFullFileContent(String report) {
         StringBuilder builder = new StringBuilder();
         try ( InputStreamReader in = new InputStreamReader(new FileInputStream(report));  BufferedReader csvReader = new BufferedReader(in)) {
-            csvReader.lines().filter((t) -> !t.contains("C:") && t.length() > 3 && !t.isBlank()).forEach((l) -> {
+            // remove as linhas que não contém necessariamente os pontos e as regiões
+            csvReader.lines().filter((t) -> !t.contains("C:") && t.length() > 4 && !t.isBlank()).forEach((l) -> {
                 builder.append(l);
                 builder.append(Constants.QUEBRA_LINHA);
             });
 
-        LOG.log(Level.INFO, report + " size {0}", builder.length());
+        LOG.log(Level.INFO, report + " size {0}", csvReader.lines());
 
         } catch (FileNotFoundException ex) {
-            LOG.log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, ex.getMessage(), ex);
         } catch (IOException ex) {
-            LOG.log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, ex.getMessage(), ex);
         }
 
         return builder;

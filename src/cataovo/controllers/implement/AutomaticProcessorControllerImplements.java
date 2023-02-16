@@ -4,8 +4,8 @@
  */
 package cataovo.controllers.implement;
 
-import cataovo.processment.automation.threads.callable.NewThreadAutomation;
-import cataovo.processment.automation.threads.callable.NewThreadAutomationAutomaticProcess;
+import cataovo.automation.threads.dataSaving.NewThreadAutomation;
+import cataovo.automation.threads.dataSaving.NewThreadAutomationAutomaticProcess;
 import cataovo.controllers.AutomaticProcessorController;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.resources.fileChooser.handler.FileExtension;
@@ -48,7 +48,7 @@ public class AutomaticProcessorControllerImplements implements AutomaticProcesso
             executorService.shutdown();
             return result;
         } catch (DirectoryNotValidException | InterruptedException | ExecutionException ex) {
-            LOG.log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, "Error while automating", ex);
         }
         return "";
     }

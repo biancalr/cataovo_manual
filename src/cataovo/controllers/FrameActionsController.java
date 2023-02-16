@@ -11,7 +11,6 @@ import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.opencvlib.wrappers.PointWrapper;
 import cataovo.opencvlib.wrappers.RectWrapper;
 import java.util.Collection;
-import java.util.List;
 import javax.swing.Icon;
 
 /**

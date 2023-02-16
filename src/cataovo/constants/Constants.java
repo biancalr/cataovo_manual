@@ -23,7 +23,7 @@ public class Constants {
     /**
      * ACTION COMMAND SALVAR ARQUIVO FINAL
      */
-    public static final String ITEM_ACTION_COMMAND_SALVAR_ARQUIVO_FINAL = "Salvar Arquivo";
+    public static final String ITEM_ACTION_COMMAND_SALVAR_RELATORIO_MANUAL_FINAL = "Salvar Arquivo";
     /**
      * ACTION COMMAND SELECIONAR RELATORIO
      */
@@ -97,6 +97,9 @@ public class Constants {
     public static final String NAME_AVALIACAO = "resut";
     
     
-    public static final int SAVING_STEPS = 15;
+    public static final int STEPS_TO_POINT_SAVING = 5;
+    
+    
+    public static final int FRAME_SLOT_TO_PROCESS_ON_PALETTE = 5;
 
 }

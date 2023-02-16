@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package cataovo.processment.automation.threads.callable;
+package cataovo.automation.threads.dataSaving;
 
 import cataovo.constants.Constants;
 import cataovo.entities.Palette;
@@ -12,7 +12,7 @@ import cataovo.resources.fileChooser.handler.FileExtension;
  *
  * @author Bianca Leopoldo Ramos
  */
-public class NewThreadAutomationManualProcess extends NewThreadAutomation{
+public final class NewThreadAutomationManualProcess extends NewThreadAutomation{
 
     /**
      * <p>

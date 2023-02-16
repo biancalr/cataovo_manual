@@ -18,7 +18,6 @@ import javax.swing.ImageIcon;
 import cataovo.controllers.FrameActionsController;
 import cataovo.entities.Frame;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Implements the frame actions controller.
@@ -110,6 +109,7 @@ public class FrameActionsControllerImplements implements FrameActionsController 
     @Override
     public Icon removeLastRegion() throws DirectoryNotValidException {
         int size = MainResources.getInstance().getCurrentFrame().getRegionsContainingEggs().size();
+        this.initialPoint = null;
         if (size == 0) {
             return new ImageIcon(Converter.getInstance().convertMatToImg(frameUtils.updateGridsOnFrame()).get());
         } else {

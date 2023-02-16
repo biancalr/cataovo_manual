@@ -7,11 +7,13 @@ package cataovo.UI;
 
 import cataovo.constants.Constants;
 import cataovo.controllers.AutomaticProcessorController;
+import cataovo.controllers.EvaluationController;
 import cataovo.controllers.FileSelectionController;
 import cataovo.controllers.MainPageController;
 import cataovo.controllers.implement.AutomaticProcessorControllerImplements;
 import cataovo.controllers.implement.FileSelectionControllerImplement;
 import cataovo.controllers.implement.FrameActionsControllerImplements;
+import cataovo.controllers.implement.EvaluationControllerImplements;
 import cataovo.controllers.implement.MainPageControllerImplements;
 import cataovo.entities.Point;
 import cataovo.exceptions.DirectoryNotValidException;
@@ -34,6 +36,7 @@ import java.awt.HeadlessException;
 import java.io.File;
 import java.util.List;
 import cataovo.controllers.FileReaderController;
+import cataovo.resources.fileChooser.handler.FileExtension;
 
 /**
  * Module that interacts with the user. This is the main face of this
@@ -49,6 +52,7 @@ public class MainPage extends javax.swing.JFrame {
     private FrameActionsController frameActionsController = null;
     private AutomaticProcessorController automaticProcessorController = null;
     private FileReaderController fileReaderController = null;
+    private EvaluationController evaluationController = null;
 
     /**
      * Creates new form MainPage
@@ -56,13 +60,14 @@ public class MainPage extends javax.swing.JFrame {
     public MainPage() {
         initComponents();
         try {
-            fileSelectionController = new FileSelectionControllerImplement();
-            mainPageController = new MainPageControllerImplements();
-            frameActionsController = new FrameActionsControllerImplements();
-            automaticProcessorController = new AutomaticProcessorControllerImplements();
-            fileReaderController = new FileReaderControllerImplements();
-            resetInitialComponents();
-            centralizeComponent();
+            this.fileSelectionController = new FileSelectionControllerImplement();
+            this.mainPageController = new MainPageControllerImplements();
+            this.frameActionsController = new FrameActionsControllerImplements();
+            this.automaticProcessorController = new AutomaticProcessorControllerImplements();
+            this.fileReaderController = new FileReaderControllerImplements();
+            this.evaluationController = new EvaluationControllerImplements();
+            this.resetInitialComponents();
+            this.centralizeComponent();
         } catch (DirectoryNotValidException ex) {
             LOG.log(Level.SEVERE, ex.getMessage());
             JOptionPane.showMessageDialog(jTabbedPane1, ex.getMessage());
@@ -136,6 +141,16 @@ public class MainPage extends javax.swing.JFrame {
         jLabel12.setIcon(null);
     }
 
+    private void cleanTexts() {
+        jLabel11.setText("");
+        jLabel28.setText("");
+        jLabel29.setText("");
+        jLabel30.setText("");
+        jLabel31.setText("");
+        jLabel32.setText("");
+        jLabel33.setText("");
+    }
+
     /**
      *
      * @return @throws DirectoryNotValidException
@@ -148,6 +163,24 @@ public class MainPage extends javax.swing.JFrame {
         file = MainResources.getInstance().getReports()[1];
         List<PointWrapper> points = fileReaderController.getPointsInFrameFile(MainResources.getInstance().getCurrentFrame().getName(), file);
         return this.frameActionsController.paintFormatsOnFrameOnEvaluation(MainResources.getInstance().getCurrentFrame().clone(), regions, points);
+    }
+
+    /**
+     *
+     * @param evaluation
+     */
+    private void setLabelsEvaluationMod(int[] evaluation) {
+        this.jLabel21.setText("" + evaluation[0]); // true positive
+        this.jLabel22.setText("" + evaluation[2]); // false Positive
+        this.jLabel23.setText("" + evaluation[1]); // false negative
+        this.jLabel24.setText("" + evaluation[3]); // true negative
+
+        this.jLabel28.setText("" + this.evaluationController.getPercentageTruePositive(evaluation[1], evaluation[0]) + "%");
+        this.jLabel29.setText("" + this.evaluationController.getPercentageFalsePositive(evaluation[2], evaluation[3]) + "%");
+        this.jLabel30.setText("" + this.evaluationController.getPercentageTrueNegative(evaluation[3], evaluation[2]) + "%");
+        this.jLabel31.setText("" + this.evaluationController.getPercentageFalseNegative(evaluation[1], evaluation[0]) + "%");
+        this.jLabel32.setText("" + this.evaluationController.getPercentageAccuracy(evaluation[0], evaluation[3], evaluation[2], evaluation[1]) + "%");
+        this.jLabel33.setText("" + this.evaluationController.getPercentagePrecision(evaluation[0], evaluation[2]) + "%");
     }
 
     /**
@@ -889,6 +922,7 @@ public class MainPage extends javax.swing.JFrame {
                     }
                     case 2 -> {
                         cleanTabs();
+                        cleanTexts();
                         MainResources.getInstance().setReports(new String[2]);
                         jButton6.setEnabled(wasFileSelected);
                         jButton7.setEnabled(wasFileSelected);
@@ -937,7 +971,7 @@ public class MainPage extends javax.swing.JFrame {
                 jLabel10.setText("");
                 jLabel9.setIcon(null);
                 MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
-                if (!fileSelectionController.fileSelectionEvent(Constants.ITEM_ACTION_COMMAND_SALVAR_ARQUIVO_FINAL, jTabbedPane1, true)) {
+                if (!fileSelectionController.fileSelectionEvent(Constants.ITEM_ACTION_COMMAND_SALVAR_RELATORIO_MANUAL_FINAL, jTabbedPane1, true)) {
                     LOG.log(Level.WARNING, "It wasn't possible to seve the Palette on a file");
                     JOptionPane.showMessageDialog(jPanel1, "It wasn't possible to seve the Palette on a file");
                 } else {
@@ -1004,6 +1038,7 @@ public class MainPage extends javax.swing.JFrame {
             jLabel11.setText("Busca Finalizada!");
             // Ao final do processamento, liberar os botões e a mudança de tab
             MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
+            this.jTabbedPane2.setSelectedIndex(2); // abre a aba dos contornos desenhados
             JOptionPane.showMessageDialog(jPanel1, "O diretório foi criado sob o nome: " + result);
             MainResources.getInstance().setSavingFolder(new File(result));
             MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
@@ -1035,7 +1070,7 @@ public class MainPage extends javax.swing.JFrame {
         try {
             if (this.fileSelectionController.getEvaluationReportsFilePosition() == 2) {
                 this.mainPageController.toNextFrameOnEvaluation(jLabel13, jLabel12);
-                mainPageController.showFrameOnScreen(jLabel13, jLabel12, showFileReportResultOnFrame());
+                mainPageController.showFrameOnScreen(jLabel13, jLabel12, this.showFileReportResultOnFrame());
             }
         } catch (DirectoryNotValidException | ImageNotValidException | HeadlessException | CloneNotSupportedException ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -1051,7 +1086,7 @@ public class MainPage extends javax.swing.JFrame {
         try {
             if (this.fileSelectionController.getEvaluationReportsFilePosition() == 2) {
                 this.mainPageController.toPreviousFrameOnEvaluation(jLabel13, jLabel12);
-                mainPageController.showFrameOnScreen(jLabel13, jLabel12, showFileReportResultOnFrame());
+                mainPageController.showFrameOnScreen(jLabel13, jLabel12, this.showFileReportResultOnFrame());
             }
         } catch (DirectoryNotValidException | ImageNotValidException | HeadlessException | CloneNotSupportedException ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -1063,7 +1098,18 @@ public class MainPage extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        LOG.log(Level.INFO, evt.getActionCommand());
+        try {
+            LOG.log(Level.INFO, evt.getActionCommand());
+            String saved = this.evaluationController.onActionComandSaveEvaluationRelatory(
+                    MainResources.getInstance().getPalette(), 
+                    MainResources.getInstance().getSavingFolder().getAbsolutePath(), 
+                    FileExtension.CSV, 
+                    MainResources.getInstance().getPanelTabHelper().getTabName());
+            JOptionPane.showMessageDialog(jTabbedPane1, "The file was saved under the path: " + saved);
+        } catch (DirectoryNotValidException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage(), ex);
+            JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
+        }
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
@@ -1076,8 +1122,14 @@ public class MainPage extends javax.swing.JFrame {
 
             if (this.fileSelectionController.getEvaluationReportsFilePosition() == 2) {
                 this.mainPageController.toNextFrameOnEvaluation(jLabel13, jLabel12);
-                mainPageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel13, jLabel12, showFileReportResultOnFrame());
-//                StringBuilder fileContentManual = fileReaderController.readFullFileContent(MainResources.getInstance().getReports()[0]);
+                MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(true);
+                mainPageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel13, jLabel12, this.showFileReportResultOnFrame());
+                int[] evaluation = this.evaluationController.onEvaluateFileContentsOnPalette(
+                        fileReaderController.readFullFileContent(MainResources.getInstance().getReports()[0]).toString(),
+                        fileReaderController.readFullFileContent(MainResources.getInstance().getReports()[1]).toString());
+                setLabelsEvaluationMod(evaluation);
+                MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
+                LOG.log(Level.INFO, "Evaluation Finished!");
             }
 
         } catch (DirectoryNotValidException | ImageNotValidException | FileNotFoundException | HeadlessException | CloneNotSupportedException ex) {
@@ -1117,8 +1169,8 @@ public class MainPage extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
+            Locale.setDefault(Locale.of("pt", "BR"));
             System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-            Locale.setDefault(new Locale.Builder().setLanguage("pt").setRegion("BR").build());
             new MainPage().setVisible(true);
         });
     }

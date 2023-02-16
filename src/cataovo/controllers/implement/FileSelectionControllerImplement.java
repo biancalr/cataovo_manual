@@ -5,8 +5,8 @@
  */
 package cataovo.controllers.implement;
 
-import cataovo.processment.automation.threads.callable.NewThreadAutomation;
-import cataovo.processment.automation.threads.callable.NewThreadAutomationManualProcess;
+import cataovo.automation.threads.dataSaving.NewThreadAutomation;
+import cataovo.automation.threads.dataSaving.NewThreadAutomationManualProcess;
 import cataovo.constants.Constants;
 import cataovo.controllers.FileSelectionController;
 import cataovo.entities.Frame;
@@ -76,8 +76,8 @@ public class FileSelectionControllerImplement implements FileSelectionController
                 case Constants.ITEM_ACTION_COMMAND_SELECIONAR_PASTA_DESTINO -> {
                     return actionCommandSetSavingFolder(isADirectoryOnly, parent);
                 }
-                case Constants.ITEM_ACTION_COMMAND_SALVAR_ARQUIVO_FINAL -> {
-                    return actionCommandNewSaveFinalFile(MainResources.getInstance().getPanelTabHelper().getTabName());
+                case Constants.ITEM_ACTION_COMMAND_SALVAR_RELATORIO_MANUAL_FINAL -> {
+                    return actionCommandNewSaveFinalFileInManual(MainResources.getInstance().getPanelTabHelper().getTabName());
                 }
                 case Constants.ITEM_ACTION_COMMAND_SELECIONAR_RELATORIO -> {
                     return actionCommandSelectReport(isADirectoryOnly, parent);
@@ -148,7 +148,7 @@ public class FileSelectionControllerImplement implements FileSelectionController
                     return evaluationReportsFile(Constants.NAME_MANUAL, file, parent);
                 }
                 case 1 -> {
-                    MainResources.getInstance().adjustPanelTab((JTabbedPane)parent, true);
+//                    MainResources.getInstance().adjustPanelTab((JTabbedPane)parent, true);
                     return evaluationReportsFile(Constants.NAME_AUTOMATICO, file, parent);
                 }
                 default -> {
@@ -271,7 +271,7 @@ public class FileSelectionControllerImplement implements FileSelectionController
      * @return <code>True</code> in case of success. <code> False </code>
      * otherwise.
      */
-    private boolean actionCommandNewSaveFinalFile(String parent) {
+    private boolean actionCommandNewSaveFinalFileInManual(String parent) {
         LOG.log(Level.INFO, "Final file save: start");
         try {
             Future<String> task;

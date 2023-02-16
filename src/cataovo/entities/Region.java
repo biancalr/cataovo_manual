@@ -9,12 +9,12 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The area containg an egg. A quadrilateral region where indicates the
- * presence of an egg.
+ * The area containg an egg. A quadrilateral region where indicates the presence
+ * of an egg.
  *
  * @author bibil
  */
-public final class Region implements Cloneable, Serializable{
+public final class Region implements Cloneable, Serializable {
 
     /**
      * The region's height
@@ -40,8 +40,8 @@ public final class Region implements Cloneable, Serializable{
         this.width = width;
         this.initialPoint = initialPoint;
     }
-    
-    public Region (Point initialPoint, Point finalPoint){
+
+    public Region(Point initialPoint, Point finalPoint) {
         this.initialPoint = initialPoint;
         this.width = initialPoint.getX() - finalPoint.getX();
         this.height = initialPoint.getY() - finalPoint.getY();
@@ -57,7 +57,7 @@ public final class Region implements Cloneable, Serializable{
     }
 
     /**
-     * 
+     *
      * @return the height
      */
     public int getHeight() {
@@ -65,7 +65,7 @@ public final class Region implements Cloneable, Serializable{
     }
 
     /**
-     * 
+     *
      * @param height a height to set
      */
     public void setHeight(int height) {
@@ -73,7 +73,7 @@ public final class Region implements Cloneable, Serializable{
     }
 
     /**
-     * 
+     *
      * @return the width
      */
     public int getWidth() {
@@ -81,7 +81,7 @@ public final class Region implements Cloneable, Serializable{
     }
 
     /**
-     * 
+     *
      * @param width a width to set
      */
     public void setWidth(int width) {
@@ -89,7 +89,7 @@ public final class Region implements Cloneable, Serializable{
     }
 
     /**
-     * 
+     *
      * @return the initial Point
      */
     public Point getInitialPoint() {
@@ -97,7 +97,7 @@ public final class Region implements Cloneable, Serializable{
     }
 
     /**
-     * 
+     *
      * @param initialPoint a initial point to set
      */
     public void setInitialPoint(Point initialPoint) {
@@ -117,11 +117,11 @@ public final class Region implements Cloneable, Serializable{
         if (this == obj) {
             return true;
         }
-        
+
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        
+
         Region reg = (Region) obj;
         return (Objects.equals(width, reg.width) && Objects.equals(height, reg.height)
                 && Objects.equals(initialPoint, reg.initialPoint));
@@ -140,6 +140,10 @@ public final class Region implements Cloneable, Serializable{
     public Region clone() throws CloneNotSupportedException {
         return (Region) super.clone(); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
+    public boolean contains(Point point) {
+        return this.initialPoint.getX() <= point.getX() && point.getX() < this.initialPoint.getX() + this.width
+                && this.initialPoint.getY() <= point.getY() && point.getY() < this.initialPoint.getY() + this.height;
+    }
 
 }
