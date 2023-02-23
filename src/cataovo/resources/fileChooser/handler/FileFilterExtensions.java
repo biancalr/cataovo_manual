@@ -10,7 +10,7 @@ import javax.swing.filechooser.FileFilter;
 
 /**
  *
- * @author bibil
+ * @author Bianca Leopoldo Ramos
  */
 public class FileFilterExtensions extends FileFilter {
 
@@ -20,7 +20,7 @@ public class FileFilterExtensions extends FileFilter {
     public FileExtension extension;
 
     /**
-     * 
+     *
      * @param extension the extension needed
      */
     public FileFilterExtensions(FileExtension extension) {
@@ -31,14 +31,14 @@ public class FileFilterExtensions extends FileFilter {
      * Empty Constructor
      */
     public FileFilterExtensions() {
-        
+
     }
 
     @Override
     public boolean accept(File f) {
-        return f.isDirectory() || 
-                f.getAbsolutePath()
-                        .endsWith("." + extension.toString().toLowerCase());
+        return f.isDirectory()
+                || f.getAbsolutePath()
+                        .endsWith("." + extension.getExtension());
     }
 
     @Override
@@ -47,15 +47,15 @@ public class FileFilterExtensions extends FileFilter {
     }
 
     /**
-     * 
-     * @param extension 
+     *
+     * @param extension
      */
     public void setExtension(FileExtension extension) {
         this.extension = extension;
     }
 
     /**
-     * 
+     *
      * @return the extension
      */
     public FileExtension getExtension() {

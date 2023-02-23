@@ -4,10 +4,10 @@
  */
 package cataovo.controllers.implement;
 
-import cataovo.automation.threads.dataEvaluation.ThreadAutomation;
+import cataovo.automation.threads.dataEvaluation.DataEvaluationThreadAutomation;
 import cataovo.automation.threads.dataEvaluation.ThreadAutomationEvaluation;
-import cataovo.automation.threads.dataSaving.NewThreadAutomation;
-import cataovo.automation.threads.dataSaving.NewThreadAutomationEvaluationProcess;
+import cataovo.automation.threads.dataSaving.DataSavingThreadAutomation;
+import cataovo.automation.threads.dataSaving.ThreadAutomationEvaluationProcess;
 import cataovo.controllers.EvaluationController;
 import cataovo.entities.Palette;
 import cataovo.resources.fileChooser.handler.FileExtension;
@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 public class EvaluationControllerImplements implements EvaluationController {
 
     /**
-     * Logging for NewThreadAutomation
+     * Logging for DataSavingThreadAutomation
      */
     private static final Logger LOG = Logger.getLogger(EvaluationControllerImplements.class.getName());
     private int[] evaluationResult;
@@ -40,7 +40,7 @@ public class EvaluationControllerImplements implements EvaluationController {
     public int[] onEvaluateFileContentsOnPalette(String fileContentManual, String fileContentAuto) {
         try {
             this.evaluationResult = new int[4];
-            ThreadAutomation automation;
+            DataEvaluationThreadAutomation automation;
             Future<int[]> task;
             ExecutorService executorService = Executors.newSingleThreadExecutor();
 
@@ -121,15 +121,15 @@ public class EvaluationControllerImplements implements EvaluationController {
         if (this.evaluationResult != null) {
             try {
                 String result;
-                NewThreadAutomation automation;
+                DataSavingThreadAutomation automation;
                 Future<String> task;
                 ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-                automation = new NewThreadAutomationEvaluationProcess(
-                        palette, 
-                        savingDirectory, 
-                        fileExtension, 
-                        parentTabName, 
+                automation = new ThreadAutomationEvaluationProcess(
+                        palette,
+                        savingDirectory,
+                        fileExtension,
+                        parentTabName,
                         this.evaluationResult);
 
                 task = executorService.submit(automation);

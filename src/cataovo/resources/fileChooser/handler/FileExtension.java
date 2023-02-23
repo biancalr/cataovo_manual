@@ -7,22 +7,22 @@ package cataovo.resources.fileChooser.handler;
 
 /**
  *
- * @author bibil
+ * @author Bianca Leopoldo Ramos
  */
 public enum FileExtension {
     
-    PNG(1), CSV(2), JPG(3);
+    PNG("png"), CSV("csv"), JPG("jpg");
 
     /**
      * The value of the extension to work with.
      */
-    private int extension;
+    private String extension;
     
     /**
      * 
      * @param extension the value of the extension to work with
      */
-    private FileExtension(int extension) {
+    private FileExtension(String extension) {
         this.extension = extension;
     }
 
@@ -30,7 +30,7 @@ public enum FileExtension {
      * 
      * @return the extension selected to work with
      */
-    public int getExtension() {
+    public String getExtension() {
         return extension;
     }
 
@@ -38,7 +38,7 @@ public enum FileExtension {
      * 
      * @param extension 
      */
-    public void setExtension(int extension) {
+    public void setExtension(String extension) {
         this.extension = extension;
     }
     

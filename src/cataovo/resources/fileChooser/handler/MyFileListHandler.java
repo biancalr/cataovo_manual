@@ -14,7 +14,7 @@ import java.util.logging.Level;
 
 /**
  *
- * @author bibil
+ * @author Bianca Leopoldo Ramos
  * @param <T> The type of the elements to deal in the List
  */
 public final class MyFileListHandler<T> {
@@ -39,7 +39,7 @@ public final class MyFileListHandler<T> {
     public Collection<T> normalizeFilesOnAList(File[] file, FileExtension fileExtension) throws ImageNotValidException {
         fileList = new LinkedList<>();
         for (File file1 : file) {
-            if (file1.exists()&& file1.isFile() && getFileExtension(file1).equalsIgnoreCase(fileExtension.toString().toLowerCase())) {
+            if (file1.exists() && file1.isFile() && getFileExtension(file1).equalsIgnoreCase(fileExtension.getExtension())) {
                 fileList.add((T) file1);
                 LOG.log(Level.INFO, "Adding following file: {0}", file1.getName());
             } else if (file1.isDirectory()) {

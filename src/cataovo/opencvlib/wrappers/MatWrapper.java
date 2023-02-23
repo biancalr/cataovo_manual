@@ -12,7 +12,7 @@ import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 
 /**
- * Wrapps {@link org.opencv.core.Mat}
+ * Wrapps a {@link org.opencv.core.Mat Mat}
  *
  * @author Bianca Leopoldo Ramos
  */

@@ -4,8 +4,8 @@
  */
 package cataovo.automation.threads.dataEvaluation;
 
-import cataovo.automation.threads.dataSaving.NewThreadAutomation;
 import cataovo.constants.Constants;
+import cataovo.exceptions.ReportNotValidException;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -14,12 +14,12 @@ import java.util.logging.Level;
  *
  * @author Bianca Leopoldo Ramos
  */
-public abstract class ThreadAutomation implements Callable<int[]> {
+public abstract class DataEvaluationThreadAutomation implements Callable<int[]> {
 
     /**
-     * Logging for ThreadAutomation
+     * Logging for DataSavingThreadAutomation
      */
-    private static final Logger LOG = Logger.getLogger(NewThreadAutomation.class.getName());
+    private static final Logger LOG = Logger.getLogger(cataovo.automation.threads.dataSaving.DataSavingThreadAutomation.class.getName());
 
     private String fileContentManual;
     private String fileContentAuto;
@@ -30,7 +30,7 @@ public abstract class ThreadAutomation implements Callable<int[]> {
      * @param fileContentManual
      * @param fileContentAuto
      */
-    public ThreadAutomation(String fileContentManual, String fileContentAuto) {
+    public DataEvaluationThreadAutomation(String fileContentManual, String fileContentAuto) {
         this.fileContentManual = fileContentManual;
         this.fileContentAuto = fileContentAuto;
         this.evaluationResult = new int[4];
@@ -41,7 +41,7 @@ public abstract class ThreadAutomation implements Callable<int[]> {
     }
 
     @Override
-    public int[] call() throws Exception {
+    public int[] call() throws NumberFormatException, ReportNotValidException {
         return evaluationAnalysis();
     }
 
@@ -57,7 +57,7 @@ public abstract class ThreadAutomation implements Callable<int[]> {
      *
      * @return
      */
-    private synchronized int[] evaluationAnalysis() throws NumberFormatException{
+    private synchronized int[] evaluationAnalysis() throws NumberFormatException, ReportNotValidException{
         LOG.log(Level.INFO, "Starting Evaluation...");
 
         //split both strings
@@ -65,7 +65,7 @@ public abstract class ThreadAutomation implements Callable<int[]> {
         String[] pointsOnFrame = this.fileContentAuto.split(Constants.QUEBRA_LINHA);
 
         if (regionsOnFrame.length != pointsOnFrame.length) {
-            return new int[4];
+            throw new ReportNotValidException("Os relatórios não têm a mesma quatidade de Frames");
         }
 
         for (int i = 0; i < regionsOnFrame.length; i++) {

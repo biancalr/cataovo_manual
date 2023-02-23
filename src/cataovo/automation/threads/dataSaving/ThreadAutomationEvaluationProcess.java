@@ -12,14 +12,14 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author bianc
+ * @author Bianca Leopoldo Ramos
  */
-public class NewThreadAutomationEvaluationProcess extends NewThreadAutomation {
+public class ThreadAutomationEvaluationProcess extends DataSavingThreadAutomation {
 
-    private static final Logger LOG = Logger.getLogger(NewThreadAutomationEvaluationProcess.class.getName());
+    private static final Logger LOG = Logger.getLogger(ThreadAutomationEvaluationProcess.class.getName());
     private int[] evaluationResult;
 
-    public NewThreadAutomationEvaluationProcess(Palette palette, String savingDirectory, FileExtension fileExtension, String parentTabName, int[] evaluationResult) {
+    public ThreadAutomationEvaluationProcess(Palette palette, String savingDirectory, FileExtension fileExtension, String parentTabName, int[] evaluationResult) {
         super(palette, savingDirectory, fileExtension, parentTabName);
         this.evaluationResult = evaluationResult;
     }
@@ -38,7 +38,7 @@ public class NewThreadAutomationEvaluationProcess extends NewThreadAutomation {
 //        evaluation[2]); // false Positive
 //        evaluation[1]); // false negative
 //        evaluation[3]); // true negative
-        
+
         StringBuffer sb = new StringBuffer(getPalette().getDirectory().getPath());
         sb.append(Constants.QUEBRA_LINHA);
         sb.append("Verdadeiro Positivo: ").append(this.evaluationResult[0]).append(Constants.QUEBRA_LINHA);

@@ -24,33 +24,36 @@ public interface FrameActionsController {
      * Chooses the format to paint the {@link cataovo.entities.Frame} whether is a dot or a rectangle
      *
      * @param point the point clicked in the frame
+     * @param currentFrame
      * @return the image correspondent to the quantoty of clicks in the frame.
      * @throws DirectoryNotValidException
      * @throws CloneNotSupportedException
      * @see cataovo.utils.frameUtils.FrameActionsUtils#drawCircle(cataovo.opencvlib.wrappers.PointWrapper) 
      * @see cataovo.utils.frameUtils.FrameActionsUtils#drawRectangle(cataovo.opencvlib.wrappers.RectWrapper) 
      */
-    public Icon paintFormat(Point point) throws DirectoryNotValidException, CloneNotSupportedException;
+    public Icon paintFormat(Point point, Frame currentFrame) throws DirectoryNotValidException, CloneNotSupportedException;
 
     /**
      * Removes the last demarked {@link cataovo.entities.Region}.
      *
+     * @param currentFrame
      * @return the image updated
      * @throws DirectoryNotValidException
      * @see cataovo.utils.frameUtils.FrameActionsUtils#updateGridsOnFrame() 
      */
-    public Icon removeLastRegion() throws DirectoryNotValidException;
+    public Icon removeLastRegion(Frame currentFrame) throws DirectoryNotValidException;
 
     /**
      * Captures a subframe in the current selected {@link cataovo.entities.Region} to focus in the
      * application.
      *
      * @param pointClick the point clicked in the frame
+     * @param currentFrame
      * @return the captured subframe
      * @throws DirectoryNotValidException
      * @see cataovo.utils.frameUtils.FrameActionsUtils#captureSubframe(cataovo.entities.Point, cataovo.entities.Point) 
      */
-    public Icon captureSubframe(Point pointClick) throws DirectoryNotValidException;
+    public Icon captureSubframe(Point pointClick, Frame currentFrame) throws DirectoryNotValidException;
 
     /**
      * 

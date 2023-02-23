@@ -20,7 +20,7 @@ public interface FileSelectionController {
     /**
      * Selects an event and an action based on the parameters.
      *
-     * @param actionCommand comand that defines a dialog showing actions. 
+     * @param actionCommand comand that defines a dialog showing actions.
      * @param parent the component
      * @param isADirectoryOnly <code>True</code> if the selection mode is a
      * <code>DIRECTORY_ONLY</code> or <code>False</code> if the selection mode
@@ -38,10 +38,10 @@ public interface FileSelectionController {
      * @return the final relatory's path.
      */
     public String getManualReportDestination();
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public int getEvaluationReportsFilePosition();
 

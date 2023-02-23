@@ -4,9 +4,10 @@
  */
 package cataovo.controllers.implement;
 
-import cataovo.automation.threads.dataSaving.NewThreadAutomation;
-import cataovo.automation.threads.dataSaving.NewThreadAutomationAutomaticProcess;
+import cataovo.automation.threads.dataSaving.DataSavingThreadAutomation;
+import cataovo.automation.threads.dataSaving.ThreadAutomationAutomaticProcess;
 import cataovo.controllers.AutomaticProcessorController;
+import cataovo.entities.Palette;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.resources.fileChooser.handler.FileExtension;
 import cataovo.resources.MainResources;
@@ -29,28 +30,31 @@ public class AutomaticProcessorControllerImplements implements AutomaticProcesso
     private static final Logger LOG = Logger.getLogger(AutomaticProcessorControllerImplements.class.getName());
 
     @Override
-    public String onNewAutoProcessPalette(JLabel jLabelImageName, JLabel jLabelImageFrame) {
-        try { 
-            NewThreadAutomation automation;
+    public String onNewAutoProcessPalette(JLabel jLabelImageName, JLabel jLabelImageFrame, Palette currentPalette, String savingFolderPath, String tabName) throws DirectoryNotValidException {
+        try {
+            DataSavingThreadAutomation automation;
             Future<String> task;
             ExecutorService executorService = Executors.newSingleThreadExecutor();
             String result;
-            
-            automation = new NewThreadAutomationAutomaticProcess(
-                    MainResources.getInstance().getPalette(),
-                    MainResources.getInstance().getSavingFolder().getPath(),
+
+            automation = new ThreadAutomationAutomaticProcess(
+                    currentPalette,
+                    savingFolderPath,
                     FileExtension.CSV,
-                    MainResources.getInstance().getPanelTabHelper().getTabName());
+                    tabName);
             MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(true);
             task = executorService.submit(automation);
             result = task.get();
             executorService.awaitTermination(1, TimeUnit.MILLISECONDS);
             executorService.shutdown();
             return result;
-        } catch (DirectoryNotValidException | InterruptedException | ExecutionException ex) {
+        } catch (DirectoryNotValidException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage(), ex);
+            throw new DirectoryNotValidException(ex.getMessage());
+        } catch (InterruptedException | ExecutionException ex) {
             LOG.log(Level.SEVERE, "Error while automating", ex);
         }
         return "";
     }
-    
+
 }

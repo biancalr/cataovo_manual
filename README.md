@@ -2,6 +2,25 @@
 
 <section>
 <p lang="en">Project developed as part of the Course Completion Work of the IFPE campus recife institution of the TADS course.</p>
+
+<p lang="en">To use this project it is needed to install OpenCV locally</p>
+<h5>Instructions:</h5>
+<ul>
+<li>Access the <a href="https://opencv.org/releases/">OpenCV website</a> in the required release (4.7.0 in this project).</li>
+<li>Download and install the option corresponding to your operating system (Windows in this project)</li>
+<li>Once installed, include the OpenCV library in the project in this path: (install-path)/opencv/build/java/opencv-470.jar</li>
+<li>Change the "run.jvmargs" property in project.properties to identify locally installed OpenCV: (install-path)/opencv/build/java/x64 </li>
+<li>The previous property can also be changed within Netbeans by following the path:
+     <ul>
+         <li>Right click on the project</li>
+         <li>Access "Properties"</li>
+         <li>When Opening, Access "Execute"</li>
+         <li>Opening the option, you must change the VM Options field to: -Djava.library.path="(installation path)opencv\build\java\x64" --enable-preview</li>
+         <li>Note: The OpenCV library is not prepared for special characters (like `´^~). Therefore, care should be taken when choosing where to save palette images.</li>
+     </ul>
+</li>
+</ul>
+
 <p lang="en">The general objective of this work is to develop a monolithic application for counting and identifying Aedes aegypti eggs contained in an image, using techniques
 computer vision.</p>
 
@@ -10,24 +29,6 @@ computer vision.</p>
 <li>Develop a module for counting Aedes mosquito eggs using the tool</li>
 <li>Serve as a measuring parameter of the efficiency of public policies to combat the mosquito</li>
 <li>Provide a database containing the worksheets and images resulting from the processing</li>
-</ul>
-
-<p lang="en">To use this project you will need to install OpenCV locally</p>
-<h5>Instructions:</h5>
-<ul>
-<li>Access the <a href="https://opencv.org/releases/">OpenCV website</a> in the required release (4.7.0 in this project).</li>
-<li>Download and install the option corresponding to your operating system (Windows in this project)</li>
-<li>Once installed, include the OpenCV library in the project in this path: (installation location)/opencv/build/java/opencv-470.jar</li>
-<li>Change the "run.jvmargs" property in project.properties to identify locally installed OpenCV: (installation path)/opencv/build/java/x64 </li>
-<li>The previous property can also be changed within Netbeans by following the path:
-     <ul>
-         <li>Right click on the project</li>
-         <li>Access "Properties"</li>
-         <li>When Opening, Access "Execute"</li>
-         <li>Opening the option, you must change the VM Options field to: -Djava.library.path="(installation path)opencv\build\java\x64" --enable-preview</li>
-         <li>Note: The OpenCV library is not prepared for accents (like `´^~). Therefore, care should be taken when choosing where to save palette images.</li>
-     </ul>
-</li>
 </ul>
 
 <p lang="en">The monolithic architecture was chosen because one of the criteria of this project is to be an application with the lowest possible cost.</p>

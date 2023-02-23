@@ -4,15 +4,14 @@
  */
 package cataovo.controllers;
 
-import cataovo.entities.Palette;
 import cataovo.opencvlib.wrappers.PointWrapper;
 import cataovo.opencvlib.wrappers.RectWrapper;
-import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 /**
  *
- * @author bianc
+ * @author Bianca Leopoldo Ramos
  */
 public interface FileReaderController {
 
@@ -21,23 +20,27 @@ public interface FileReaderController {
      * @param frameName
      * @param report
      * @return
+     * @throws java.io.FileNotFoundException
+     * @throws NumberFormatException
      */
-    public List<RectWrapper> getRegionsInFrameFile(String frameName, String report);
+    public List<RectWrapper> getRegionsInFrameFile(String frameName, String report) throws FileNotFoundException, NumberFormatException;
 
     /**
-     * 
+     *
      * @param frameName
      * @param report
-     * @return 
+     * @return
+     * @throws java.io.FileNotFoundException
+     * @throws NumberFormatException
      */
-    public List<PointWrapper> getPointsInFrameFile(String frameName, String report);
+    public List<PointWrapper> getPointsInFrameFile(String frameName, String report) throws FileNotFoundException, NumberFormatException;
 
     /**
-     * 
+     *
      * @param report
-     * @return 
+     * @return
+     * @throws java.io.FileNotFoundException
      */
-    public StringBuilder readFullFileContent(String report);
-    
-        
+    public StringBuilder readFullFileContent(String report) throws FileNotFoundException;
+
 }

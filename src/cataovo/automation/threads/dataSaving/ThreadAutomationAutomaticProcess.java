@@ -4,6 +4,7 @@
  */
 package cataovo.automation.threads.dataSaving;
 
+import cataovo.automation.threads.dataProcessing.DataProcessingThreadAutomation;
 import cataovo.constants.Constants;
 import cataovo.entities.Frame;
 import cataovo.entities.Palette;
@@ -25,12 +26,12 @@ import javax.swing.JOptionPane;
  *
  * @author Bianca Leopoldo Ramos
  */
-public final class NewThreadAutomationAutomaticProcess extends NewThreadAutomation {
+public final class ThreadAutomationAutomaticProcess extends DataSavingThreadAutomation {
 
     /**
      * Thread that actually rules the processment of the files.
      */
-    private ThreadAutomaticFramesProcessor framesProcessor;
+    private DataProcessingThreadAutomation framesProcessor;
     /**
      * Defines the directory where the resultant images of each transformation
      * will be placed.
@@ -58,7 +59,7 @@ public final class NewThreadAutomationAutomaticProcess extends NewThreadAutomati
      * palette: Manual or Automatic. Also helps to create folders of each
      * processing type.
      */
-    public NewThreadAutomationAutomaticProcess(Palette palette, String savingDirectory, FileExtension extension, String parentName) {
+    public ThreadAutomationAutomaticProcess(Palette palette, String savingDirectory, FileExtension extension, String parentName) {
         super(palette, savingDirectory, extension, parentName);
         this.dateTime = super.getDateTime("dd-MM-yyyy_HH-mm");
         this.imagesDestination = new StringBuffer(savingDirectory).append("/cataovo/").append(palette.getDirectory().getName()).append("/auto/").append(dateTime);
@@ -82,7 +83,7 @@ public final class NewThreadAutomationAutomaticProcess extends NewThreadAutomati
                     result.append(processFrameImages(splitted, imagesDestination.toString()));
                 }
             } catch (InterruptedException | ExecutionException ex) {
-                Logger.getLogger(NewThreadAutomationAutomaticProcess.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ThreadAutomationAutomaticProcess.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(null, ex.getMessage());
             }
 

@@ -10,7 +10,7 @@ import cataovo.entities.Region;
 import org.opencv.core.Rect;
 
 /**
- * Wrapps {@link org.opencv.core.Rect}
+ * Wrapps a {@link org.opencv.core.Rect Rect}
  * @author Bianca Leopoldo Ramos
  */
 public class RectWrapper {

@@ -53,16 +53,16 @@ public class FrameActionsControllerImplements implements FrameActionsController 
      * @throws CloneNotSupportedException
      */
     @Override
-    public Icon paintFormat(Point point) throws DirectoryNotValidException, CloneNotSupportedException {
+    public Icon paintFormat(Point point, Frame currentFrame) throws DirectoryNotValidException, CloneNotSupportedException {
         switch (clickCount) {
             case 0 -> {
                 clickCount++;
                 this.initialPoint = new Point(point.getX(), point.getY());
-                return paintDotOnFrame(this.initialPoint);
+                return paintDotOnFrame(this.initialPoint, currentFrame);
             }
             case 1 -> {
                 clickCount = 0;
-                return paintGridOnFrame(new Region(this.initialPoint, new Point(point.getX(), point.getY())));
+                return paintGridOnFrame(new Region(this.initialPoint, new Point(point.getX(), point.getY())), currentFrame);
             }
             default -> {
                 return null;
@@ -78,8 +78,8 @@ public class FrameActionsControllerImplements implements FrameActionsController 
      * @throws DirectoryNotValidException
      * @throws CloneNotSupportedException
      */
-    private Icon paintDotOnFrame(Point point) throws DirectoryNotValidException, CloneNotSupportedException {
-        this.frameUtils = new FrameActionsUtils(MainResources.getInstance().getCurrentFrame().clone());
+    private Icon paintDotOnFrame(Point point, Frame currentFrame) throws DirectoryNotValidException, CloneNotSupportedException {
+        this.frameUtils = new FrameActionsUtils(currentFrame.clone());
         PointWrapper pw = new PointWrapper(point);
         return frameUtils.drawCircle(pw);
     }
@@ -92,8 +92,8 @@ public class FrameActionsControllerImplements implements FrameActionsController 
      * @throws DirectoryNotValidException
      * @throws CloneNotSupportedException
      */
-    private Icon paintGridOnFrame(Region region) throws DirectoryNotValidException, CloneNotSupportedException {
-        this.frameUtils = new FrameActionsUtils(MainResources.getInstance().getCurrentFrame().clone());
+    private Icon paintGridOnFrame(Region region, Frame currentFrame) throws DirectoryNotValidException, CloneNotSupportedException {
+        this.frameUtils = new FrameActionsUtils(currentFrame.clone());
         RectWrapper rw = new RectWrapper(region);
         Icon icon = frameUtils.drawRectangle(rw);
         MainResources.getInstance().getCurrentFrame().getRegionsContainingEggs().addAll(frameUtils.getFrame().getRegionsContainingEggs());
@@ -103,18 +103,18 @@ public class FrameActionsControllerImplements implements FrameActionsController 
     /**
      * Removes the last demarked region.
      *
+     * @param currentFrame
      * @return the image updated
      * @throws DirectoryNotValidException
      */
     @Override
-    public Icon removeLastRegion() throws DirectoryNotValidException {
-        int size = MainResources.getInstance().getCurrentFrame().getRegionsContainingEggs().size();
+    public Icon removeLastRegion(Frame currentFrame) throws DirectoryNotValidException {
         this.initialPoint = null;
-        if (size == 0) {
+        if (currentFrame.getRegionsContainingEggs().isEmpty()) {
             return new ImageIcon(Converter.getInstance().convertMatToImg(frameUtils.updateGridsOnFrame()).get());
         } else {
             MainResources.getInstance().getCurrentFrame().getRegionsContainingEggs().remove(
-                    (Region) MainResources.getInstance().getCurrentFrame().getRegionsContainingEggs().toArray()[size - 1]
+                    (Region) currentFrame.getRegionsContainingEggs().toArray()[currentFrame.getRegionsContainingEggs().size() - 1]
             );
             return new ImageIcon(Converter.getInstance().convertMatToImg(frameUtils.updateGridsOnFrame()).get());
         }
@@ -125,14 +125,15 @@ public class FrameActionsControllerImplements implements FrameActionsController 
      * application.
      *
      * @param pointClick the point clicked in the frame
+     * @param currentFrame
      * @return the captured subframe
      * @throws DirectoryNotValidException
      */
     @Override
-    public Icon captureSubframe(Point pointClick) throws DirectoryNotValidException {
+    public Icon captureSubframe(Point pointClick, Frame currentFrame) throws DirectoryNotValidException {
         Icon subframeImage = null;
         if (clickCount == 0 && initialPoint != null) {
-            this.frameUtils = new FrameActionsUtils(MainResources.getInstance().getCurrentFrame());
+            this.frameUtils = new FrameActionsUtils(currentFrame);
             subframeImage = this.frameUtils.captureSubframe(this.initialPoint, pointClick);
         }
         return subframeImage;

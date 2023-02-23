@@ -24,12 +24,12 @@ import javax.swing.JOptionPane;
  *
  * @author Bianca Leopoldo Ramos
  */
-public abstract class NewThreadAutomation implements Callable<String> {
+public abstract class DataSavingThreadAutomation implements Callable<String> {
 
     /**
-     * Logging for NewThreadAutomation
+     * Logging for DataSavingThreadAutomation
      */
-    private static final Logger LOG = Logger.getLogger(NewThreadAutomation.class.getName());
+    private static final Logger LOG = Logger.getLogger(DataSavingThreadAutomation.class.getName());
     /**
      * The palette to be processed.
      */
@@ -60,7 +60,7 @@ public abstract class NewThreadAutomation implements Callable<String> {
      * @param parentTabName relates the tabName to the type of processing of a
      * palette: Manual or Automatic.
      */
-    public NewThreadAutomation(Palette palette, String savingDirectory, FileExtension fileExtension, String parentTabName) {
+    public DataSavingThreadAutomation(Palette palette, String savingDirectory, FileExtension fileExtension, String parentTabName) {
         this.palette = palette;
         this.savingDirectory = savingDirectory;
         this.fileExtension = fileExtension;
@@ -98,7 +98,7 @@ public abstract class NewThreadAutomation implements Callable<String> {
         if (!directory.exists()) {
             directory.mkdirs();
         }
-        try ( FileWriter csvWriter = new FileWriter(savingDirectory + "/cataovo/" + dstn + "/Relatory." + this.fileExtension.toString().toLowerCase());  PrintWriter csvPrinter = new PrintWriter(csvWriter);) {
+        try ( FileWriter csvWriter = new FileWriter(savingDirectory + "/cataovo/" + dstn + "/Relatory." + this.fileExtension.getExtension());  PrintWriter csvPrinter = new PrintWriter(csvWriter);) {
 
             sb.append(createContent());
             csvPrinter.print(sb);

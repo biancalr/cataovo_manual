@@ -106,6 +106,12 @@ public class FrameActionsUtils extends FrameUtils {
         return new ImageIcon(Converter.getInstance().convertMatToImg(matWrapper).get());
     }
 
+    /**
+     * 
+     * @param rects
+     * @param circles
+     * @return 
+     */
     public Icon drawFormatsOnFrame(Collection<RectWrapper> rects, Collection<PointWrapper> circles) {
         matWrapper = new MatWrapper(frame);
         matWrapper.setOpencvMat(super.drawMultipleRectangles(rects).getOpencvMat());

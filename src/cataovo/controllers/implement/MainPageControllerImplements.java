@@ -47,7 +47,7 @@ public class MainPageControllerImplements implements MainPageController {
      * @throws DirectoryNotValidException
      */
     @Override
-    public void toNextFrameOnManual(JLabel parentName, JLabel parent) throws ImageNotValidException, DirectoryNotValidException, AssertionError {
+    public void onNextFrameInManual(JLabel parentName, JLabel parent) throws ImageNotValidException, DirectoryNotValidException, AssertionError {
         if (!MainResources.getInstance().getPalette().getFrames().isEmpty()) {
             Frame frame = MainResources.getInstance().getPalette().getFrames().poll();
             MainResources.getInstance().setCurrentFrame(frame);
@@ -62,10 +62,10 @@ public class MainPageControllerImplements implements MainPageController {
     }
 
     @Override
-    public int toPreviousFrameOnEvaluation(JLabel parentName, JLabel parent) throws DirectoryNotValidException, ImageNotValidException {
-        if (isReportValid()) { //verifica senão foi selecionada uma paleta diferente
-            File[] frameResults = MainResources.getInstance().getPalette().getDirectory().listFiles((pathname) -> pathname.isFile());
-            LOG.log(Level.INFO, "Tamanho da paleta: ", String.valueOf(MainResources.getInstance().getSavingFolder().length()));
+    public int onPreviousFrameInEvaluation(JLabel parentName, JLabel parent, File paletteDirectory, String[] reports) throws DirectoryNotValidException, ImageNotValidException {
+        if (isReportValid(reports, paletteDirectory.getName())) { //verifica senão foi selecionada uma paleta diferente
+            File[] frameResults = paletteDirectory.listFiles((pathname) -> pathname.isFile());
+            LOG.log(Level.INFO, "Palette Size: ", String.valueOf(frameResults.length));
             if (frameResults.length > 0) {
                 if (this.frameCounter > 0) {
                     this.frameCounter--;
@@ -77,13 +77,7 @@ public class MainPageControllerImplements implements MainPageController {
                 }
             }
         } else {
-            StringBuilder sb = new StringBuilder();
-            sb.append("Não foram encontradas as pastas correspondentes ao processamento automático");
-            sb.append(Constants.QUEBRA_LINHA);
-            sb.append("É possível que uma nova paleta ou nenhuma tenha sido selecionada, portanto o diretório foi alterado ou ainda não existe.");
-            sb.append(Constants.QUEBRA_LINHA);
-            sb.append("Reinicie processamento para assim poder visualizar os devidos resultados.");
-            throw new DirectoryNotValidException(sb.toString());
+            throw new DirectoryNotValidException("The current Palette " + paletteDirectory.getName() + "couldn't be verified");
 
         }
         return -1;
@@ -108,29 +102,26 @@ public class MainPageControllerImplements implements MainPageController {
      *
      * @param parentName
      * @param parent
+     * @param paletteDirectory
+     * @param reports
      * @throws DirectoryNotValidException
+     * @throws cataovo.exceptions.ImageNotValidException
      */
     @Override
-    public void toNextFrameOnEvaluation(JLabel parentName, JLabel parent) throws DirectoryNotValidException, ImageNotValidException {
-        if (isReportValid()) { //verifica senão foi selecionada uma paleta diferente
-            File[] frameResults = MainResources.getInstance().getPalette().getDirectory().listFiles((pathname) -> pathname.isFile());
-            LOG.log(Level.INFO, "Tamanho da paleta: {0}", String.valueOf(MainResources.getInstance().getSavingFolder().length()));
+    public void onNextFrameInEvaluation(JLabel parentName, JLabel parent, File paletteDirectory, String[] reports) throws DirectoryNotValidException, ImageNotValidException {
+        if (isReportValid(reports, paletteDirectory.getName())) { //verifica senão foi selecionada uma paleta diferente
+            File[] frameResults = paletteDirectory.listFiles((pathname) -> pathname.isFile());
+            LOG.log(Level.INFO, "Tamanho da paleta: {0}", String.valueOf(frameResults.length));
             if (frameResults.length > 0) {
                 if (this.frameCounter < (frameResults.length - 1)) {
                     this.frameCounter++;
                     setCurrentFrameOnEvaluationScreen(frameResults[this.frameCounter], parentName, parent);
                 } else {
                     this.frameCounter = frameResults.length - 1;
-                    throw new ArrayIndexOutOfBoundsException("Atingiu o fim da paleta");
+                    throw new ArrayIndexOutOfBoundsException("Reached the end of the palette " + paletteDirectory.getName());
                 }
             } else {
-                StringBuilder sb = new StringBuilder();
-                sb.append("Não foram encontradas as pastas correspondentes ao processamento automático");
-                sb.append(Constants.QUEBRA_LINHA);
-                sb.append("É possível que uma nova paleta ou nenhuma tenha sido selecionada, portanto o diretório foi alterado ou ainda não existe.");
-                sb.append(Constants.QUEBRA_LINHA);
-                sb.append("Reinicie processamento para assim poder visualizar os devidos resultados.");
-                throw new DirectoryNotValidException(sb.toString());
+                throw new DirectoryNotValidException("The current Palette " +  paletteDirectory.getName() + "couldn't be verified");
             }
         }
     }
@@ -143,17 +134,14 @@ public class MainPageControllerImplements implements MainPageController {
      * @throws DirectoryNotValidException
      */
     @Override
-    public void toNextFrameOnAutomatic(JLabel parentName, JTabbedPane jTabbedPane) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException {
+    public void onNextFrameInAutomatic(JLabel parentName, JTabbedPane jTabbedPane, File paletteSavingFolder, String paletteName) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException {
         // Verificar as palavras-chave que formam o caminho de um diretório do processamento automático no projeto: (nome da paleta) e "auto". 
-        if (!MainResources.getInstance().getSavingFolder().getAbsolutePath().contains(MainResources.getInstance().getPalette().getDirectory().getName())
-                || !MainResources.getInstance().getSavingFolder().getAbsolutePath().contains("auto")) {
-            StringBuilder sb = new StringBuilder("É possível que uma nova paleta ou nenhuma tenha sido selecionada, portanto o diretório de salvamento foi alterado ou ainda não existe.");
-            sb.append(Constants.QUEBRA_LINHA);
-            sb.append("Inicie um novo processamento para assim poder visualizar os devidos resultados.");
-            throw new DirectoryNotValidException(sb.toString());
+        if (!paletteSavingFolder.getAbsolutePath().contains(paletteName)
+                || !paletteSavingFolder.getAbsolutePath().contains("auto")) {
+            throw new DirectoryNotValidException("The current Palette " +  paletteName + "couldn't be verified");
         } else {
             // Listando os diretórios correspondentes a cada frame
-            File[] frameResults = MainResources.getInstance().getSavingFolder().listFiles((pathname) -> pathname.isDirectory());
+            File[] frameResults = paletteSavingFolder.listFiles((pathname) -> pathname.isDirectory());
             if (frameResults.length > 0) {
                 if (this.frameCounter < (frameResults.length - 1)) {
                     this.frameCounter++;
@@ -164,26 +152,23 @@ public class MainPageControllerImplements implements MainPageController {
                     LOG.log(Level.INFO, "Image Position: {0}", this.frameCounter);
                 } else {
                     this.frameCounter = frameResults.length - 1;
-                    throw new ArrayIndexOutOfBoundsException("Atingiu o fim da paleta");
+                    throw new ArrayIndexOutOfBoundsException("Reached the end of the Palette " + paletteName);
                 }
             } else {
-                throw new DirectoryNotValidException("Não foram encontradas as pastas correspondentes ao processamento automático");
+                throw new DirectoryNotValidException("Couldn't match the folders and the frames tag names (size = " + frameResults.length + ")");
             }
         }
     }
 
     @Override
-    public void toPreviousFrameOnAutomatic(JLabel parentName, JTabbedPane jTabbedPane) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException {
+    public void onPreviousFrameInAutomatic(JLabel parentName, JTabbedPane jTabbedPane, File savingFolder, String paletteDirectoryName) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException {
         // Verificar as palavras-chave que formam o caminho de um diretório do processamento automático no projeto: (nome da paleta) e "auto". 
-        if (!MainResources.getInstance().getSavingFolder().getAbsolutePath().contains(MainResources.getInstance().getPalette().getDirectory().getName())
-                || !MainResources.getInstance().getSavingFolder().getAbsolutePath().contains("auto")) {
-            StringBuilder sb = new StringBuilder("É possível que uma nova paleta ou nenhuma tenha sido selecionada, portanto o diretório de salvamento foi alterado ou ainda não existe.");
-            sb.append(Constants.QUEBRA_LINHA);
-            sb.append("Inicie um novo processamento para assim poder visualizar os devidos resultados.");
-            throw new DirectoryNotValidException(sb.toString());
+        if (!savingFolder.getAbsolutePath().contains(paletteDirectoryName)
+                || !savingFolder.getAbsolutePath().contains("auto")) {
+            throw new DirectoryNotValidException("The current Palette " +  paletteDirectoryName + "couldn't be verified");
         } else {
             // Listando os diretórios correspondentes a cada frame
-            File[] frameResults = MainResources.getInstance().getSavingFolder().listFiles((pathname) -> pathname.isDirectory());
+            File[] frameResults = savingFolder.listFiles((pathname) -> pathname.isDirectory());
             if (frameResults.length > 0) {
                 if (this.frameCounter > 0) {
                     this.frameCounter--;
@@ -194,10 +179,10 @@ public class MainPageControllerImplements implements MainPageController {
                     LOG.log(Level.INFO, "Image Position: {0}", this.frameCounter);
                 } else {
                     this.frameCounter = 0;
-                    throw new ArrayIndexOutOfBoundsException("Atingiu o início da paleta");
+                    throw new ArrayIndexOutOfBoundsException("Reached the beggining of the palette " + paletteDirectoryName);
                 }
             } else {
-                throw new DirectoryNotValidException("Não foram encontradas as pastas correspondentes ao processamento automático");
+                throw new DirectoryNotValidException("Couldn't match the folders and the frames tag names (size = " + frameResults.length + ")");
             }
         }
     }
@@ -296,17 +281,17 @@ public class MainPageControllerImplements implements MainPageController {
     /**
      * When a Frame was finished its analysis, go to next Frame on Queue.
      *
-     * @param jLabel1
-     * @param jLabel2
+     * @param parentName
+     * @param parent
      * @throws cataovo.exceptions.ImageNotValidException
      * @throws cataovo.exceptions.DirectoryNotValidException
      */
     @Override
-    public void onFrameFinished(JLabel jLabel1, JLabel jLabel2) throws ImageNotValidException, DirectoryNotValidException {
+    public void onFrameFinished(JLabel parentName, JLabel parent, Frame currentFrame) throws ImageNotValidException, DirectoryNotValidException {
         LOG.log(Level.INFO, "The frame was analysed. Charging next...");
         MainResources.getInstance().getPaletteToSave().getFrames()
-                .offer(MainResources.getInstance().getCurrentFrame());
-        toNextFrameOnManual(jLabel1, jLabel2);
+                .offer(currentFrame);
+        onNextFrameInManual(parentName, parent);
     }
 
     /**
@@ -360,9 +345,9 @@ public class MainPageControllerImplements implements MainPageController {
      *
      * @return @throws DirectoryNotValidException
      */
-    private boolean isReportValid() throws DirectoryNotValidException {
-        for (String report : MainResources.getInstance().getReports()) {
-            if (!report.contains(MainResources.getInstance().getPalette().getDirectory().getName())) {
+    private boolean isReportValid(String[] reports, String directoryName) throws DirectoryNotValidException {
+        for (String report : reports) {
+            if (!report.contains(directoryName)) {
                 return false;
             }
         }

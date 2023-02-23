@@ -5,8 +5,8 @@
  */
 package cataovo.controllers.implement;
 
-import cataovo.automation.threads.dataSaving.NewThreadAutomation;
-import cataovo.automation.threads.dataSaving.NewThreadAutomationManualProcess;
+import cataovo.automation.threads.dataSaving.DataSavingThreadAutomation;
+import cataovo.automation.threads.dataSaving.ThreadAutomationManualProcess;
 import cataovo.constants.Constants;
 import cataovo.controllers.FileSelectionController;
 import cataovo.entities.Frame;
@@ -38,13 +38,13 @@ import javax.swing.JTabbedPane;
 /**
  * Controls the interactions with the files outside of the Application.
  *
- * @author bibil
+ * @author Bianca Leopoldo Ramos
  */
 public class FileSelectionControllerImplement implements FileSelectionController {
 
     private static final Logger LOG = Logger.getLogger(FileSelectionControllerImplement.class.getName());
     private final MyFileChooserUI fileChooser;
-    private NewThreadAutomation newCreateRelatories;
+    private DataSavingThreadAutomation newCreateRelatories;
     private String finalRelatoryDestination;
     private int evaluationReportsFilePosition = 0;
 
@@ -276,7 +276,7 @@ public class FileSelectionControllerImplement implements FileSelectionController
         try {
             Future<String> task;
             ExecutorService executorService = Executors.newSingleThreadExecutor();
-            this.newCreateRelatories = new NewThreadAutomationManualProcess(
+            this.newCreateRelatories = new ThreadAutomationManualProcess(
                     MainResources.getInstance().getPaletteToSave(),
                     MainResources.getInstance().getSavingFolder().getPath(),
                     FileExtension.CSV,

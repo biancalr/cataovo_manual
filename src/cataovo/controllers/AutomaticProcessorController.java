@@ -4,6 +4,8 @@
  */
 package cataovo.controllers;
 
+import cataovo.entities.Palette;
+import cataovo.exceptions.DirectoryNotValidException;
 import javax.swing.JLabel;
 
 /**
@@ -18,8 +20,12 @@ public interface AutomaticProcessorController {
      * 
      * @param jLabelImageName
      * @param jLabelImageFrame
+     * @param currentPalette
+     * @param savingFolderPath
+     * @param tabName
      * @return the final relatory's path
+     * @throws cataovo.exceptions.DirectoryNotValidException
      */
-    public String onNewAutoProcessPalette(JLabel jLabelImageName, JLabel jLabelImageFrame);
+    public String onNewAutoProcessPalette(JLabel jLabelImageName, JLabel jLabelImageFrame, Palette currentPalette, String savingFolderPath, String tabName) throws DirectoryNotValidException;
     
 }

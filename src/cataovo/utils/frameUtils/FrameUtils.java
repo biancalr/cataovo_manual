@@ -19,7 +19,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import org.opencv.core.Mat;
 
 /**
  * Define the actions to do in a {@link Frame}.

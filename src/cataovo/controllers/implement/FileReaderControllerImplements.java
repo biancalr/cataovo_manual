@@ -30,14 +30,14 @@ public class FileReaderControllerImplements implements FileReaderController {
     private static final Logger LOG = Logger.getLogger(FileReaderControllerImplements.class.getName());
 
     @Override
-    public List<RectWrapper> getRegionsInFrameFile(String frameName, String report) {
+    public List<RectWrapper> getRegionsInFrameFile(String frameName, String report) throws FileNotFoundException, NumberFormatException {
         List<RectWrapper> regions = new ArrayList<>();
         RectWrapper current;
 
         try ( InputStreamReader in = new InputStreamReader(new FileInputStream(report));  BufferedReader csvReader = new BufferedReader(in)) {
 
             // encontrando o frame filtrando pelo nome
-            Optional<String> optLine = csvReader.lines().filter((t) -> t.contains(frameName)).findFirst();
+            Optional<String> optLine = csvReader.lines().filter((line) -> line.contains(frameName)).findFirst();
 
             if (optLine.isPresent()) {
 
@@ -63,8 +63,12 @@ public class FileReaderControllerImplements implements FileReaderController {
 
             }
 
-        } catch (FileNotFoundException | NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
+            throw new NumberFormatException("Error while converting a data string to number");
+        } catch (FileNotFoundException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage(), ex);
+            throw new FileNotFoundException(ex.getMessage());
         } catch (IOException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
         }
@@ -73,14 +77,14 @@ public class FileReaderControllerImplements implements FileReaderController {
     }
 
     @Override
-    public List<PointWrapper> getPointsInFrameFile(String frameName, String report) {
+    public List<PointWrapper> getPointsInFrameFile(String frameName, String report) throws FileNotFoundException, NumberFormatException {
         List<PointWrapper> points = new ArrayList<>();
         PointWrapper current;
 
         try ( InputStreamReader in = new InputStreamReader(new FileInputStream(report));  BufferedReader csvReader = new BufferedReader(in)) {
 
             // encontrando o frame filtrando pelo nome
-            Optional<String> optLine = csvReader.lines().filter((t) -> t.contains(frameName)).findFirst();
+            Optional<String> optLine = csvReader.lines().filter((line) -> line.contains(frameName)).findFirst();
 
             LOG.log(Level.INFO, "LINE: {0}", optLine.get());
 
@@ -103,8 +107,12 @@ public class FileReaderControllerImplements implements FileReaderController {
                 }
             }
 
-        } catch (FileNotFoundException | NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
+            throw new NumberFormatException("Error while converting a data string to number");
+        } catch (FileNotFoundException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage(), ex);
+            throw new FileNotFoundException(ex.getMessage());
         } catch (IOException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
         }
@@ -113,19 +121,20 @@ public class FileReaderControllerImplements implements FileReaderController {
     }
 
     @Override
-    public StringBuilder readFullFileContent(String report) {
+    public StringBuilder readFullFileContent(String report) throws FileNotFoundException{
         StringBuilder builder = new StringBuilder();
         try ( InputStreamReader in = new InputStreamReader(new FileInputStream(report));  BufferedReader csvReader = new BufferedReader(in)) {
             // remove as linhas que não contém necessariamente os pontos e as regiões
-            csvReader.lines().filter((t) -> !t.contains("C:") && t.length() > 4 && !t.isBlank()).forEach((l) -> {
+            csvReader.lines().filter((line) -> !line.contains("C:") && line.length() > 4 && !line.isBlank()).forEach((l) -> {
                 builder.append(l);
                 builder.append(Constants.QUEBRA_LINHA);
             });
 
-        LOG.log(Level.INFO, report + " size {0}", csvReader.lines());
+            LOG.log(Level.INFO, report + " size {0}", csvReader.lines());
 
         } catch (FileNotFoundException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
+            throw new FileNotFoundException();
         } catch (IOException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
         }

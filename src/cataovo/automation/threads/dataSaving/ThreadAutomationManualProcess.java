@@ -12,7 +12,7 @@ import cataovo.resources.fileChooser.handler.FileExtension;
  *
  * @author Bianca Leopoldo Ramos
  */
-public final class NewThreadAutomationManualProcess extends NewThreadAutomation{
+public final class ThreadAutomationManualProcess extends DataSavingThreadAutomation{
 
     /**
      * <p>
@@ -26,7 +26,7 @@ public final class NewThreadAutomationManualProcess extends NewThreadAutomation{
      * palette: Manual or Automatic. Also helps to create folders of each
      * processing type.
      */
-    public NewThreadAutomationManualProcess(Palette palette, String savingDirectory, FileExtension fileExtension, String parent) {
+    public ThreadAutomationManualProcess(Palette palette, String savingDirectory, FileExtension fileExtension, String parent) {
         super(palette, savingDirectory, fileExtension, parent);
     }
 

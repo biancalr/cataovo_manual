@@ -8,7 +8,7 @@ package cataovo.opencvlib.wrappers;
 import org.opencv.core.Point;
 
 /**
- * Wrapps {@link org.opencv.core.Point}
+ * Wrapps a {@link org.opencv.core.Point Point}
  * @author Bianca Leopoldo Ramos.
  */
 public class PointWrapper {

@@ -5,10 +5,12 @@
  */
 package cataovo.controllers;
 
+import cataovo.entities.Frame;
 import cataovo.entities.Point;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
 import java.awt.Component;
+import java.io.File;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
@@ -29,36 +31,41 @@ public interface MainPageController {
      * @throws ImageNotValidException
      * @throws DirectoryNotValidException
      */
-    public void toNextFrameOnManual(JLabel parentName, JLabel parent) throws ImageNotValidException, DirectoryNotValidException;
+    public void onNextFrameInManual(JLabel parentName, JLabel parent) throws ImageNotValidException, DirectoryNotValidException, AssertionError ;
 
     /**
      * Set to the next frame
      *
      * @param parentName
      * @param jTabbedPane
+     * @param paletteSavingFolder
+     * @param paletteName
      * @throws ImageNotValidException
      * @throws DirectoryNotValidException
      */
-    public void toNextFrameOnAutomatic(JLabel parentName, JTabbedPane jTabbedPane) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException;
+    public void onNextFrameInAutomatic(JLabel parentName, JTabbedPane jTabbedPane, File paletteSavingFolder, String paletteName) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException;
 
     /**
      *
      * @param parentName
      * @param parent
+     * @param paletteDirectory
+     * @param reports
      * @throws DirectoryNotValidException
      * @throws ImageNotValidException
      */
-    public void toNextFrameOnEvaluation(JLabel parentName, JLabel parent) throws DirectoryNotValidException, ImageNotValidException;
+    public void onNextFrameInEvaluation(JLabel parentName, JLabel parent, File paletteDirectory, String[] reports) throws DirectoryNotValidException, ImageNotValidException ;
 
     /**
      * When a Frame was finished its analysis, go to next Frame on Queue.
      *
-     * @param jLabel1
-     * @param jLabel2
+     * @param parentName
+     * @param parent
+     * @param currentFrame
      * @throws cataovo.exceptions.ImageNotValidException
      * @throws cataovo.exceptions.DirectoryNotValidException
      */
-    public void onFrameFinished(JLabel jLabel1, JLabel jLabel2) throws ImageNotValidException, DirectoryNotValidException;
+    public void onFrameFinished(JLabel parentName, JLabel parent, Frame currentFrame) throws ImageNotValidException, DirectoryNotValidException;
 
     /**
      *
@@ -94,24 +101,27 @@ public interface MainPageController {
 
     /**
      *
-     * @param jLabel4
-     * @param jTabbedPane2
+     * @param parentName
+     * @param jTabbedPane
+     * @param savingFolder
+     * @param paletteDirectoryName
      * @throws ImageNotValidException
      * @throws DirectoryNotValidException
      * @throws ArrayIndexOutOfBoundsException
      */
-    public void toPreviousFrameOnAutomatic(JLabel jLabel4, JTabbedPane jTabbedPane2) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException;
+    public void onPreviousFrameInAutomatic(JLabel parentName, JTabbedPane jTabbedPane, File savingFolder, String paletteDirectoryName) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException ;
 
     /**
      *
      * @param parentName
      * @param parent
+     * @param paletteDirectory
+     * @param reports
      * @return
      * @throws ImageNotValidException
      * @throws DirectoryNotValidException
      * @throws ArrayIndexOutOfBoundsException
      */
-    public int toPreviousFrameOnEvaluation(JLabel parentName, JLabel parent) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException;
-;
+    public int onPreviousFrameInEvaluation(JLabel parentName, JLabel parent, File paletteDirectory, String[] reports) throws DirectoryNotValidException, ImageNotValidException ;
 
 }
