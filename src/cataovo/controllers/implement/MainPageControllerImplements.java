@@ -27,7 +27,7 @@ import javax.swing.JTabbedPane;
 /**
  * Controls the actions with the Frames
  *
- * @author bibil
+ * @author Bianca Leopoldo Ramos
  */
 public class MainPageControllerImplements implements MainPageController {
 
@@ -121,7 +121,7 @@ public class MainPageControllerImplements implements MainPageController {
                     throw new ArrayIndexOutOfBoundsException("Reached the end of the palette " + paletteDirectory.getName());
                 }
             } else {
-                throw new DirectoryNotValidException("The current Palette " +  paletteDirectory.getName() + "couldn't be verified");
+                throw new DirectoryNotValidException("The current Palette " + paletteDirectory.getName() + "couldn't be verified");
             }
         }
     }
@@ -138,7 +138,7 @@ public class MainPageControllerImplements implements MainPageController {
         // Verificar as palavras-chave que formam o caminho de um diretório do processamento automático no projeto: (nome da paleta) e "auto". 
         if (!paletteSavingFolder.getAbsolutePath().contains(paletteName)
                 || !paletteSavingFolder.getAbsolutePath().contains("auto")) {
-            throw new DirectoryNotValidException("The current Palette " +  paletteName + "couldn't be verified");
+            throw new DirectoryNotValidException("The current Palette " + paletteName + "couldn't be verified");
         } else {
             // Listando os diretórios correspondentes a cada frame
             File[] frameResults = paletteSavingFolder.listFiles((pathname) -> pathname.isDirectory());
@@ -165,7 +165,7 @@ public class MainPageControllerImplements implements MainPageController {
         // Verificar as palavras-chave que formam o caminho de um diretório do processamento automático no projeto: (nome da paleta) e "auto". 
         if (!savingFolder.getAbsolutePath().contains(paletteDirectoryName)
                 || !savingFolder.getAbsolutePath().contains("auto")) {
-            throw new DirectoryNotValidException("The current Palette " +  paletteDirectoryName + "couldn't be verified");
+            throw new DirectoryNotValidException("The current Palette " + paletteDirectoryName + "couldn't be verified");
         } else {
             // Listando os diretórios correspondentes a cada frame
             File[] frameResults = savingFolder.listFiles((pathname) -> pathname.isDirectory());
@@ -310,7 +310,6 @@ public class MainPageControllerImplements implements MainPageController {
                 case 0 -> {
                     parentLabel.setText(null);
                     parentLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                    parentLabel.setVisible(true);
                     this.frameCounter = -1;
                     showFrameOnScreen(parentNameLabel, parentLabel, frame);
                 }
@@ -321,7 +320,6 @@ public class MainPageControllerImplements implements MainPageController {
                 case 2 -> {
                     parentLabel.setText(null);
                     parentLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                    parentLabel.setVisible(true);
                     this.frameCounter = -1;
                     showFrameOnScreen(parentNameLabel, parentLabel, frame);
                 }

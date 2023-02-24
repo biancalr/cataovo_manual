@@ -9,7 +9,6 @@ import cataovo.entities.Frame;
 import cataovo.entities.Palette;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.resources.fileChooser.UI.MyFileChooserUI;
-import cataovo.resources.fileChooser.handler.MyFileListHandler;
 import java.io.File;
 import java.util.logging.Level;
 import javax.swing.filechooser.FileSystemView;
@@ -25,8 +24,6 @@ public class MainResources {
 
     private static final Logger LOG = Logger.getLogger(MainResources.class.getName());
     private final MyFileChooserUI fileChooserUI;
-    private MyFileListHandler fileListHandler;
-    private String current;
     private Palette palette;
     private Palette paletteToSave;
     private Frame currentFrame;
@@ -37,9 +34,9 @@ public class MainResources {
     private String[] reports;
 
     public MainResources() throws DirectoryNotValidException {
-        current = FileSystemView.getFileSystemView().getHomeDirectory().getPath();
-        savingFolder = getFileFolder(new File(current));
-        fileChooserUI = new MyFileChooserUI(new File(current));
+        String homeDirectory = FileSystemView.getFileSystemView().getHomeDirectory().getPath();
+        savingFolder = getFileFolder(new File(homeDirectory));
+        fileChooserUI = new MyFileChooserUI(new File(homeDirectory));
         panelTabHelper = new PanelTabHelper(false, 0, "Manual");
     }
 
@@ -64,30 +61,8 @@ public class MainResources {
         this.savingFolder = getFileFolder(savingFolder);
     }
 
-    public String getCurrent() {
-        return current;
-    }
-
-    public void setCurrent(String current) {
-        this.current = current;
-    }
-
     public MyFileChooserUI getFileChooserUI() {
         return fileChooserUI;
-    }
-
-    public MyFileListHandler getFileListHandler() {
-        if (this.fileListHandler == null) {
-            this.fileListHandler = new MyFileListHandler();
-        }
-        return fileListHandler;
-    }
-
-    public void setFileListHandler(MyFileListHandler fileListHandler) {
-        if (this.fileListHandler == null) {
-            this.fileListHandler = new MyFileListHandler();
-        }
-        this.fileListHandler = fileListHandler;
     }
 
     public Palette getPalette() {
@@ -169,6 +144,10 @@ public class MainResources {
         panelTabHelper.setIsActualTabProcessing(isActualTabProcessing);
         panelTabHelper.setTabIndex(pane.getSelectedIndex());
         panelTabHelper.setTabName(pane.getTitleAt(pane.getSelectedIndex()));
+    }
+
+    public void resetSavingFolder() throws DirectoryNotValidException {
+        this.savingFolder = getFileFolder(new File(FileSystemView.getFileSystemView().getHomeDirectory().getPath()));
     }
 
     public final File getFileFolder(File file) throws DirectoryNotValidException {

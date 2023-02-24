@@ -13,10 +13,12 @@ import cataovo.entities.Frame;
 import cataovo.entities.Palette;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
+import cataovo.exceptions.ReportNotValidException;
 import cataovo.resources.fileChooser.UI.MyFileChooserUI;
 import cataovo.resources.fileChooser.handler.FileExtension;
 import cataovo.resources.MainResources;
 import cataovo.resources.fileChooser.handler.FileFilterExtensions;
+import cataovo.resources.fileChooser.handler.MyFileListHandler;
 import java.awt.Component;
 import java.awt.HeadlessException;
 import java.io.File;
@@ -46,7 +48,6 @@ public class FileSelectionControllerImplement implements FileSelectionController
     private final MyFileChooserUI fileChooser;
     private DataSavingThreadAutomation newCreateRelatories;
     private String finalRelatoryDestination;
-    private int evaluationReportsFilePosition = 0;
 
     public FileSelectionControllerImplement() throws DirectoryNotValidException {
         fileChooser = MainResources.getInstance().getFileChooserUI();
@@ -65,9 +66,10 @@ public class FileSelectionControllerImplement implements FileSelectionController
      * @throws cataovo.exceptions.DirectoryNotValidException
      * @throws cataovo.exceptions.ImageNotValidException
      * @throws java.io.FileNotFoundException
+     * @throws cataovo.exceptions.ReportNotValidException
      */
     @Override
-    public boolean fileSelectionEvent(String actionCommand, Component parent, boolean isADirectoryOnly) throws DirectoryNotValidException, ImageNotValidException, FileNotFoundException {
+    public boolean fileSelectionEvent(String actionCommand, Component parent, boolean isADirectoryOnly) throws DirectoryNotValidException, ImageNotValidException, FileNotFoundException, ReportNotValidException {
         if (!MainResources.getInstance().getPanelTabHelper().isIsActualTabProcessing()) {
             switch (actionCommand) {
                 case Constants.ITEM_ACTION_COMMAND_ABRIR_PASTA -> {
@@ -104,13 +106,17 @@ public class FileSelectionControllerImplement implements FileSelectionController
      * @throws ImageNotValidException
      */
     private boolean actionCommandOpenFolder(boolean isADirectoryOnly, Component parent) throws FileNotFoundException, DirectoryNotValidException, ImageNotValidException, HeadlessException {
-        File file = this.fileChooser.dialogs(JFileChooser.OPEN_DIALOG, isADirectoryOnly, parent);
+        MyFileChooserUI chooser = this.fileChooser;
+        chooser.resetChoosableFileFilters();
+        chooser.setFileFilter(null);
+        File file = chooser.dialogs(JFileChooser.OPEN_DIALOG, isADirectoryOnly, parent);
         if (file != null && file.exists()) {
             // Set the palette which represents the folder where the frames are contained
 
             MainResources.getInstance().setPalette(setNewPalette(file));
             MainResources.getInstance().setPaletteToSave(new Palette());
             MainResources.getInstance().getPaletteToSave().setDirectory(MainResources.getInstance().getPalette().getDirectory());
+            MainResources.getInstance().resetSavingFolder();
             if (parent instanceof JTabbedPane jTabbedPane) {
                 if (jTabbedPane.getSelectedIndex() == 0) {
                     MainResources.getInstance().getPalette().getFrames().poll();
@@ -119,8 +125,7 @@ public class FileSelectionControllerImplement implements FileSelectionController
                     MainResources.getInstance().adjustPanelTab(jTabbedPane, true);
                 }
             }
-            this.evaluationReportsFilePosition = 0;
-            MainResources.getInstance().setReports(null);
+            MainResources.getInstance().setReports(new String[2]);
             return true;
         }
         return false;
@@ -134,41 +139,56 @@ public class FileSelectionControllerImplement implements FileSelectionController
      * @throws DirectoryNotValidException
      * @throws HeadlessException
      */
-    private boolean actionCommandSelectReport(boolean isADirectoryOnly, Component parent) throws DirectoryNotValidException, HeadlessException {
-        this.fileChooser.addChoosableFileFilter(new FileFilterExtensions(FileExtension.CSV));
-        this.fileChooser.setFileFilter(new FileFilterExtensions(FileExtension.CSV));
-        this.fileChooser.setExtensionType(FileExtension.CSV);
-        File file = this.fileChooser.dialogs(JFileChooser.OPEN_DIALOG, isADirectoryOnly, parent);
-        String msgErro = "Por favor, revisar os arquivos selecionados." + Constants.QUEBRA_LINHA + "Primeiro deve-se selecionar a pasta da Paleta na Opçao 'Abrir Paleta' e depois selecionar os dois relatórios CSV desta mesma Paleta em 'Selecionar Relatório'." + Constants.QUEBRA_LINHA + "O primeiro deve ser o relatório da contagem Manual e o segundo o relatório da contagem Automática.";
-        if (isAValidFileReport(file)) {
-            // Fixar ordem dos relatórios: o primeiro deve ser o relatório de contagem manual
-            // verificar se o primeiro relatório corresponde ao relatório da contagem manual
-            switch (this.evaluationReportsFilePosition) {
-                case 0 -> {
-                    return evaluationReportsFile(Constants.NAME_MANUAL, file, parent);
-                }
-                case 1 -> {
-//                    MainResources.getInstance().adjustPanelTab((JTabbedPane)parent, true);
-                    return evaluationReportsFile(Constants.NAME_AUTOMATICO, file, parent);
-                }
-                default -> {
-                    LOG.log(Level.WARNING, msgErro);
-                    JOptionPane.showMessageDialog(parent, msgErro);
-                    return false;
-                }
-            }
+    private boolean actionCommandSelectReport(boolean isADirectoryOnly, Component parent) throws DirectoryNotValidException, HeadlessException, ReportNotValidException {
+        MyFileChooserUI chooser = this.fileChooser;
+        chooser.resetChoosableFileFilters();
+        chooser.addChoosableFileFilter(new FileFilterExtensions(FileExtension.CSV));
+        chooser.setFileFilter(new FileFilterExtensions(FileExtension.CSV));
+        chooser.setExtensionType(FileExtension.CSV);
+        File file = chooser.dialogs(JFileChooser.OPEN_DIALOG, isADirectoryOnly, parent);
+        if (isAValidFileReportOnPalette(file, MainResources.getInstance().getPalette())) {
+            return setReports(file, parent);
+        } else {
+            LOG.log(Level.WARNING, "Couldn't pass all the validations for a csv report");
+            JOptionPane.showMessageDialog(parent, "Verifique os critérios de aceitação do processamento de relatórios");
+            return false;
         }
-        JOptionPane.showMessageDialog(parent, msgErro);
-        return false;
+
     }
 
-    private boolean isAValidFileReport(File file) throws DirectoryNotValidException {
+    /**
+     *
+     * @param file
+     * @param parent
+     * @return
+     * @throws ReportNotValidException
+     * @throws DirectoryNotValidException
+     */
+    private boolean setReports(File file, Component parent) throws ReportNotValidException, DirectoryNotValidException {
+        // Fixar ordem dos relatórios: o primeiro deve ser o relatório de contagem manual
+        // verificar se o primeiro relatório corresponde ao relatório da contagem manual
+        // Receber os relatórios em qualquer ordem no array na posição correta
+        String nameReport = "";
+        int position = 0;
+        if (file.getAbsolutePath().contains(Constants.NAME_MANUAL)) {
+            nameReport = Constants.NAME_MANUAL;
+            position = 0;
+        } else if (file.getAbsolutePath().contains(Constants.NAME_AUTOMATICO)) {
+            nameReport = Constants.NAME_AUTOMATICO;
+            position = 1;
+        } else {
+            throw new ReportNotValidException("Report not properly selected");
+        }
+        return evaluationReportsFile(nameReport, file, parent, position);
+
+    }
+
+    private boolean isAValidFileReportOnPalette(File file, Palette palette) throws DirectoryNotValidException {
         return file != null && file.exists() && file.isFile()
-                && file.getAbsolutePath().contains(FileExtension.CSV.toString().toLowerCase())
-                && (MainResources.getInstance().getPalette() != null
-                && MainResources.getInstance().getPalette().getDirectory() != null
-                && !MainResources.getInstance().getPalette().getDirectory().getName().isBlank())
-                && (file.getAbsolutePath().contains(MainResources.getInstance().getPalette().getDirectory().getName()));
+                && file.getAbsolutePath().contains(FileExtension.CSV.getExtension())
+                && (palette != null && palette.getDirectory() != null
+                && !palette.getDirectory().getName().isBlank())
+                && (file.getAbsolutePath().contains(palette.getDirectory().getName()));
     }
 
     /**
@@ -179,19 +199,12 @@ public class FileSelectionControllerImplement implements FileSelectionController
      * @return
      * @throws DirectoryNotValidException
      */
-    private boolean evaluationReportsFile(String nameReport, File file, Component parent) throws DirectoryNotValidException {
+    private boolean evaluationReportsFile(String nameReport, File file, Component parent, int position) throws DirectoryNotValidException {
         String msg = "Relatório para " + nameReport.toUpperCase();
-        if (file.getAbsolutePath().contains(nameReport)) {
-            MainResources.getInstance().addReport(file.getAbsolutePath(), this.evaluationReportsFilePosition);
-            this.evaluationReportsFilePosition++;
-            LOG.log(Level.INFO, "{0} foi adicionado: {1}", new Object[]{msg, file.getPath()});
-            JOptionPane.showMessageDialog(parent, msg + " foi adicionado.");
-            return true;
-        } else {
-            LOG.log(Level.INFO, "{0} não foi adicionado.", new Object[]{msg});
-            JOptionPane.showMessageDialog(parent, msg + " não foi adicionado por não estar em uma pasta " + nameReport);
-            return false;
-        }
+        MainResources.getInstance().addReport(file.getAbsolutePath(), position);
+        LOG.log(Level.INFO, "{0} foi adicionado: {1}", new Object[]{msg, file.getPath()});
+        JOptionPane.showMessageDialog(parent, msg + " foi adicionado.");
+        return true;
     }
 
     /**
@@ -205,7 +218,10 @@ public class FileSelectionControllerImplement implements FileSelectionController
      */
     private boolean actionCommandSetSavingFolder(boolean isADirectoryOnly, Component parent) throws DirectoryNotValidException {
         LOG.log(Level.INFO, "Setting a new saving Folder.");
-        File file = fileChooser.dialogs(JFileChooser.OPEN_DIALOG, isADirectoryOnly, parent);
+        MyFileChooserUI chooser = this.fileChooser;
+        chooser.resetChoosableFileFilters();
+        chooser.setFileFilter(null);
+        File file = chooser.dialogs(JFileChooser.OPEN_DIALOG, isADirectoryOnly, parent);
         if (file != null && file.exists()) {
             // Set the folder where the result will be saved.
             MainResources.getInstance().setSavingFolder(file);
@@ -227,7 +243,6 @@ public class FileSelectionControllerImplement implements FileSelectionController
         LOG.log(Level.INFO, "Setting a new Palette...");
         Palette pal = null;
         if (selectedFile.exists()) {
-            MainResources.getInstance().setCurrent(selectedFile.getAbsolutePath());
             if (selectedFile.isDirectory()) {
                 pal = new Palette(selectedFile);
                 pal.setFrames(setPaletteFrames(selectedFile.listFiles()));
@@ -255,7 +270,7 @@ public class FileSelectionControllerImplement implements FileSelectionController
      */
     private Queue<Frame> setPaletteFrames(File[] listFiles) throws DirectoryNotValidException, ImageNotValidException {
         Queue<Frame> frames = new LinkedList<>();
-        Collection<File> colection = MainResources.getInstance().getFileListHandler().normalizeFilesOnAList(listFiles, FileExtension.PNG);
+        Collection<File> colection = new MyFileListHandler<File>().normalizeFilesOnAList(listFiles, FileExtension.PNG);
         Frame frame;
         for (File file1 : colection) {
             frame = new Frame(file1.getPath());
@@ -297,26 +312,9 @@ public class FileSelectionControllerImplement implements FileSelectionController
      *
      * @return
      */
-    public MyFileChooserUI getFileChooser() {
-        return fileChooser;
-    }
-
-    /**
-     *
-     * @return
-     */
     @Override
     public String getManualReportDestination() {
         return finalRelatoryDestination;
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public int getEvaluationReportsFilePosition() {
-        return evaluationReportsFilePosition;
     }
 
 }

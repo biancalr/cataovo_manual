@@ -7,6 +7,7 @@ package cataovo.controllers;
 
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
+import cataovo.exceptions.ReportNotValidException;
 import java.awt.Component;
 import java.io.FileNotFoundException;
 
@@ -29,20 +30,15 @@ public interface FileSelectionController {
      * @throws cataovo.exceptions.DirectoryNotValidException
      * @throws cataovo.exceptions.ImageNotValidException
      * @throws java.io.FileNotFoundException
+     * @throws cataovo.exceptions.ReportNotValidException
      * @see cataovo.constants.Constants
      */
-    public boolean fileSelectionEvent(String actionCommand, Component parent, boolean isADirectoryOnly) throws DirectoryNotValidException, ImageNotValidException, FileNotFoundException;
+    public boolean fileSelectionEvent(String actionCommand, Component parent, boolean isADirectoryOnly) throws DirectoryNotValidException, ImageNotValidException, FileNotFoundException, ReportNotValidException;
 
     /**
      *
      * @return the final relatory's path.
      */
     public String getManualReportDestination();
-
-    /**
-     *
-     * @return
-     */
-    public int getEvaluationReportsFilePosition();
 
 }

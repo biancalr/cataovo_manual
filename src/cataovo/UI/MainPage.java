@@ -36,6 +36,7 @@ import java.awt.HeadlessException;
 import java.io.File;
 import java.util.List;
 import cataovo.controllers.FileReaderController;
+import cataovo.exceptions.ReportNotValidException;
 import cataovo.resources.fileChooser.handler.FileExtension;
 
 /**
@@ -138,6 +139,7 @@ public class MainPage extends javax.swing.JFrame {
      */
     private void cleanTabs() {
         jLabel2.setIcon(null);
+        jLabel2.setBorder(null);
         jLabel3.setIcon(null);
         jLabel5.setIcon(null);
         jLabel6.setIcon(null);
@@ -145,6 +147,7 @@ public class MainPage extends javax.swing.JFrame {
         jLabel8.setIcon(null);
         jLabel9.setIcon(null);
         jLabel12.setIcon(null);
+        jLabel12.setBorder(null);
     }
 
     /**
@@ -222,6 +225,38 @@ public class MainPage extends javax.swing.JFrame {
         sb.append(Constants.QUEBRA_LINHA);
         sb.append("Revise os arquivos e inicie um novo processamento para visualizar os devidos resultados.");
         return sb.toString();
+    }
+
+    /**
+     * Setts the message when Evaluation resolves to a report validation error
+     *
+     * @return the error message
+     */
+    private String onReportErrorEvaluationMessage() {
+        StringBuilder sb = new StringBuilder("Por favor, revisar os arquivos selecionados.");
+        sb.append(Constants.QUEBRA_LINHA);
+        sb.append("1º Selecionar a pasta da Paleta na Opçao 'Abrir Paleta'");
+        sb.append(Constants.QUEBRA_LINHA);
+        sb.append("2º Selecionar os dois relatórios CSV desta mesma Paleta em 'Selecionar Relatório'.");
+        return sb.toString();
+    }
+
+    /**
+     * Count the reports running through the array. Sums one if the position has
+     * a report.
+     *
+     * @return the number of reports that contains a actual report
+     * @throws DirectoryNotValidException
+     */
+    private int countEvaluationReports() throws DirectoryNotValidException {
+        // With only two positions, doesn't have major problem to iterate over them
+        int numberOfEvaluationReports = 0;
+        for (String report : MainResources.getInstance().getReports()) {
+            if (report != null) {
+                numberOfEvaluationReports++;
+            }
+        }
+        return numberOfEvaluationReports;
     }
 
     /**
@@ -981,7 +1016,7 @@ public class MainPage extends javax.swing.JFrame {
                 }
 
             }
-        } catch (DirectoryNotValidException | FileNotFoundException | ImageNotValidException | HeadlessException ex) {
+        } catch (DirectoryNotValidException | FileNotFoundException | ImageNotValidException | ReportNotValidException | HeadlessException ex) {
             LOG.log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
         }
@@ -995,7 +1030,7 @@ public class MainPage extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(jPanel1, "Diretório não foi alterado. Por favor, verifique algumas possibilidades: a seleção da pasta foi cancelada, tentando alterar a pasta durante o processamento ou erro na seleção da pasta.");
             }
-        } catch (DirectoryNotValidException | FileNotFoundException | ImageNotValidException | HeadlessException ex) {
+        } catch (DirectoryNotValidException | FileNotFoundException | ImageNotValidException | ReportNotValidException | HeadlessException ex) {
             LOG.log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
         }
@@ -1026,7 +1061,7 @@ public class MainPage extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(jPanel1, "A paleta foi salva com sucesso em: " + fileSelectionController.getManualReportDestination());
                 }
             }
-        } catch (ImageNotValidException | DirectoryNotValidException | FileNotFoundException | HeadlessException ex) {
+        } catch (ImageNotValidException | DirectoryNotValidException | FileNotFoundException | ReportNotValidException | HeadlessException ex) {
             LOG.log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
         }
@@ -1139,7 +1174,8 @@ public class MainPage extends javax.swing.JFrame {
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         LOG.log(Level.INFO, evt.getActionCommand());
         try {
-            if (this.fileSelectionController.getEvaluationReportsFilePosition() == 2) {
+            int numberOfEvaluationReports = countEvaluationReports();
+            if (numberOfEvaluationReports == 2) {
                 this.mainPageController.onNextFrameInEvaluation(
                         jLabel13, jLabel12,
                         MainResources.getInstance().getPalette().getDirectory(),
@@ -1161,7 +1197,8 @@ public class MainPage extends javax.swing.JFrame {
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         LOG.log(Level.INFO, evt.getActionCommand());
         try {
-            if (this.fileSelectionController.getEvaluationReportsFilePosition() == 2) {
+            int numberOfEvaluationReports = countEvaluationReports();
+            if (numberOfEvaluationReports == 2) {
                 this.mainPageController.onPreviousFrameInEvaluation(jLabel13, jLabel12,
                         MainResources.getInstance().getPalette().getDirectory(),
                         MainResources.getInstance().getReports());
@@ -1197,16 +1234,19 @@ public class MainPage extends javax.swing.JFrame {
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
         LOG.log(Level.INFO, evt.getActionCommand());
         try {
+
             boolean result = this.fileSelectionController.fileSelectionEvent(evt.getActionCommand(), jTabbedPane1, false);
             if (!result) {
                 MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
             }
+            
+            int numberOfEvaluationReports = countEvaluationReports();
 
-            if (this.fileSelectionController.getEvaluationReportsFilePosition() == 2) {
+            if (numberOfEvaluationReports == 2) {
+                MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(true);
                 this.mainPageController.onNextFrameInEvaluation(jLabel13, jLabel12,
                         MainResources.getInstance().getPalette().getDirectory(),
                         MainResources.getInstance().getReports());
-                MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(true);
                 mainPageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel13, jLabel12, this.showFileReportResultOnFrame());
                 int[] evaluation = this.evaluationController.onEvaluateFileContentsOnPalette(
                         fileReaderController.readFullFileContent(MainResources.getInstance().getReports()[0]).toString(),
@@ -1219,6 +1259,9 @@ public class MainPage extends javax.swing.JFrame {
         } catch (DirectoryNotValidException | ImageNotValidException | FileNotFoundException | HeadlessException | CloneNotSupportedException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
+        } catch (ReportNotValidException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage(), ex);
+            JOptionPane.showMessageDialog(jPanel1, onReportErrorEvaluationMessage());
         }
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 

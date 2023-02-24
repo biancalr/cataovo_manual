@@ -130,7 +130,7 @@ public class FileReaderControllerImplements implements FileReaderController {
                 builder.append(Constants.QUEBRA_LINHA);
             });
 
-            LOG.log(Level.INFO, report + " size {0}", csvReader.lines());
+            LOG.log(Level.INFO, report + " size {0}", csvReader.lines().count());
 
         } catch (FileNotFoundException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
