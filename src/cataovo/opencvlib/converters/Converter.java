@@ -79,8 +79,7 @@ public final class Converter {
      * {@link cataovo.opencvlib.wrappers.MatWrapper Mat} in order to make
      * operations with a {@link org.opencv.core.Mat Opencv.Mat}.
      *
-     * @param current the Frame to make the
-     * conversion.
+     * @param current the Frame to make the conversion.
      * @return a {@link cataovo.opencvlib.wrappers.MatWrapper MatWrapper} that
      * encapsulates a {@link org.opencv.core.Mat Mat}
      * @see org.opencv.imgcodecs.Imgcodecs#imread(java.lang.String)

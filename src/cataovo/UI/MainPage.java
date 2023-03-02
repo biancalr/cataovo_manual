@@ -330,10 +330,6 @@ public class MainPage extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -933,19 +929,6 @@ public class MainPage extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Tutoriais");
-
-        jMenuItem2.setText("Mód. Manual");
-        jMenu2.add(jMenuItem2);
-
-        jMenuItem3.setText("Mód. Automático");
-        jMenu2.add(jMenuItem3);
-
-        jMenuItem4.setText("Mód. Avaliação");
-        jMenu2.add(jMenuItem4);
-
-        jMenuBar1.add(jMenu2);
-
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1000,6 +983,7 @@ public class MainPage extends javax.swing.JFrame {
                         jButton1.setEnabled(wasFileSelected);
                         jButton4.setEnabled(wasFileSelected);
                         jButton5.setEnabled(wasFileSelected);
+                        jTabbedPane2.setSelectedIndex(4);
                         mainPageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel4, jLabel8, MainResources.getInstance().getCurrentFrame());
                     }
                     case 2 -> {
@@ -1239,7 +1223,7 @@ public class MainPage extends javax.swing.JFrame {
             if (!result) {
                 MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
             }
-            
+
             int numberOfEvaluationReports = countEvaluationReports();
 
             if (numberOfEvaluationReports == 2) {
@@ -1351,12 +1335,8 @@ public class MainPage extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPanel jPanel1;
