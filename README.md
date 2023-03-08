@@ -59,7 +59,7 @@ computer vision.</p>
 <p lang="en">The Manual Counting module is the first of the three modules that make up the application. It makes it possible to carry out the counting and identification of eggs manually by an operator. The application, as shown in the figure below, has the advantage of abstracting the manipulation of microscopes for counting eggs, eliminating failures caused by lack of dexterity in handling this equipment.</p>
 <p lang="en">It will also be used as the gold standard for the entire project, as it is up to the operator to define what is egg or not.</p>
 </section>
-<img src="/images/mod_manual_2.png" alt="Manual Counting Module Image" style="width:600px;height:400px"/>
+<img src="/images/mod_manual_3.png" alt="Manual Counting Module Image" style="width:600px;height:400px"/>
 </div>
 
 <div>
@@ -67,7 +67,7 @@ computer vision.</p>
 <section>
 <p lang="en">In the Automatic Counting Module, the selected palette is processed automatically by the software.</p>
 </section>
-<img src="/images/mod_auto_2.png" alt="Auto Counting Module Image" style="width:600px;height:400px"/>
+<img src="/images/mod_auto_3.png" alt="Auto Counting Module Image" style="width:600px;height:400px"/>
 </div>
 
 <div>
@@ -77,7 +77,7 @@ computer vision.</p>
 <p>Each of the counting modules produces a final report containing data on eggs found. The Assessment Module makes use of these artifacts and,
 using manual counting as the gold standard, it confronts the data with automatic counting in order to extract some hit metrics.</p>
 </section>
-<img src="/images/mod_result_2.png" alt="Assessment Module Image" style="width:600px;height:400px"/>
+<img src="/images/mod_result_3.png" alt="Assessment Module Image" style="width:600px;height:400px"/>
 </div>
 </section>
 <br/> <br/>
@@ -139,7 +139,7 @@ de visão computacional.</p>
 <p lang="pt-BR">O módulo de Contagem Manual é o primeiro dos três módulos que formam a aplicação. Ele possibilita realizar a contagem e identificação dos ovos manualmente por uma pessoa operadora. A aplicação, como mostra a figura abaixo, apresenta a vantagem de abstrair a manipulação de microscópios para a contagem dos ovos, eliminando as falhas causadas pela falta de destreza na manipulação deste equipamento.</p>
 <p lang="pt-BR">Ele também será usado como padrão ouro para todo o projeto, já que fica a critério do operador definir o que é ovo ou não.</p>
 </section>
-<img src="/images/mod_manual_2.png" alt="Imagem do Módulo de Contagem Manual" style="width:600px;height:400px"/>
+<img src="/images/mod_manual_3.png" alt="Imagem do Módulo de Contagem Manual" style="width:600px;height:400px"/>
 </div>
 
 <div>
@@ -147,7 +147,7 @@ de visão computacional.</p>
 <section>
 <p lang="pt-BR">No Módulo de Contagem Automática, a paleta selecionada é processada automaticamente pelo software.</p>
 </section>
-<img src="/images/mod_auto_2.png" alt="Imagem do Módulo de Contagem Automática" style="width:600px;height:400px"/>
+<img src="/images/mod_auto_3.png" alt="Imagem do Módulo de Contagem Automática" style="width:600px;height:400px"/>
 </div>
 
 <div>
@@ -157,7 +157,7 @@ de visão computacional.</p>
 <p lang="pt-BR">Cada um dos módulos de contagem produz um relatório final contendo os dados dos ovos encontrados. O Módulo de Avaliação faz o uso destes artefatos e, 
 utilizando a contagem manual como padrão ouro, confronta os dados com a contagem automática a fim de extrair algumas métricas de acerto.</p>
 </section>
-<img src="/images/mod_result_2.png" alt="Imagem do Módulo de Avaliação" style="width:600px;height:400px"/>
+<img src="/images/mod_result_3.png" alt="Imagem do Módulo de Avaliação" style="width:600px;height:400px"/>
 </div>
 </section>
 <br/> <br/>
@@ -220,7 +220,7 @@ visión artificial.</p>
 <p lang="es">El módulo de Conteo Manual es el primero de los tres módulos que componen la aplicación. Permite realizar el conteo e identificación de huevos manualmente por un operario. La aplicación, como se muestra en la siguiente figura, tiene la ventaja de abstraer la manipulación de microscopios para el conteo de huevos, eliminando fallas causadas por falta de destreza en el manejo de este equipo.</p>
 <p lang="es">También se usará como el estándar de oro para todo el proyecto, ya que depende del operador definir qué es huevo o no.</p>
 </sección>
-<img src="/images/mod_manual_2.png" alt="Imagen del módulo de conteo manual" style="width:600px;height:400px"/>
+<img src="/images/mod_manual_3.png" alt="Imagen del módulo de conteo manual" style="width:600px;height:400px"/>
 </div>
 
 <div>
@@ -228,7 +228,7 @@ visión artificial.</p>
 <sección>
 <p lang="es">En el módulo de conteo automático, la paleta seleccionada es procesada automáticamente por el software.</p>
 </sección>
-<img src="/images/mod_auto_2.png" alt="Imagen del módulo de conteo automático" style="width:600px;height:400px"/>
+<img src="/images/mod_auto_3.png" alt="Imagen del módulo de conteo automático" style="width:600px;height:400px"/>
 </div>
 
 <div>
@@ -238,6 +238,6 @@ visión artificial.</p>
 <p lang="es">Cada uno de los módulos de conteo produce un informe final que contiene datos sobre los huevos encontrados. El módulo de evaluación hace uso de estos artefactos y,
 utilizando el conteo manual como estándar de oro, confronta los datos con el conteo automático para extraer algunas métricas de aciertos.</p>
 </sección>
-<img src="/images/mod_result_2.png" alt="Imagen del módulo de evaluación" style="width:600px;height:400px"/>
+<img src="/images/mod_result_3.png" alt="Imagen del módulo de evaluación" style="width:600px;height:400px"/>
 </div>
 </section>

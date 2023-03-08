@@ -780,7 +780,7 @@
                   <Font name="Tahoma" size="16" style="0"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
-                <Property name="text" type="java.lang.String" value="Escolha os relat&#xf3;rios de paleta (0/2)"/>
+                <Property name="text" type="java.lang.String" value="Escolha a Paleta"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="jButton6">

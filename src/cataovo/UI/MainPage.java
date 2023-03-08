@@ -8,36 +8,33 @@ package cataovo.UI;
 import cataovo.constants.Constants;
 import cataovo.controllers.AutomaticProcessorController;
 import cataovo.controllers.EvaluationController;
+import cataovo.controllers.FileReaderController;
 import cataovo.controllers.FileSelectionController;
+import cataovo.controllers.FrameActionsController;
 import cataovo.controllers.MainPageController;
 import cataovo.controllers.implement.AutomaticProcessorControllerImplements;
+import cataovo.controllers.implement.EvaluationControllerImplements;
+import cataovo.controllers.implement.FileReaderControllerImplements;
 import cataovo.controllers.implement.FileSelectionControllerImplement;
 import cataovo.controllers.implement.FrameActionsControllerImplements;
-import cataovo.controllers.implement.EvaluationControllerImplements;
 import cataovo.controllers.implement.MainPageControllerImplements;
 import cataovo.entities.Point;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
+import cataovo.exceptions.ReportNotValidException;
 import cataovo.resources.MainResources;
+import cataovo.resources.fileChooser.handler.FileExtension;
 import java.awt.Dimension;
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Locale;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import org.opencv.core.Core;
-import cataovo.controllers.FrameActionsController;
-import cataovo.controllers.implement.FileReaderControllerImplements;
-import cataovo.opencvlib.wrappers.PointWrapper;
-import cataovo.opencvlib.wrappers.RectWrapper;
-import java.awt.HeadlessException;
-import java.io.File;
-import java.util.List;
-import cataovo.controllers.FileReaderController;
-import cataovo.exceptions.ReportNotValidException;
-import cataovo.resources.fileChooser.handler.FileExtension;
 
 /**
  * Module that interacts with the user. This is the main face of this
@@ -164,20 +161,34 @@ public class MainPage extends javax.swing.JFrame {
     }
 
     /**
-     * Draw formats (circle or square) on the frame based on the reports' data
      *
-     * @return @throws DirectoryNotValidException
      * @throws CloneNotSupportedException
-     * @throws ImageNotValidException
-     * @throws java.io.FileNotFoundException
      * @throws NumberFormatException
+     * @throws ImageNotValidException
+     * @throws DirectoryNotValidException
+     * @throws FileNotFoundException
      */
-    public Icon showFileReportResultOnFrame() throws DirectoryNotValidException, CloneNotSupportedException, ImageNotValidException, FileNotFoundException, NumberFormatException {
-        String file = MainResources.getInstance().getReports()[0];
-        List<RectWrapper> regions = fileReaderController.getRegionsInFrameFile(MainResources.getInstance().getCurrentFrame().getName(), file);
-        file = MainResources.getInstance().getReports()[1];
-        List<PointWrapper> points = fileReaderController.getPointsInFrameFile(MainResources.getInstance().getCurrentFrame().getName(), file);
-        return this.frameActionsController.paintFormatsOnFrameOnEvaluation(MainResources.getInstance().getCurrentFrame().clone(), regions, points);
+    private void calculateEvaluation() throws CloneNotSupportedException, NumberFormatException, ImageNotValidException, DirectoryNotValidException, FileNotFoundException {
+        String manualReport = MainResources.getInstance().getReports()[0];
+        String autoReport = MainResources.getInstance().getReports()[1];
+        MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(true);
+        this.mainPageController.onNextFrameInEvaluation(jLabel13, jLabel12,
+                MainResources.getInstance().getPalette().getDirectory(),
+                MainResources.getInstance().getReports());
+        this.mainPageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel13, jLabel12,
+                (this.frameActionsController.paintFormatsOnFrameOnEvaluation(
+                        MainResources.getInstance().getCurrentFrame().clone(),
+                        this.fileReaderController.getRegionsInFrameFile(MainResources.getInstance().getCurrentFrame().getName(),
+                                manualReport),
+                        this.fileReaderController.getPointsInFrameFile(MainResources.getInstance().getCurrentFrame().getName(),
+                                autoReport)))
+        );
+        int[] evaluation = this.evaluationController.onEvaluateFileContentsOnPalette(
+                this.fileReaderController.readFullFileContent(manualReport).toString(),
+                this.fileReaderController.readFullFileContent(autoReport).toString());
+        setLabelsEvaluationMod(evaluation);
+        MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
+        LOG.log(Level.INFO, "Evaluation Finished!");
     }
 
     /**
@@ -650,7 +661,7 @@ public class MainPage extends javax.swing.JFrame {
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel13.setText("Escolha os relatórios de paleta (0/2)");
+        jLabel13.setText("Escolha a Paleta");
 
         jButton6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton6.setText("< Anterior");
@@ -1164,7 +1175,14 @@ public class MainPage extends javax.swing.JFrame {
                         jLabel13, jLabel12,
                         MainResources.getInstance().getPalette().getDirectory(),
                         MainResources.getInstance().getReports());
-                mainPageController.showFrameOnScreen(jLabel13, jLabel12, this.showFileReportResultOnFrame());
+                mainPageController.showFrameOnScreen(jLabel13, jLabel12,
+                        this.frameActionsController.paintFormatsOnFrameOnEvaluation(
+                                MainResources.getInstance().getCurrentFrame().clone(),
+                                fileReaderController.getRegionsInFrameFile(MainResources.getInstance().getCurrentFrame().getName(),
+                                        MainResources.getInstance().getReports()[0]),
+                                fileReaderController.getPointsInFrameFile(MainResources.getInstance().getCurrentFrame().getName(),
+                                        MainResources.getInstance().getReports()[1]))
+                );
             }
         } catch (FileNotFoundException | ImageNotValidException | HeadlessException | CloneNotSupportedException | NumberFormatException ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -1186,7 +1204,14 @@ public class MainPage extends javax.swing.JFrame {
                 this.mainPageController.onPreviousFrameInEvaluation(jLabel13, jLabel12,
                         MainResources.getInstance().getPalette().getDirectory(),
                         MainResources.getInstance().getReports());
-                mainPageController.showFrameOnScreen(jLabel13, jLabel12, this.showFileReportResultOnFrame());
+                mainPageController.showFrameOnScreen(jLabel13, jLabel12,
+                        this.frameActionsController.paintFormatsOnFrameOnEvaluation(
+                                MainResources.getInstance().getCurrentFrame().clone(),
+                                fileReaderController.getRegionsInFrameFile(MainResources.getInstance().getCurrentFrame().getName(),
+                                        MainResources.getInstance().getReports()[0]),
+                                fileReaderController.getPointsInFrameFile(MainResources.getInstance().getCurrentFrame().getName(),
+                                        MainResources.getInstance().getReports()[1]))
+                );
             }
         } catch (ImageNotValidException | FileNotFoundException | HeadlessException | CloneNotSupportedException | NumberFormatException ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -1227,17 +1252,7 @@ public class MainPage extends javax.swing.JFrame {
             int numberOfEvaluationReports = countEvaluationReports();
 
             if (numberOfEvaluationReports == 2) {
-                MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(true);
-                this.mainPageController.onNextFrameInEvaluation(jLabel13, jLabel12,
-                        MainResources.getInstance().getPalette().getDirectory(),
-                        MainResources.getInstance().getReports());
-                mainPageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel13, jLabel12, this.showFileReportResultOnFrame());
-                int[] evaluation = this.evaluationController.onEvaluateFileContentsOnPalette(
-                        fileReaderController.readFullFileContent(MainResources.getInstance().getReports()[0]).toString(),
-                        fileReaderController.readFullFileContent(MainResources.getInstance().getReports()[1]).toString());
-                setLabelsEvaluationMod(evaluation);
-                MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
-                LOG.log(Level.INFO, "Evaluation Finished!");
+                calculateEvaluation();
             }
 
         } catch (DirectoryNotValidException | ImageNotValidException | FileNotFoundException | HeadlessException | CloneNotSupportedException ex) {
