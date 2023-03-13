@@ -72,16 +72,16 @@ public class FileSelectionControllerImplement implements FileSelectionController
     public boolean fileSelectionEvent(String actionCommand, Component parent, boolean isADirectoryOnly) throws DirectoryNotValidException, ImageNotValidException, FileNotFoundException, ReportNotValidException {
         if (!MainResources.getInstance().getPanelTabHelper().isIsActualTabProcessing()) {
             switch (actionCommand) {
-                case Constants.ITEM_ACTION_COMMAND_ABRIR_PASTA -> {
+                case Constants.ITEM_ACTION_COMMAND_OPEN_PALETTE_PT_BR -> {
                     return actionCommandOpenFolder(isADirectoryOnly, parent);
                 }
-                case Constants.ITEM_ACTION_COMMAND_SELECIONAR_PASTA_DESTINO -> {
+                case Constants.ITEM_ACTION_COMMAND_SELECT_DESTINATION_FOLDER_PT_BR -> {
                     return actionCommandSetSavingFolder(isADirectoryOnly, parent);
                 }
-                case Constants.ITEM_ACTION_COMMAND_SALVAR_RELATORIO_MANUAL_FINAL -> {
+                case Constants.ITEM_ACTION_COMMAND_SAVE_MANUAL_REPORT_PT_BR -> {
                     return actionCommandNewSaveFinalFileInManual(MainResources.getInstance().getPanelTabHelper().getTabName());
                 }
-                case Constants.ITEM_ACTION_COMMAND_SELECIONAR_RELATORIO -> {
+                case Constants.ITEM_ACTION_COMMAND_SELECT_REPORT_PT_BR -> {
                     return actionCommandSelectReport(isADirectoryOnly, parent);
                 }
                 default -> {

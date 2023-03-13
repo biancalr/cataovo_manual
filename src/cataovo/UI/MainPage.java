@@ -21,7 +21,9 @@ import cataovo.controllers.implement.MainPageControllerImplements;
 import cataovo.entities.Point;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
+import cataovo.exceptions.RegionNotValidException;
 import cataovo.exceptions.ReportNotValidException;
+import cataovo.exceptions.TabNotValidToEvaluationException;
 import cataovo.resources.MainResources;
 import cataovo.resources.fileChooser.handler.FileExtension;
 import java.awt.Dimension;
@@ -111,13 +113,13 @@ public class MainPage extends javax.swing.JFrame {
 
         jLabel9.setIcon(null);
 
-        jMenuItem1.setText(Constants.ITEM_ACTION_COMMAND_ABRIR_PASTA);
-        jMenuItem5.setText(Constants.ITEM_ACTION_COMMAND_SELECIONAR_PASTA_DESTINO);
-        jMenuItem6.setText(Constants.ITEM_ACTION_COMMAND_SELECIONAR_RELATORIO);
+        jMenuItem1.setText(Constants.ITEM_ACTION_COMMAND_OPEN_PALETTE_PT_BR);
+        jMenuItem5.setText(Constants.ITEM_ACTION_COMMAND_SELECT_DESTINATION_FOLDER_PT_BR);
+        jMenuItem6.setText(Constants.ITEM_ACTION_COMMAND_SELECT_REPORT_PT_BR);
 
-        jTabbedPane1.setTitleAt(0, Constants.TAB_NAME_MANUAL);
-        jTabbedPane1.setTitleAt(1, Constants.TAB_NAME_AUTOMATICO);
-        jTabbedPane1.setTitleAt(2, Constants.TAB_NAME_AVALIACAO);
+        jTabbedPane1.setTitleAt(0, Constants.TAB_NAME_MANUAL_PT_BR);
+        jTabbedPane1.setTitleAt(1, Constants.TAB_NAME_AUTOMATIC_PT_BR);
+        jTabbedPane1.setTitleAt(2, Constants.TAB_NAME_EVALUATION_PT_BR);
 
         jTabbedPane2.setSelectedIndex(4);
     }
@@ -1048,7 +1050,7 @@ public class MainPage extends javax.swing.JFrame {
                 jLabel10.setText("");
                 jLabel9.setIcon(null);
                 MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
-                if (!fileSelectionController.fileSelectionEvent(Constants.ITEM_ACTION_COMMAND_SALVAR_RELATORIO_MANUAL_FINAL, jTabbedPane1, true)) {
+                if (!fileSelectionController.fileSelectionEvent(Constants.ITEM_ACTION_COMMAND_SAVE_MANUAL_REPORT_PT_BR, jTabbedPane1, true)) {
                     LOG.log(Level.WARNING, "It wasn't possible to seve the Palette on a file");
                     JOptionPane.showMessageDialog(jPanel1, "It wasn't possible to seve the Palette on a file");
                 } else {
@@ -1075,7 +1077,7 @@ public class MainPage extends javax.swing.JFrame {
                 mainPageController.showSubFrameOnSelectedTabScreen(jLabel10, jLabel9, subFrame, pointClick);
                 LOG.log(Level.INFO, "Presenting frame on screen");
             }
-        } catch (DirectoryNotValidException | ImageNotValidException | CloneNotSupportedException ex) {
+        } catch (DirectoryNotValidException | ImageNotValidException | RegionNotValidException | CloneNotSupportedException ex) {
             LOG.log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
         }
@@ -1244,6 +1246,10 @@ public class MainPage extends javax.swing.JFrame {
         LOG.log(Level.INFO, evt.getActionCommand());
         try {
 
+            if (MainResources.getInstance().getPanelTabHelper().getTabIndex() != 2) {
+                throw new TabNotValidToEvaluationException(Constants.ERROR_TAB_NOT_VALID_TO_EVALUATE_ENG_1);
+            }
+
             boolean result = this.fileSelectionController.fileSelectionEvent(evt.getActionCommand(), jTabbedPane1, false);
             if (!result) {
                 MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
@@ -1255,7 +1261,7 @@ public class MainPage extends javax.swing.JFrame {
                 calculateEvaluation();
             }
 
-        } catch (DirectoryNotValidException | ImageNotValidException | FileNotFoundException | HeadlessException | CloneNotSupportedException ex) {
+        } catch (DirectoryNotValidException | ImageNotValidException | FileNotFoundException | TabNotValidToEvaluationException | HeadlessException | CloneNotSupportedException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
         } catch (ReportNotValidException ex) {

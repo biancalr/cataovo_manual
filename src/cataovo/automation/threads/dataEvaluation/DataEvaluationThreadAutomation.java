@@ -7,8 +7,8 @@ package cataovo.automation.threads.dataEvaluation;
 import cataovo.constants.Constants;
 import cataovo.exceptions.ReportNotValidException;
 import java.util.concurrent.Callable;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *

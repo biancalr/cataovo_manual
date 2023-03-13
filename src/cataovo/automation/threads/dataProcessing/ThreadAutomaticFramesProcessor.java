@@ -6,13 +6,9 @@ package cataovo.automation.threads.dataProcessing;
 
 import cataovo.constants.Constants;
 import cataovo.entities.Frame;
-import cataovo.opencvlib.automation.imageProcessing.AutomaticImageProcess;
-import cataovo.opencvlib.automation.imageProcessing.AutomaticImageProcessImplements;
 import cataovo.opencvlib.converters.Converter;
 import cataovo.opencvlib.wrappers.MatWrapper;
 import java.util.Queue;
-import java.util.concurrent.Callable;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**

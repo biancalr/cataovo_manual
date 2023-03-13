@@ -5,6 +5,7 @@
  */
 package cataovo.entities;
 
+import cataovo.constants.Constants;
 import cataovo.exceptions.ImageNotValidException;
 import cataovo.resources.fileChooser.handler.FileExtension;
 import java.io.File;
@@ -16,9 +17,9 @@ import java.util.Set;
 /**
  * A frame represents a fraction of the various images that make up a palette.
  *
- * @author bibil
+ * @author Bianca Leopoldo Ramos
  */
-public final class Frame implements Cloneable, Serializable{
+public final class Frame implements Cloneable, Serializable {
 
     /**
      * the frame identifier name
@@ -37,9 +38,10 @@ public final class Frame implements Cloneable, Serializable{
     private File paletteFrame;
 
     /**
+     * Create a frame using the image path
      *
      * @param filePath the file path of this image
-     * @throws cataovo.exceptions.ImageNotValidException
+     * @throws cataovo.exceptions.ImageNotValidException if the file isn't a *.jpg or a *.png type
      */
     public Frame(String filePath) throws ImageNotValidException {
         if (verifyFileIsAValidImage(filePath)) {
@@ -48,41 +50,10 @@ public final class Frame implements Cloneable, Serializable{
             if (this.regionsContainingEggs == null) {
                 this.regionsContainingEggs = new HashSet<>();
             }
+        } else {
+            throw new ImageNotValidException(Constants.ERROR_IMAGE_NOT_VALID_ENG_1);
         }
 
-    }
-
-    /**
-     *
-     * @param filePath
-     * @param region the area containg an egg.
-     * @throws cataovo.exceptions.ImageNotValidException
-     */
-    public Frame(String filePath, Region region) throws ImageNotValidException {
-        if (verifyFileIsAValidImage(filePath)) {
-            this.paletteFrame = new File(filePath);
-            this.name = chopName(filePath);
-            if (this.regionsContainingEggs == null) {
-                this.regionsContainingEggs = new HashSet<>();
-            }
-            this.regionsContainingEggs.add(region);
-        }
-    }
-
-    /**
-     * 
-     * @param name
-     * @param paletteFrame
-     * @throws ImageNotValidException 
-     */
-    public Frame(String name, File paletteFrame) throws ImageNotValidException {
-        if (verifyFileIsAValidImage(name)) {
-            this.paletteFrame = paletteFrame;
-            this.name = chopName(name);
-            if (this.regionsContainingEggs == null) {
-                this.regionsContainingEggs = new HashSet<>();
-            }
-        }
     }
 
     /**
@@ -200,12 +171,7 @@ public final class Frame implements Cloneable, Serializable{
 
         fileExtension = getFileExtension(f);
         // Verify if this file exists, is a file and is a .png file type
-        if (f.exists() && f.isFile() && (fileExtension.contains(FileExtension.PNG.toString().toLowerCase()) || fileExtension.contains(FileExtension.JPG.toString().toLowerCase()))) {
-            return true;
-        } else {
-            throw new ImageNotValidException("This file with extension " +
-                    " does not represent a valid image, wich should be " + fileExtension);
-        }
+        return (f.exists() && f.isFile() && (fileExtension.contains(FileExtension.PNG.getExtension()) || fileExtension.contains(FileExtension.JPG.getExtension())));
     }
 
     /**

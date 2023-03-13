@@ -5,19 +5,20 @@
  */
 package cataovo.controllers.implement;
 
+import cataovo.controllers.FrameActionsController;
+import cataovo.entities.Frame;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
 import cataovo.exceptions.DirectoryNotValidException;
+import cataovo.exceptions.RegionNotValidException;
 import cataovo.opencvlib.converters.Converter;
-import cataovo.utils.frameUtils.FrameActionsUtils;
 import cataovo.opencvlib.wrappers.PointWrapper;
 import cataovo.opencvlib.wrappers.RectWrapper;
 import cataovo.resources.MainResources;
+import cataovo.utils.frameUtils.FrameActionsUtils;
+import java.util.Collection;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import cataovo.controllers.FrameActionsController;
-import cataovo.entities.Frame;
-import java.util.Collection;
 
 /**
  * Implements the frame actions controller.
@@ -50,10 +51,11 @@ public class FrameActionsControllerImplements implements FrameActionsController 
      * @param point the point clicked in the frame
      * @return the image correspondent to the quantoty of clicks in the frame.
      * @throws DirectoryNotValidException
+     * @throws RegionNotValidException
      * @throws CloneNotSupportedException
      */
     @Override
-    public Icon paintFormat(Point point, Frame currentFrame) throws DirectoryNotValidException, CloneNotSupportedException {
+    public Icon paintFormat(Point point, Frame currentFrame) throws DirectoryNotValidException, RegionNotValidException, CloneNotSupportedException {
         switch (clickCount) {
             case 0 -> {
                 clickCount++;

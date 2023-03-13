@@ -5,6 +5,8 @@
  */
 package cataovo.entities;
 
+import cataovo.constants.Constants;
+import cataovo.exceptions.RegionNotValidException;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -12,7 +14,7 @@ import java.util.Objects;
  * The area containg an egg. A quadrilateral region where indicates the presence
  * of an egg.
  *
- * @author bibil
+ * @author Bianca Leopoldo Ramos
  */
 public final class Region implements Cloneable, Serializable {
 
@@ -30,6 +32,8 @@ public final class Region implements Cloneable, Serializable {
     private Point initialPoint;
 
     /**
+     * Create a region using a initial {@link cataovo.entities.Point point}, a
+     * width and a height as a data.
      *
      * @param height
      * @param width
@@ -41,10 +45,24 @@ public final class Region implements Cloneable, Serializable {
         this.initialPoint = initialPoint;
     }
 
-    public Region(Point initialPoint, Point finalPoint) {
+    /**
+     * Create a region using the diference of two opposite side
+     * {@link cataovo.entities.Point points}
+     *
+     * @param initialPoint
+     * @param finalPoint
+     * @throws cataovo.exceptions.RegionNotValidException if the distance of any
+     * axis is less then 40px
+     */
+    public Region(Point initialPoint, Point finalPoint) throws RegionNotValidException {
         this.initialPoint = initialPoint;
-        this.width = initialPoint.getX() - finalPoint.getX();
-        this.height = initialPoint.getY() - finalPoint.getY();
+        if (isValidDistanceOfTwoPoints(initialPoint, finalPoint)) {
+            this.width = initialPoint.getX() - finalPoint.getX();
+            this.height = initialPoint.getY() - finalPoint.getY();
+        } else {
+            throw new RegionNotValidException(Constants.ERROR_REGION_NOT_VALID_ENG_1);
+        }
+
     }
 
     /**
@@ -144,6 +162,15 @@ public final class Region implements Cloneable, Serializable {
     public boolean contains(Point point) {
         return this.initialPoint.getX() <= point.getX() && point.getX() < this.initialPoint.getX() + this.width
                 && this.initialPoint.getY() <= point.getY() && point.getY() < this.initialPoint.getY() + this.height;
+    }
+
+    private boolean isValidDistanceOfTwoPoints(Point initialPoint, Point finalPoint) {
+        if (Math.abs(initialPoint.getX() - finalPoint.getX()) <= 40) {
+            return false;
+        } else if (Math.abs(initialPoint.getY() - finalPoint.getY()) <= 40) {
+            return false;
+        }
+        return true;
     }
 
 }

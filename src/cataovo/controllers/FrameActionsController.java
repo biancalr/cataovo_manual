@@ -8,6 +8,7 @@ package cataovo.controllers;
 import cataovo.entities.Frame;
 import cataovo.entities.Point;
 import cataovo.exceptions.DirectoryNotValidException;
+import cataovo.exceptions.RegionNotValidException;
 import cataovo.opencvlib.wrappers.PointWrapper;
 import cataovo.opencvlib.wrappers.RectWrapper;
 import java.util.Collection;
@@ -27,11 +28,12 @@ public interface FrameActionsController {
      * @param currentFrame
      * @return the image correspondent to the quantoty of clicks in the frame.
      * @throws DirectoryNotValidException
+     * @throws cataovo.exceptions.RegionNotValidException
      * @throws CloneNotSupportedException
      * @see cataovo.utils.frameUtils.FrameActionsUtils#drawCircle(cataovo.opencvlib.wrappers.PointWrapper) 
      * @see cataovo.utils.frameUtils.FrameActionsUtils#drawRectangle(cataovo.opencvlib.wrappers.RectWrapper) 
      */
-    public Icon paintFormat(Point point, Frame currentFrame) throws DirectoryNotValidException, CloneNotSupportedException;
+    public Icon paintFormat(Point point, Frame currentFrame) throws DirectoryNotValidException, RegionNotValidException, CloneNotSupportedException;
 
     /**
      * Removes the last demarked {@link cataovo.entities.Region}.

@@ -5,6 +5,7 @@
  */
 package cataovo.entities;
 
+import cataovo.constants.Constants;
 import cataovo.exceptions.DirectoryNotValidException;
 import java.io.File;
 import java.io.Serializable;
@@ -15,9 +16,9 @@ import java.util.Queue;
 /**
  * Representation of an ovitrap palette, composed of several frames.
  *
- * @author bibil
+ * @author Bianca Leopoldo Ramos
  */
-public final class Palette implements Cloneable, Serializable{
+public final class Palette implements Cloneable, Serializable {
 
     /**
      * The path where the palette is localized.
@@ -34,6 +35,7 @@ public final class Palette implements Cloneable, Serializable{
     private File directory;
 
     /**
+     * Create a Palette using the folder path
      *
      * @param pathName The path where the palette is localized. <strong>The file
      * has to be a directory</strong>
@@ -46,11 +48,12 @@ public final class Palette implements Cloneable, Serializable{
             this.frames = new LinkedList<>();
             this.directory = new File(pathName);
         } else {
-            throw new DirectoryNotValidException("This file path does not represent a valid directory. Must choose another one");
+            throw new DirectoryNotValidException(Constants.ERROR_DIRECTORY_NOT_VALID_ENG_1);
         }
     }
-    
+
     /**
+     * Create a Palette using the folder as a file
      *
      * @param file
      * @throws cataovo.exceptions.DirectoryNotValidException if the file is not
@@ -62,28 +65,8 @@ public final class Palette implements Cloneable, Serializable{
             this.frames = new LinkedList<>();
             this.directory = new File(file.getAbsolutePath());
         } else {
-            throw new DirectoryNotValidException("This file path does not represent a valid directory. Must choose another one");
+            throw new DirectoryNotValidException(Constants.ERROR_DIRECTORY_NOT_VALID_ENG_1);
         }
-    }
-
-    /**
-     *
-     * @param pathName The path where the palette is localized.
-     * @param frame a frames to compose a palette.
-     * @throws cataovo.exceptions.DirectoryNotValidException
-     */
-    public Palette(String pathName, Frame frame) throws DirectoryNotValidException {
-        if (!verifyPathIsDirectory(pathName)) {
-            throw new DirectoryNotValidException("This file path does not represent a valid directory. Must choose another one");
-        } else {
-            this.pathName = pathName;
-            this.directory = new File(pathName);
-            if (this.frames == null) {
-                this.frames = new LinkedList<>();
-            }
-            this.frames.offer(frame);
-        }
-
     }
 
     /**
@@ -158,15 +141,15 @@ public final class Palette implements Cloneable, Serializable{
         }
         return total;
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
-    public int getPaletteSize(){
+    public int getPaletteSize() {
         if (frames != null || !frames.isEmpty()) {
             return frames.size();
-        } 
+        }
         return 0;
     }
 
@@ -217,5 +200,5 @@ public final class Palette implements Cloneable, Serializable{
     public Palette clone() throws CloneNotSupportedException {
         return (Palette) super.clone(); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }

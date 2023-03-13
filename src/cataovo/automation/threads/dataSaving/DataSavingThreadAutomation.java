@@ -92,7 +92,7 @@ public abstract class DataSavingThreadAutomation implements Callable<String> {
      */
     private synchronized String createFile() {
         StringBuffer sb = new StringBuffer();
-        String processingMode = (this.parentTabName == null ? Constants.TAB_NAME_MANUAL == null : this.parentTabName.equals(Constants.TAB_NAME_MANUAL)) ? Constants.NAME_MANUAL : (this.parentTabName == null ? Constants.TAB_NAME_AUTOMATICO == null : this.parentTabName.equals(Constants.TAB_NAME_AUTOMATICO)) ? Constants.NAME_AUTOMATICO : Constants.NAME_AVALIACAO;
+        String processingMode = (this.parentTabName == null ? Constants.TAB_NAME_MANUAL_PT_BR == null : this.parentTabName.equals(Constants.TAB_NAME_MANUAL_PT_BR)) ? Constants.NAME_MANUAL : (this.parentTabName == null ? Constants.TAB_NAME_AUTOMATIC_PT_BR == null : this.parentTabName.equals(Constants.TAB_NAME_AUTOMATIC_PT_BR)) ? Constants.NAME_AUTOMATICO : Constants.NAME_AVALIACAO;
         String dstn = palette.getDirectory().getName() + "/" + processingMode + "/" + getDateTime("dd-MM-yyyy_HH-mm");
         File directory = new File(savingDirectory + "/cataovo/" + palette.getDirectory().getName() + "/" + processingMode + "/" + getDateTime("dd-MM-yyyy_HH-mm"));
         if (!directory.exists()) {
