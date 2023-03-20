@@ -101,7 +101,7 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
             } else {
                 // se foram encontrados os pontos na região demarcada
                 eggFound = false;
-                LOG.log(Level.INFO, "N\u00e3o casou um contorno com a marca\u00e7\u00e3o {0}", eggFound);
+                LOG.log(Level.INFO, "Nao casou um contorno com a marcacao {0}", eggFound);
                 // acrescenta a quantidade de falsos negativos
                 this.fn++;
             }

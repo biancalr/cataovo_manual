@@ -93,7 +93,7 @@ public class Constants {
     /**
      * Custom error message to REGION NOT VALID
      */
-    public static String ERROR_REGION_NOT_VALID_ENG_1 = "Axis(ies) with difference too small: less than 40px";
+    public static String ERROR_REGION_NOT_VALID_ENG_1 = "Axis(ies) with difference too small (less than 35px) or too large (more than 110px)";
 
     /**
      * Custom error message to DIRECTORY NOT VALID
@@ -109,5 +109,25 @@ public class Constants {
      * Custom error message to TAB NOT VALID TO EVALUATE
      */
     public static String ERROR_TAB_NOT_VALID_TO_EVALUATE_ENG_1 = "Must select Evaluation tab";
+    
+    /**
+     * MINUMUM AXIS X DISTANCE ON REGION
+     */
+    public static int MINUMUM_AXIS_X_DISTANCE_ON_REGION = 35;
+    
+    /**
+     * MINUMUM AXIS Y DISTANCE ON REGION
+     */
+    public static int MINUMUM_AXIS_Y_DISTANCE_ON_REGION = 35;
+    
+    /**
+     * MAXIMUM AXIS X DISTANCE ON REGION
+     */
+    public static int MAXIMUM_AXIS_X_DISTANCE_ON_REGION = 110;
+    
+    /**
+     * MAXIMUM AXIS Y DISTANCE ON REGION
+     */
+    public static int MAXIMUM_AXIS_Y_DISTANCE_ON_REGION = 110;
 
 }

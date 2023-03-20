@@ -165,9 +165,13 @@ public final class Region implements Cloneable, Serializable {
     }
 
     private boolean isValidDistanceOfTwoPoints(Point initialPoint, Point finalPoint) {
-        if (Math.abs(initialPoint.getX() - finalPoint.getX()) <= 40) {
+        if (Math.abs(initialPoint.getX() - finalPoint.getX()) <= Constants.MINUMUM_AXIS_X_DISTANCE_ON_REGION) {
             return false;
-        } else if (Math.abs(initialPoint.getY() - finalPoint.getY()) <= 40) {
+        } else if (Math.abs(initialPoint.getY() - finalPoint.getY()) <= Constants.MINUMUM_AXIS_Y_DISTANCE_ON_REGION) {
+            return false;
+        } else if (initialPoint.getX() - finalPoint.getX() > Constants.MAXIMUM_AXIS_X_DISTANCE_ON_REGION) {
+            return false;
+        } else if(Math.abs(initialPoint.getY() - finalPoint.getY()) > Constants.MAXIMUM_AXIS_Y_DISTANCE_ON_REGION){
             return false;
         }
         return true;

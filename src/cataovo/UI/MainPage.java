@@ -1051,11 +1051,12 @@ public class MainPage extends javax.swing.JFrame {
                 jLabel9.setIcon(null);
                 MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
                 if (!fileSelectionController.fileSelectionEvent(Constants.ITEM_ACTION_COMMAND_SAVE_MANUAL_REPORT_PT_BR, jTabbedPane1, true)) {
-                    LOG.log(Level.WARNING, "It wasn't possible to seve the Palette on a file");
-                    JOptionPane.showMessageDialog(jPanel1, "It wasn't possible to seve the Palette on a file");
+                    LOG.log(Level.WARNING, "It wasn't possible to save the Palette on a file");
+                    JOptionPane.showMessageDialog(jPanel1, "It wasn't possible to save the Palette on a file");
                 } else {
                     LOG.log(Level.INFO, "The palette was saved successfully!");
-                    JOptionPane.showMessageDialog(jPanel1, "A paleta foi salva com sucesso em: " + fileSelectionController.getManualReportDestination());
+                    JOptionPane.showMessageDialog(jPanel1, "A paleta foi salva com sucesso em: " + fileSelectionController.getManualReportDestination()
+                            + Constants.QUEBRA_LINHA + "Total de ovos: " + MainResources.getInstance().getPaletteToSave().getTheTotalNumberOfEggsPalette());
                 }
             }
         } catch (ImageNotValidException | DirectoryNotValidException | FileNotFoundException | ReportNotValidException | HeadlessException ex) {
@@ -1076,6 +1077,16 @@ public class MainPage extends javax.swing.JFrame {
                 mainPageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel1, jLabel2, frame);
                 mainPageController.showSubFrameOnSelectedTabScreen(jLabel10, jLabel9, subFrame, pointClick);
                 LOG.log(Level.INFO, "Presenting frame on screen");
+                String eggs = this.jLabel1.getText();
+                if (eggs.contains(": ")) {
+                    eggs = eggs.split(":")[0];
+                    eggs = eggs.concat(": ").concat("" + MainResources.getInstance().getCurrentFrame().getTotalNumberOfEggsFrame());
+                } else {
+                    eggs = eggs.concat(": ").concat("" + MainResources.getInstance().getCurrentFrame().getTotalNumberOfEggsFrame());
+                }
+
+                this.jLabel1.setText(eggs);
+                LOG.log(Level.INFO, "Counting eggs in frame: {0}", MainResources.getInstance().getCurrentFrame().getName());
             }
         } catch (DirectoryNotValidException | ImageNotValidException | RegionNotValidException | CloneNotSupportedException ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -1098,7 +1109,7 @@ public class MainPage extends javax.swing.JFrame {
             LOG.log(Level.SEVERE, "Atingiu o início da paleta", ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
         } catch (DirectoryNotValidException ex) {
-            LOG.log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, "The saving directory doesn't exist", ex);
             JOptionPane.showMessageDialog(jPanel1, onDirectoryErrorAutomaticMessage());
         }
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -1118,7 +1129,7 @@ public class MainPage extends javax.swing.JFrame {
             LOG.log(Level.SEVERE, "Atingiu o fim da paleta", ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
         } catch (DirectoryNotValidException ex) {
-            LOG.log(Level.SEVERE, "Atingiu o fim da paleta", ex);
+            LOG.log(Level.SEVERE, "The saving directory doesn't exist", ex);
             JOptionPane.showMessageDialog(jPanel1, onDirectoryErrorAutomaticMessage());
         }
     }//GEN-LAST:event_jButton5ActionPerformed
