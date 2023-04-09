@@ -125,7 +125,7 @@ public abstract class DataSavingThreadAutomation implements Callable<String> {
         return "";
     }
 
-    private StringBuffer verifyFileAreadyExistent(final String createdFile) throws Exception {
+    private StringBuffer verifyFileAreadyExistent(final String createdFile) throws AutomationExecutionException {
         StringBuffer sb = new StringBuffer();
         File f = new File(createdFile);
         LOG.info("Verifying if the file already exists.");
@@ -137,7 +137,7 @@ public abstract class DataSavingThreadAutomation implements Callable<String> {
         return sb;
     }
 
-    private synchronized StringBuffer readFile(File createdFile) throws Exception {
+    private synchronized StringBuffer readFile(File createdFile) throws AutomationExecutionException {
         StringBuffer sb = new StringBuffer();
         LOG.info("Starting to read the file");
         try (InputStreamReader in = new InputStreamReader(new FileInputStream(createdFile)); BufferedReader csvReader = new BufferedReader(in);) {
@@ -149,7 +149,7 @@ public abstract class DataSavingThreadAutomation implements Callable<String> {
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());
             JOptionPane.showMessageDialog(null, e.getMessage());
-            throw new Exception("Error while reading an existing file.", e);
+            throw new AutomationExecutionException("Error while reading an existing file.");
         }
         return sb;
     }
