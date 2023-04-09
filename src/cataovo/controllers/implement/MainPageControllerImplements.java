@@ -177,7 +177,7 @@ public class MainPageControllerImplements implements MainPageController {
                     File currentFrameDirectory = frameResults[this.frameCounter];
                     Frame current = putFileOnFrame(jTabbedPane, currentFrameDirectory, parentName);
                     MainResources.getInstance().setCurrentFrame(current);
-                    setLabelText(parentName, currentFrameDirectory.getPath().substring(currentFrameDirectory.getAbsolutePath().lastIndexOf("\\"), currentFrameDirectory.getAbsolutePath().indexOf(".")));
+                    setLabelText(parentName, currentFrameDirectory.getAbsolutePath().substring(currentFrameDirectory.getAbsolutePath().indexOf(Constants.FRAME_ID_TAG) + Constants.FRAME_ID_TAG.length()));
                     LOG.log(Level.INFO, "Image Position: {0}", this.frameCounter);
                 } else {
                     this.frameCounter = 0;
