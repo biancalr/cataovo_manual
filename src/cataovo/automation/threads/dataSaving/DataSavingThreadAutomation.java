@@ -6,13 +6,14 @@ package cataovo.automation.threads.dataSaving;
 
 import cataovo.constants.Constants;
 import cataovo.entities.Palette;
+import cataovo.exceptions.AutomationExecutionException;
 import cataovo.resources.fileChooser.handler.FileExtension;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,6 +49,10 @@ public abstract class DataSavingThreadAutomation implements Callable<String> {
      * Automatic. Also helps to create folders of each processing type.
      */
     private final String parentTabName;
+    /**
+     *
+     */
+    protected final String dateTime;
 
     /**
      * <p>
@@ -59,12 +64,14 @@ public abstract class DataSavingThreadAutomation implements Callable<String> {
      * text data will be saved.
      * @param parentTabName relates the tabName to the type of processing of a
      * palette: Manual or Automatic.
+     * @param dateTime
      */
-    public DataSavingThreadAutomation(Palette palette, String savingDirectory, FileExtension fileExtension, String parentTabName) {
+    public DataSavingThreadAutomation(Palette palette, String savingDirectory, FileExtension fileExtension, String parentTabName, String dateTime) {
         this.palette = palette;
         this.savingDirectory = savingDirectory;
         this.fileExtension = fileExtension;
         this.parentTabName = parentTabName;
+        this.dateTime = dateTime;
     }
 
     @Override
@@ -77,12 +84,13 @@ public abstract class DataSavingThreadAutomation implements Callable<String> {
      * resulted products
      *
      * @return the content of the file;
+     * @throws cataovo.exceptions.AutomationExecutionException
      * @see
      * cataovo.automation.threads.dataSaving.NewThreadAutomationAutomaticProcess
      * @see
      * cataovo.automation.threads.dataSaving.NewThreadAutomationManualProcess
      */
-    protected abstract StringBuffer createContent();
+    protected abstract StringBuffer createContent() throws AutomationExecutionException;
 
     /**
      * Creates the relatory wich saves the data of each type of processment.
@@ -90,15 +98,21 @@ public abstract class DataSavingThreadAutomation implements Callable<String> {
      * @return the filepath's relatory.
      * @see #createContent()
      */
-    private synchronized String createFile() {
+    private synchronized String createFile() throws Exception {
         StringBuffer sb = new StringBuffer();
         String processingMode = (this.parentTabName == null ? Constants.TAB_NAME_MANUAL_PT_BR == null : this.parentTabName.equals(Constants.TAB_NAME_MANUAL_PT_BR)) ? Constants.NAME_MANUAL : (this.parentTabName == null ? Constants.TAB_NAME_AUTOMATIC_PT_BR == null : this.parentTabName.equals(Constants.TAB_NAME_AUTOMATIC_PT_BR)) ? Constants.NAME_AUTOMATICO : Constants.NAME_AVALIACAO;
-        String dstn = palette.getDirectory().getName() + "/" + processingMode + "/" + getDateTime("dd-MM-yyyy_HH-mm");
-        File directory = new File(savingDirectory + "/cataovo/" + palette.getDirectory().getName() + "/" + processingMode + "/" + getDateTime("dd-MM-yyyy_HH-mm"));
+        String dstn = palette.getDirectory().getName() + "/" + processingMode + "/" + this.dateTime;
+        File directory = new File(savingDirectory + "/cataovo/" + palette.getDirectory().getName() + "/" + processingMode + "/" + this.dateTime);
+        final String createdFile = savingDirectory + "/cataovo/" + dstn + "/Relatory." + this.fileExtension.getExtension();
         if (!directory.exists()) {
             directory.mkdirs();
         }
-        try ( FileWriter csvWriter = new FileWriter(savingDirectory + "/cataovo/" + dstn + "/Relatory." + this.fileExtension.getExtension());  PrintWriter csvPrinter = new PrintWriter(csvWriter);) {
+
+        if (processingMode.equals(Constants.NAME_AUTOMATICO)) {
+            sb.append(verifyFileAreadyExistent(createdFile));
+        }
+
+        try (FileWriter csvWriter = new FileWriter(createdFile); PrintWriter csvPrinter = new PrintWriter(csvWriter);) {
 
             sb.append(createContent());
             csvPrinter.print(sb);
@@ -111,16 +125,33 @@ public abstract class DataSavingThreadAutomation implements Callable<String> {
         return "";
     }
 
-    /**
-     * Calculates the date and the time.
-     *
-     * @param datePattern the pattern to return the date
-     * @return date and time according to the the datePattern
-     */
-    protected String getDateTime(String datePattern) {
-        DateFormat dateFormat = new SimpleDateFormat(datePattern);
-        Date date = new Date();
-        return dateFormat.format(date);
+    private StringBuffer verifyFileAreadyExistent(final String createdFile) throws Exception {
+        StringBuffer sb = new StringBuffer();
+        File f = new File(createdFile);
+        LOG.info("Verifying if the file already exists.");
+        if (f.exists() && f.isFile()) {
+            LOG.info("Reading the existing file to append its previous");
+            sb.append(palette.getPathName()).append(Constants.QUEBRA_LINHA);
+            sb.append(readFile(f));
+        }
+        return sb;
+    }
+
+    private synchronized StringBuffer readFile(File createdFile) throws Exception {
+        StringBuffer sb = new StringBuffer();
+        LOG.info("Starting to read the file");
+        try (InputStreamReader in = new InputStreamReader(new FileInputStream(createdFile)); BufferedReader csvReader = new BufferedReader(in);) {
+
+            csvReader.lines().filter(l -> !l.contains(palette.getPathName()) && l.length() > 4)
+                    .forEachOrdered(l -> sb.append(Constants.QUEBRA_LINHA).append(l));
+            sb.append(Constants.QUEBRA_LINHA);
+
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE, e.getMessage());
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            throw new Exception("Error while reading an existing file.", e);
+        }
+        return sb;
     }
 
     /**
@@ -171,4 +202,11 @@ public abstract class DataSavingThreadAutomation implements Callable<String> {
         this.fileExtension = fileExtension;
     }
 
+    /**
+     *
+     * @return the given dateTime
+     */
+    public String getDateTime() {
+        return dateTime;
+    }
 }

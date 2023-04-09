@@ -9,6 +9,7 @@ import cataovo.automation.threads.dataProcessing.ThreadAutomaticFramesProcessor;
 import cataovo.constants.Constants;
 import cataovo.entities.Frame;
 import cataovo.entities.Palette;
+import cataovo.exceptions.AutomationExecutionException;
 import cataovo.resources.fileChooser.handler.FileExtension;
 import java.io.File;
 import java.util.LinkedList;
@@ -20,7 +21,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -28,19 +28,12 @@ import javax.swing.JOptionPane;
  */
 public final class ThreadAutomationAutomaticProcess extends DataSavingThreadAutomation {
 
-    /**
-     * Thread that actually rules the processment of the files.
-     */
-    private DataProcessingThreadAutomation framesProcessor;
+    private static final Logger LOG = Logger.getLogger(ThreadAutomationAutomaticProcess.class.getName());
     /**
      * Defines the directory where the resultant images of each transformation
      * will be placed.
      */
     private final StringBuffer imagesDestination;
-    /**
-     * Datetime will be used to create new folder of each processment.
-     */
-    private final String dateTime;
     /**
      * .
      * Controls the range of each subquerie related to the main querie.
@@ -58,33 +51,33 @@ public final class ThreadAutomationAutomaticProcess extends DataSavingThreadAuto
      * @param parentName relates the tabName to the type of processing of a
      * palette: Manual or Automatic. Also helps to create folders of each
      * processing type.
+     * @param dateTime date to separeate each analisys by the folder
      */
-    public ThreadAutomationAutomaticProcess(Palette palette, String savingDirectory, FileExtension extension, String parentName) {
-        super(palette, savingDirectory, extension, parentName);
-        this.dateTime = super.getDateTime("dd-MM-yyyy_HH-mm");
+    public ThreadAutomationAutomaticProcess(Palette palette, String savingDirectory, FileExtension extension, String parentName, String dateTime) {
+        super(palette, savingDirectory, extension, parentName, dateTime);
         this.imagesDestination = new StringBuffer(savingDirectory).append("/cataovo/").append(palette.getDirectory().getName()).append("/auto/").append(dateTime);
     }
 
     @Override
-    protected StringBuffer createContent() {
-        StringBuffer result = new StringBuffer(palette.getPathName()).append(Constants.QUEBRA_LINHA);
+    protected StringBuffer createContent() throws AutomationExecutionException {
+        StringBuffer result = new StringBuffer();
         Queue<Frame> splitted;
-        String destination = imagesDestination.toString();
+        String destination;
+        this.slotRangeControl = 0;
         do {
-            splitted = split(palette.getFrames(), Constants.FRAME_SLOT_TO_PROCESS_ON_PALETTE);
+            splitted = split(palette.getFrames(), Constants.FRAME_SLOT_TO_PROCESS);
             try {
                 for (Frame frame : splitted) {
                     destination = imagesDestination.toString() + "/" + frame.getName();
                     createImagesFolders(destination);
-
                 }
-
+                destination = imagesDestination.toString();
                 synchronized (destination) {
-                    result.append(processFrameImages(splitted, imagesDestination.toString()));
+                    result.append(processFrameImages(splitted, destination));
                 }
             } catch (InterruptedException | ExecutionException ex) {
-                Logger.getLogger(ThreadAutomationAutomaticProcess.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(null, ex.getMessage());
+                LOG.log(Level.SEVERE, null, ex);
+                throw new AutomationExecutionException("Error while executing automation on frame");
             }
 
         } while (slotRangeControl != palette.getPaletteSize());
@@ -104,18 +97,20 @@ public final class ThreadAutomationAutomaticProcess extends DataSavingThreadAuto
      * @throws InterruptedException
      * @see #createContent()
      * @see #split(java.util.Queue, int)
-     * @see #framesProcessor
      */
-    private synchronized StringBuffer processFrameImages(Queue<Frame> frames, String destination) throws ExecutionException, InterruptedException {
-        Future<StringBuffer> task;
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private StringBuffer processFrameImages(Queue<Frame> frames, String destination) throws ExecutionException, InterruptedException {
         StringBuffer result = new StringBuffer();
-        framesProcessor = new ThreadAutomaticFramesProcessor(frames, destination);
-        task = executorService.submit(framesProcessor);
-        result.append(task.get());
-        executorService.awaitTermination(1, TimeUnit.MILLISECONDS);
-        executorService.shutdown();
-        notify();
+        Future<StringBuffer> task;
+        DataProcessingThreadAutomation framesProcessor;
+        for (Frame frame : frames) {
+            ExecutorService executorService = Executors.newSingleThreadExecutor();
+            framesProcessor = new ThreadAutomaticFramesProcessor(frame, destination);
+            task = executorService.submit(framesProcessor);
+            synchronized (task) {
+                result.append(task.get());
+            }
+            executorService.awaitTermination(1, TimeUnit.MICROSECONDS);
+        }
         return result;
     }
 

@@ -26,8 +26,8 @@ public final class ThreadAutomationManualProcess extends DataSavingThreadAutomat
      * palette: Manual or Automatic. Also helps to create folders of each
      * processing type.
      */
-    public ThreadAutomationManualProcess(Palette palette, String savingDirectory, FileExtension fileExtension, String parent) {
-        super(palette, savingDirectory, fileExtension, parent);
+    public ThreadAutomationManualProcess(Palette palette, String savingDirectory, FileExtension fileExtension, String parent, String dateTime) {
+        super(palette, savingDirectory, fileExtension, parent, dateTime);
     }
 
     @Override
@@ -35,7 +35,7 @@ public final class ThreadAutomationManualProcess extends DataSavingThreadAutomat
         StringBuffer sb = new StringBuffer(getPalette().getDirectory().getPath());
         sb.append(Constants.QUEBRA_LINHA);
         sb.append(getPalette().getTheTotalNumberOfEggsPalette());
-        getPalette().getFrames().stream().forEach((f) -> {
+        getPalette().getFrames().parallelStream().forEach((f) -> {
             sb.append(Constants.QUEBRA_LINHA);
             sb.append(f.getName());
             if (!f.getRegionsContainingEggs().isEmpty()) {

@@ -5,15 +5,16 @@
  */
 package cataovo.resources;
 
+import cataovo.constants.Constants;
 import cataovo.entities.Frame;
 import cataovo.entities.Palette;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.resources.fileChooser.UI.MyFileChooserUI;
 import java.io.File;
 import java.util.logging.Level;
-import javax.swing.filechooser.FileSystemView;
 import java.util.logging.Logger;
 import javax.swing.JTabbedPane;
+import javax.swing.filechooser.FileSystemView;
 
 /**
  * Resources used in the applications as a whole.
@@ -35,6 +36,7 @@ public class MainResources {
 
     public MainResources() throws DirectoryNotValidException {
         String homeDirectory = FileSystemView.getFileSystemView().getHomeDirectory().getPath();
+        LOG.log(Level.INFO, "Selecting home directory: {0}", homeDirectory);
         savingFolder = getFileFolder(new File(homeDirectory));
         fileChooserUI = new MyFileChooserUI(new File(homeDirectory));
         panelTabHelper = new PanelTabHelper(false, 0, "Manual");
@@ -132,11 +134,14 @@ public class MainResources {
         if (position < reports.length) {
             if (reports[position] == null) {
                 reports[position] = report;
+                LOG.log(Level.INFO, "Selecting the report: {0}", report);
             } else {
-                throw new ArrayIndexOutOfBoundsException("Posição ocupada");
+                LOG.log(Level.WARNING, Constants.POSITION_OCCUPIED_EN);
+                throw new ArrayIndexOutOfBoundsException(Constants.POSITION_OCCUPIED_EN);
             }
         } else {
-            throw new ArrayIndexOutOfBoundsException("Relatórios já foram selecionados.");
+            LOG.log(Level.WARNING, Constants.REPORTS_ALREADY_SELECTED_PT_BR);
+            throw new ArrayIndexOutOfBoundsException(Constants.REPORTS_ALREADY_SELECTED_PT_BR);
         }
     }
 

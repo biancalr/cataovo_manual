@@ -11,7 +11,10 @@ import cataovo.automation.threads.dataSaving.ThreadAutomationEvaluationProcess;
 import cataovo.controllers.EvaluationController;
 import cataovo.entities.Palette;
 import cataovo.resources.fileChooser.handler.FileExtension;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -119,6 +122,7 @@ public class EvaluationControllerImplements implements EvaluationController {
     @Override
     public String onActionComandSaveEvaluationRelatory(Palette palette, String savingDirectory, FileExtension fileExtension, String parentTabName) {
         if (this.evaluationResult != null) {
+            final String dateTime = getDateTime("dd-MM-yyyy_HH-mm");
             try {
                 String result;
                 DataSavingThreadAutomation automation;
@@ -130,7 +134,8 @@ public class EvaluationControllerImplements implements EvaluationController {
                         savingDirectory,
                         fileExtension,
                         parentTabName,
-                        this.evaluationResult);
+                        this.evaluationResult, 
+                        dateTime);
 
                 task = executorService.submit(automation);
                 result = task.get();
@@ -145,6 +150,18 @@ public class EvaluationControllerImplements implements EvaluationController {
         } else {
             return null;
         }
+    }
+    
+    /**
+     * Calculates the date and the time.
+     *
+     * @param datePattern the pattern to return the date
+     * @return date and time according to the the datePattern
+     */
+    private String getDateTime(String datePattern) {
+        DateFormat dateFormat = new SimpleDateFormat(datePattern);
+        Date date = new Date();
+        return dateFormat.format(date);
     }
 
 }

@@ -28,6 +28,10 @@ public class ThreadAutomaticFramesProcessor extends DataProcessingThreadAutomati
     public ThreadAutomaticFramesProcessor(Queue<Frame> frames, String destination) {
         super(frames, destination);
     }
+    
+    public ThreadAutomaticFramesProcessor(Frame frame, String destination) {
+        super(frame, destination);
+    }
 
     /**
      * <p>
@@ -45,6 +49,7 @@ public class ThreadAutomaticFramesProcessor extends DataProcessingThreadAutomati
      */
     @Override
     public StringBuffer startSequence(Frame frame) {
+        LOG.info("Starting to process the frame");
         MatWrapper current = new MatWrapper(frame);
         String dstny = destination + "/" + frame.getName();
         // blur
@@ -55,20 +60,21 @@ public class ThreadAutomaticFramesProcessor extends DataProcessingThreadAutomati
         current.setOpencvMat(imageProcess.applyBinaryOnImage(dstny + Constants.BINARY_PNG,
                 Converter.getInstance().convertMatToPng(current).get()));
 
-        // morphology
+        // morphology 
         current.setOpencvMat(imageProcess.applyMorphOnImage(dstny + Constants.MORPH_PNG,
-                17, 30, 2, current.getOpencvMat()));
+                17, 35, 2, current.getOpencvMat()));
         current.setOpencvMat(imageProcess.applyMorphOnImage(dstny + Constants.MORPH_PNG,
-                30, 17, 2, current.getOpencvMat()));
-        current.setOpencvMat(imageProcess.applyMorphOnImage(dstny + Constants.MORPH_PNG,
-                17, 30, 2, current.getOpencvMat()));
-        current.setOpencvMat(imageProcess.applyMorphOnImage(dstny + Constants.MORPH_PNG,
-                30, 17, 2, current.getOpencvMat()));
+                35, 17, 2, current.getOpencvMat()));
+//        current.setOpencvMat(imageProcess.applyMorphOnImage(dstny + Constants.MORPH_PNG,
+//                17, 35, 2, current.getOpencvMat()));
+//        current.setOpencvMat(imageProcess.applyMorphOnImage(dstny + Constants.MORPH_PNG,
+//                30, 17, 2, current.getOpencvMat()));
 
         // contours
         current.setOpencvMat(imageProcess.drawContoursOnImage(dstny + Constants.CONTOURS_PNG,
-                new MatWrapper(frame).getOpencvMat(), current.getOpencvMat(), 780, 4800));
+                new MatWrapper(frame).getOpencvMat(), current.getOpencvMat(), 800, 5000));
 
+        LOG.info("Finising the processment of the frame");
         return imageProcess.generateAutomaticRelatory();
     }
 

@@ -19,6 +19,7 @@ import cataovo.controllers.implement.FileSelectionControllerImplement;
 import cataovo.controllers.implement.FrameActionsControllerImplements;
 import cataovo.controllers.implement.MainPageControllerImplements;
 import cataovo.entities.Point;
+import cataovo.exceptions.AutomationExecutionException;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
 import cataovo.exceptions.RegionNotValidException;
@@ -68,7 +69,7 @@ public class MainPage extends javax.swing.JFrame {
             this.evaluationController = new EvaluationControllerImplements();
             this.resetInitialComponents();
             this.centralizeComponent();
-        } catch (DirectoryNotValidException ex) {
+        } catch (Exception ex) {
             LOG.log(Level.SEVERE, ex.getMessage());
             JOptionPane.showMessageDialog(jTabbedPane1, ex.getMessage());
         }
@@ -985,6 +986,7 @@ public class MainPage extends javax.swing.JFrame {
             LOG.log(Level.INFO, evt.getActionCommand());
             boolean wasFileSelected = fileSelectionController.fileSelectionEvent(evt.getActionCommand(), jTabbedPane1, true);
             if (wasFileSelected && MainResources.getInstance().getCurrentFrame().getPaletteFrame().exists()) {
+                MainResources.getInstance().getPalette().getFrames().stream().forEachOrdered(e -> e.setName(Constants.FRAME_ID_TAG + e.getName()));
                 switch (jTabbedPane1.getSelectedIndex()) {
                     case 0 -> {
                         jButton3.setEnabled(wasFileSelected);
@@ -1136,6 +1138,7 @@ public class MainPage extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         LOG.log(Level.INFO, evt.getActionCommand());
+        jLabel11.setText("");
         String result;
         jLabel11.setText("");
         try {
@@ -1160,6 +1163,9 @@ public class MainPage extends javax.swing.JFrame {
         } catch (DirectoryNotValidException | ImageNotValidException | ArrayIndexOutOfBoundsException ex) {
             LOG.log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
+        } catch (AutomationExecutionException ex) {
+           LOG.log(Level.SEVERE, null, ex);
+           JOptionPane.showMessageDialog(jPanel1, Constants.NO_FOLDER_WAS_CREATED);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

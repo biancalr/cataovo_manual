@@ -6,11 +6,20 @@ package cataovo.controllers.implement;
 
 import cataovo.automation.threads.dataSaving.DataSavingThreadAutomation;
 import cataovo.automation.threads.dataSaving.ThreadAutomationAutomaticProcess;
+import cataovo.constants.Constants;
 import cataovo.controllers.AutomaticProcessorController;
+import cataovo.entities.Frame;
 import cataovo.entities.Palette;
+import cataovo.exceptions.AutomationExecutionException;
 import cataovo.exceptions.DirectoryNotValidException;
-import cataovo.resources.fileChooser.handler.FileExtension;
 import cataovo.resources.MainResources;
+import cataovo.resources.fileChooser.handler.FileExtension;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -29,32 +38,87 @@ public class AutomaticProcessorControllerImplements implements AutomaticProcesso
 
     private static final Logger LOG = Logger.getLogger(AutomaticProcessorControllerImplements.class.getName());
 
-    @Override
-    public String onNewAutoProcessPalette(JLabel jLabelImageName, JLabel jLabelImageFrame, Palette currentPalette, String savingFolderPath, String tabName) throws DirectoryNotValidException {
-        try {
-            DataSavingThreadAutomation automation;
-            Future<String> task;
-            ExecutorService executorService = Executors.newSingleThreadExecutor();
-            String result;
+    /**
+     * .
+     * Controls the range of each subquerie related to the main querie.
+     */
+    private int slotRangeControl = 0;
 
-            automation = new ThreadAutomationAutomaticProcess(
-                    currentPalette,
-                    savingFolderPath,
-                    FileExtension.CSV,
-                    tabName);
-            MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(true);
-            task = executorService.submit(automation);
-            result = task.get();
-            executorService.awaitTermination(1, TimeUnit.MILLISECONDS);
-            executorService.shutdown();
+    @Override
+    public String onNewAutoProcessPalette(JLabel jLabelImageName, JLabel jLabelImageFrame, Palette currentPalette, String savingFolderPath, String tabName) throws DirectoryNotValidException, AutomationExecutionException {
+        try {
+            List<Palette> splitted = split(currentPalette, Constants.SLOT_FRAMES_TO_PROCESS_ON_PALETTE);
+            String result = "";
+            DataSavingThreadAutomation automation;
+            final String dateTime = getDateTime("dd-MM-yyyy_HH-mm");
+            Future<String> task;
+            
+            for (Palette palette : splitted) {
+                ExecutorService executorService = Executors.newSingleThreadExecutor();
+                automation = new ThreadAutomationAutomaticProcess(
+                        palette,
+                        savingFolderPath,
+                        FileExtension.CSV,
+                        tabName, dateTime);
+                MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(true);
+                task = executorService.submit(automation);
+                synchronized (task) {
+                    result = task.get();
+                }
+                executorService.awaitTermination(1, TimeUnit.MICROSECONDS);
+            }
+            this.slotRangeControl = 0;
             return result;
         } catch (DirectoryNotValidException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
             throw new DirectoryNotValidException(ex.getMessage());
-        } catch (InterruptedException | ExecutionException ex) {
-            LOG.log(Level.SEVERE, "Error while automating", ex);
+        } catch (InterruptedException | ExecutionException | CloneNotSupportedException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            throw new AutomationExecutionException("Error while executing automation on palette");
         }
-        return "";
+    }
+
+    /**
+     * <p>
+     * Splits the main queue into subqueue according to the range.</p>
+     *
+     * @param toSplit the queue to split.
+     * @param range the range of values in each subqueue to be created.
+     * @return a subqueue based on the range.
+     * @see #createContent()
+     */
+    private List<Palette> split(Palette toSplit, int range) throws CloneNotSupportedException, DirectoryNotValidException {
+        List<Palette> list = new LinkedList<>();
+        Palette subPalette;
+        Object[] auxToSplit = toSplit.getFrames().toArray();
+        Queue<Frame> subQueue;
+        while (toSplit.getPaletteSize() != slotRangeControl) {
+            subPalette = new Palette(toSplit.getDirectory());
+            subQueue = new LinkedList<>();
+            int limit = (slotRangeControl + range) <= auxToSplit.length ? (slotRangeControl + range) : auxToSplit.length;
+            if (slotRangeControl != limit) {
+                for (int i = this.slotRangeControl; i < limit; i++) {
+                    Object object = auxToSplit[i];
+                    subQueue.offer((Frame) object);
+                }
+            }
+            slotRangeControl = (slotRangeControl + range) <= auxToSplit.length ? (slotRangeControl + range) : auxToSplit.length;
+            subPalette.setFrames(subQueue);
+            list.add(subPalette);
+        }
+        return list;
+    }
+
+    /**
+     * Calculates the date and the time.
+     *
+     * @param datePattern the pattern to return the date
+     * @return date and time according to the the datePattern
+     */
+    private String getDateTime(String datePattern) {
+        DateFormat dateFormat = new SimpleDateFormat(datePattern);
+        Date date = new Date();
+        return dateFormat.format(date);
     }
 
 }

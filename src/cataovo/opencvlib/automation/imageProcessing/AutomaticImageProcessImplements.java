@@ -5,24 +5,24 @@
 package cataovo.opencvlib.automation.imageProcessing;
 
 import cataovo.constants.Constants;
-import cataovo.resources.fileChooser.handler.FileExtension;
 import cataovo.opencvlib.converters.Converter;
 import cataovo.opencvlib.wrappers.MatWrapper;
+import cataovo.resources.fileChooser.handler.FileExtension;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-import org.opencv.core.Size;
-import java.util.logging.Logger;
-import java.util.logging.Level;
-import javax.imageio.ImageIO;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 /**

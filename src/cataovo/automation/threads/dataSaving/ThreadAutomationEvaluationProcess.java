@@ -19,8 +19,8 @@ public class ThreadAutomationEvaluationProcess extends DataSavingThreadAutomatio
     private static final Logger LOG = Logger.getLogger(ThreadAutomationEvaluationProcess.class.getName());
     private int[] evaluationResult;
 
-    public ThreadAutomationEvaluationProcess(Palette palette, String savingDirectory, FileExtension fileExtension, String parentTabName, int[] evaluationResult) {
-        super(palette, savingDirectory, fileExtension, parentTabName);
+    public ThreadAutomationEvaluationProcess(Palette palette, String savingDirectory, FileExtension fileExtension, String parentTabName, int[] evaluationResult, String dateTime) {
+        super(palette, savingDirectory, fileExtension, parentTabName, dateTime);
         this.evaluationResult = evaluationResult;
     }
 

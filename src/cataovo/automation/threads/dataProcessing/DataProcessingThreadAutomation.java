@@ -28,6 +28,11 @@ public abstract class DataProcessingThreadAutomation implements Callable<StringB
      * The a slot of the total frames in a palette to be processed.
      */
     private Queue<Frame> frames;
+
+    /**
+     * The frame in a palette to be processed.
+     */
+    private Frame frame;
     /**
      * Where the frames wll be saved.
      */
@@ -49,7 +54,19 @@ public abstract class DataProcessingThreadAutomation implements Callable<StringB
         this.destination = destination;
         this.imageProcess = new AutomaticImageProcessImplements();
     }
+    
+    public DataProcessingThreadAutomation(Frame frame, String destination) {
+        this.frame = frame;
+        this.destination = destination;
+        this.imageProcess = new AutomaticImageProcessImplements();
+    }
 
+    /**
+     * Starting the processment of the frame.
+     *
+     * @param f
+     * @return
+     */
     protected abstract StringBuffer startSequence(Frame f);
 
     /**
@@ -66,9 +83,14 @@ public abstract class DataProcessingThreadAutomation implements Callable<StringB
     public StringBuffer call() throws Exception {
         LOG.log(Level.INFO, "Starting Sequence...");
         StringBuffer result = new StringBuffer();
-        for (Frame f : frames) {
-            result.append(Constants.QUEBRA_LINHA).append(f.getName()).append(",");
-            result.append(startSequence(f));
+        if (this.frame == null) {
+            for (Frame f : frames) {
+                result.append(Constants.QUEBRA_LINHA).append(f.getName()).append(",");
+                result.append(startSequence(f));
+            }
+        } else {
+            result.append(Constants.QUEBRA_LINHA).append(this.frame.getName()).append(",");
+            result.append(startSequence(this.frame));
         }
         return result;
     }

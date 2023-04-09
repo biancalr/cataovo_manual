@@ -23,7 +23,10 @@ import java.awt.Component;
 import java.awt.HeadlessException;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.ExecutionException;
@@ -291,11 +294,13 @@ public class FileSelectionControllerImplement implements FileSelectionController
         try {
             Future<String> task;
             ExecutorService executorService = Executors.newSingleThreadExecutor();
+            final String dateTime = getDateTime("dd-MM-yyyy_HH-mm");
             this.newCreateRelatories = new ThreadAutomationManualProcess(
                     MainResources.getInstance().getPaletteToSave(),
                     MainResources.getInstance().getSavingFolder().getPath(),
                     FileExtension.CSV,
-                    parent);
+                    parent, 
+                    dateTime);
             task = executorService.submit(newCreateRelatories);
             this.finalRelatoryDestination = task.get();
             executorService.awaitTermination(5, TimeUnit.MILLISECONDS);
@@ -306,6 +311,18 @@ public class FileSelectionControllerImplement implements FileSelectionController
             return false;
         }
 
+    }
+    
+    /**
+     * Calculates the date and the time.
+     *
+     * @param datePattern the pattern to return the date
+     * @return date and time according to the the datePattern
+     */
+    private String getDateTime(String datePattern) {
+        DateFormat dateFormat = new SimpleDateFormat(datePattern);
+        Date date = new Date();
+        return dateFormat.format(date);
     }
 
     /**

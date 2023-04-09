@@ -149,6 +149,7 @@ public class MainPageControllerImplements implements MainPageController {
                     File currentFrameDirectory = frameResults[this.frameCounter];
                     Frame current = putFileOnFrame(jTabbedPane, currentFrameDirectory, parentName);
                     MainResources.getInstance().setCurrentFrame(current);
+                    setLabelText(parentName, currentFrameDirectory.getAbsolutePath().substring(currentFrameDirectory.getAbsolutePath().indexOf(Constants.FRAME_ID_TAG) + Constants.FRAME_ID_TAG.length()));
                     LOG.log(Level.INFO, "Image Position: {0}", this.frameCounter);
                 } else {
                     this.frameCounter = frameResults.length - 1;
@@ -176,6 +177,7 @@ public class MainPageControllerImplements implements MainPageController {
                     File currentFrameDirectory = frameResults[this.frameCounter];
                     Frame current = putFileOnFrame(jTabbedPane, currentFrameDirectory, parentName);
                     MainResources.getInstance().setCurrentFrame(current);
+                    setLabelText(parentName, currentFrameDirectory.getPath().substring(currentFrameDirectory.getAbsolutePath().lastIndexOf("\\"), currentFrameDirectory.getAbsolutePath().indexOf(".")));
                     LOG.log(Level.INFO, "Image Position: {0}", this.frameCounter);
                 } else {
                     this.frameCounter = 0;
@@ -222,14 +224,19 @@ public class MainPageControllerImplements implements MainPageController {
      */
     @Override
     public boolean showFrameOnScreen(JLabel parentName, JLabel parent, Object frame) throws ImageNotValidException {
-        if (frame instanceof Frame fr) {
-            LOG.log(Level.INFO, "Presenting the image {0} on screen...", fr.getName());
-            if (presentImageFrameOnScreen(parent, parentName, fr)) {
+        switch (frame) {
+            case Frame fr -> {
+                LOG.log(Level.INFO, "Presenting the image {0} on screen...", fr.getName());
+                if (presentImageFrameOnScreen(parent, parentName, fr)) {
+                    return true;
+                }
+            }
+            case Icon icon -> {
+                presentImageIconOnScreen(parent, icon);
                 return true;
             }
-        } else if (frame instanceof Icon icon) {
-            presentImageIconOnScreen(parent, icon);
-            return true;
+            case default -> {
+            }
         }
 
         return false;

@@ -5,6 +5,7 @@
 package cataovo.controllers.implement;
 
 import cataovo.constants.Constants;
+import cataovo.controllers.FileReaderController;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
 import cataovo.opencvlib.wrappers.PointWrapper;
@@ -19,7 +20,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import cataovo.controllers.FileReaderController;
 
 /**
  *
@@ -32,24 +32,21 @@ public class FileReaderControllerImplements implements FileReaderController {
     @Override
     public List<RectWrapper> getRegionsInFrameFile(String frameName, String report) throws FileNotFoundException, NumberFormatException {
         List<RectWrapper> regions = new ArrayList<>();
-        RectWrapper current;
 
-        try ( InputStreamReader in = new InputStreamReader(new FileInputStream(report));  BufferedReader csvReader = new BufferedReader(in)) {
-
-            // encontrando o frame filtrando pelo nome
+        try (InputStreamReader in = new InputStreamReader(new FileInputStream(report)); BufferedReader csvReader = new BufferedReader(in)) {
             Optional<String> optLine = csvReader.lines().filter((line) -> line.contains(frameName)).findFirst();
 
-            if (optLine.isPresent()) {
+            optLine.ifPresent(line -> {
 
                 LOG.log(Level.INFO, "LINE: {0}", optLine.get());
 
-                String[] data = optLine.get().split(",");
+                String[] data = line.split(",");
                 if (data.length > 2) {
                     // ignorando posição 0 pois representa o nome do frame, o qual não é necessário
                     for (int i = 1; i < data.length; i += 4) {
                         String string = data[i];
                         if (string != null) {
-                            current = new RectWrapper(
+                            RectWrapper current = new RectWrapper(
                                     new Region(
                                             Integer.parseInt(data[i + 3]),
                                             Integer.parseInt(data[i + 2]),
@@ -61,7 +58,7 @@ public class FileReaderControllerImplements implements FileReaderController {
                     }
                 }
 
-            }
+            });
 
         } catch (NumberFormatException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
@@ -79,17 +76,17 @@ public class FileReaderControllerImplements implements FileReaderController {
     @Override
     public List<PointWrapper> getPointsInFrameFile(String frameName, String report) throws FileNotFoundException, NumberFormatException {
         List<PointWrapper> points = new ArrayList<>();
-        PointWrapper current;
 
-        try ( InputStreamReader in = new InputStreamReader(new FileInputStream(report));  BufferedReader csvReader = new BufferedReader(in)) {
+        try (InputStreamReader in = new InputStreamReader(new FileInputStream(report)); BufferedReader csvReader = new BufferedReader(in)) {
 
             // encontrando o frame filtrando pelo nome
             Optional<String> optLine = csvReader.lines().filter((line) -> line.contains(frameName)).findFirst();
 
             LOG.log(Level.INFO, "LINE: {0}", optLine.get());
 
-            if (optLine.isPresent()) {
-                String[] data = optLine.get().split(",");
+            optLine.ifPresent(line -> {
+
+                String[] data = line.split(",");
                 if (data.length > 3) {
                     // ignorando posição 0 pois representa o nome do frame, o qual não é necessário
                     // ignorando a posição 1 pois ela representa a quantidade de ovos no frame, o qual também não é necessário
@@ -97,15 +94,16 @@ public class FileReaderControllerImplements implements FileReaderController {
                     for (int i = 2; i < data.length; i += 4) {
                         String string = data[i];
                         if (string != null) {
-                            current = new PointWrapper(
+                            PointWrapper current = new PointWrapper(
                                     new Point(
                                             Integer.parseInt(data[i].replace(".0", "").trim()),
                                             Integer.parseInt(data[i + 1].replace(".0", "").trim())));
                             points.add(current);
                         }
                     }
+
                 }
-            }
+            });
 
         } catch (NumberFormatException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
@@ -121,11 +119,11 @@ public class FileReaderControllerImplements implements FileReaderController {
     }
 
     @Override
-    public StringBuilder readFullFileContent(String report) throws FileNotFoundException{
+    public StringBuilder readFullFileContent(String report) throws FileNotFoundException {
         StringBuilder builder = new StringBuilder();
-        try ( InputStreamReader in = new InputStreamReader(new FileInputStream(report));  BufferedReader csvReader = new BufferedReader(in)) {
+        try (InputStreamReader in = new InputStreamReader(new FileInputStream(report)); BufferedReader csvReader = new BufferedReader(in)) {
             // remove as linhas que não contém necessariamente os pontos e as regiões
-            csvReader.lines().filter((line) -> !line.contains("C:") && line.length() > 4 && !line.isBlank()).forEach((l) -> {
+            csvReader.lines().filter((line) -> !line.contains("C:") && line.length() > 5 && !line.isBlank()).forEach((l) -> {
                 builder.append(l);
                 builder.append(Constants.QUEBRA_LINHA);
             });

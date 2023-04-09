@@ -53,23 +53,23 @@ public class Constants {
     public static final String QUEBRA_LINHA = "\n";
 
     /**
-     * ORIGINAL.PNG
+     * original.png
      */
     public static final String ORIGINAL_PNG = "/original.png";
     /**
-     * BLUR.PNG
+     * blur.png
      */
     public static final String BLUR_PNG = "/blur.png";
     /**
-     * BINARY.PNG
+     * binary.png
      */
     public static final String BINARY_PNG = "/binary.png";
     /**
-     * MORPH.PNG
+     * morph.png
      */
     public static final String MORPH_PNG = "/morph.png";
     /**
-     * CONTOURS.PNG
+     * contours.png
      */
     public static final String CONTOURS_PNG = "/contours.png";
 
@@ -88,7 +88,8 @@ public class Constants {
 
     public static final int STEPS_TO_POINT_SAVING = 5;
 
-    public static final int FRAME_SLOT_TO_PROCESS_ON_PALETTE = 5;
+    public static final int FRAME_SLOT_TO_PROCESS = 5;
+    public static final int SLOT_FRAMES_TO_PROCESS_ON_PALETTE = 20;
 
     /**
      * Custom error message to REGION NOT VALID
@@ -129,5 +130,13 @@ public class Constants {
      * MAXIMUM AXIS Y DISTANCE ON REGION
      */
     public static int MAXIMUM_AXIS_Y_DISTANCE_ON_REGION = 110;
+    
+    public static final String NO_FOLDER_WAS_CREATED = "No folder was created";
+    
+    public static final String POSITION_OCCUPIED_EN = "position already occupied";
+    
+    public static final String REPORTS_ALREADY_SELECTED_PT_BR = "Relatórios já foram selecionados.";
+    
+    public static final String FRAME_ID_TAG = "frame_";
 
 }
