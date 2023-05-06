@@ -11,7 +11,7 @@ import java.util.Objects;
  * The initial Point. Class that represents the initial Point from wich a
  * {@link Region} containig an egg is formed.
  *
- * @author bibil
+ * @author Bianca Leopoldo Ramos
  */
 public final class Point implements Cloneable, Serializable{
 
@@ -77,7 +77,7 @@ public final class Point implements Cloneable, Serializable{
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append(x).append(",").append(y).append(",");
+        sb.append(x).append(",").append(y);
         return sb.toString();
     }
 

@@ -7,7 +7,7 @@ package cataovo.entities;
 
 import cataovo.constants.Constants;
 import cataovo.exceptions.ImageNotValidException;
-import cataovo.resources.fileChooser.handler.FileExtension;
+import cataovo.enums.FileExtension;
 import java.io.File;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -44,7 +44,7 @@ public final class Frame implements Cloneable, Serializable {
      * @throws cataovo.exceptions.ImageNotValidException if the file isn't a *.jpg or a *.png type
      */
     public Frame(String filePath) throws ImageNotValidException {
-        if (verifyFileIsAValidImage(filePath)) {
+        if (fileIsAValidImageFrom(filePath)) {
             this.paletteFrame = new File(filePath);
             this.name = chopName(filePath);
             if (this.regionsContainingEggs == null) {
@@ -129,8 +129,8 @@ public final class Frame implements Cloneable, Serializable {
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append(name)
-                .append(",")
+        sb.append(",")
+                .append(name)
                 .append(regionsContainingEggs.toString());
         return sb.toString();
     }
@@ -163,9 +163,9 @@ public final class Frame implements Cloneable, Serializable {
      * @param pathName
      * @return true if the image is valid. False otherwise.
      * @throws ImageNotValidException if the image does not exists, is not a
-     * file or is not a PNG image file.
+     * file or is not a PNG/JPG image file.
      */
-    private boolean verifyFileIsAValidImage(String pathName) throws ImageNotValidException {
+    private boolean fileIsAValidImageFrom(String pathName) throws ImageNotValidException {
         File f = new File(pathName);
         String fileExtension;
 

@@ -7,17 +7,18 @@ package cataovo.UI;
 
 import cataovo.constants.Constants;
 import cataovo.controllers.AutomaticProcessorController;
-import cataovo.controllers.EvaluationController;
 import cataovo.controllers.FileReaderController;
 import cataovo.controllers.FileSelectionController;
 import cataovo.controllers.FrameActionsController;
 import cataovo.controllers.MainPageController;
+import cataovo.controllers.ManualProcessorController;
 import cataovo.controllers.implement.AutomaticProcessorControllerImplements;
-import cataovo.controllers.implement.EvaluationControllerImplements;
+import cataovo.controllers.implement.EvaluationProcessorControllerImplements;
 import cataovo.controllers.implement.FileReaderControllerImplements;
 import cataovo.controllers.implement.FileSelectionControllerImplement;
 import cataovo.controllers.implement.FrameActionsControllerImplements;
 import cataovo.controllers.implement.MainPageControllerImplements;
+import cataovo.controllers.implement.ManualProcessorControllerImplements;
 import cataovo.entities.Point;
 import cataovo.exceptions.AutomationExecutionException;
 import cataovo.exceptions.DirectoryNotValidException;
@@ -26,7 +27,7 @@ import cataovo.exceptions.RegionNotValidException;
 import cataovo.exceptions.ReportNotValidException;
 import cataovo.exceptions.TabNotValidToEvaluationException;
 import cataovo.resources.MainResources;
-import cataovo.resources.fileChooser.handler.FileExtension;
+import cataovo.enums.FileExtension;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
@@ -38,6 +39,7 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import org.opencv.core.Core;
+import cataovo.controllers.EvaluationProcessorController;
 
 /**
  * Module that interacts with the user. This is the main face of this
@@ -53,7 +55,8 @@ public class MainPage extends javax.swing.JFrame {
     private FrameActionsController frameActionsController = null;
     private AutomaticProcessorController automaticProcessorController = null;
     private FileReaderController fileReaderController = null;
-    private EvaluationController evaluationController = null;
+    private EvaluationProcessorController evaluationController = null;
+    private ManualProcessorController manualProcessorController = null;
 
     /**
      * Creates new form MainPage
@@ -66,10 +69,11 @@ public class MainPage extends javax.swing.JFrame {
             this.frameActionsController = new FrameActionsControllerImplements();
             this.automaticProcessorController = new AutomaticProcessorControllerImplements();
             this.fileReaderController = new FileReaderControllerImplements();
-            this.evaluationController = new EvaluationControllerImplements();
+            this.evaluationController = new EvaluationProcessorControllerImplements();
+            this.manualProcessorController = new ManualProcessorControllerImplements();
             this.resetInitialComponents();
             this.centralizeComponent();
-        } catch (Exception ex) {
+        } catch (DirectoryNotValidException ex) {
             LOG.log(Level.SEVERE, ex.getMessage());
             JOptionPane.showMessageDialog(jTabbedPane1, ex.getMessage());
         }
@@ -179,14 +183,14 @@ public class MainPage extends javax.swing.JFrame {
                 MainResources.getInstance().getPalette().getDirectory(),
                 MainResources.getInstance().getReports());
         this.mainPageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel13, jLabel12,
-                (this.frameActionsController.paintFormatsOnFrameOnEvaluation(
+                (this.frameActionsController.paintFormats(
                         MainResources.getInstance().getCurrentFrame().clone(),
                         this.fileReaderController.getRegionsInFrameFile(MainResources.getInstance().getCurrentFrame().getName(),
                                 manualReport),
                         this.fileReaderController.getPointsInFrameFile(MainResources.getInstance().getCurrentFrame().getName(),
                                 autoReport)))
         );
-        int[] evaluation = this.evaluationController.onEvaluateFileContentsOnPalette(
+        String evaluation = this.evaluationController.onEvaluateFileContentsOnPalette(
                 this.fileReaderController.readFullFileContent(manualReport).toString(),
                 this.fileReaderController.readFullFileContent(autoReport).toString());
         setLabelsEvaluationMod(evaluation);
@@ -199,18 +203,19 @@ public class MainPage extends javax.swing.JFrame {
      *
      * @param evaluation
      */
-    private void setLabelsEvaluationMod(int[] evaluation) {
-        this.jLabel21.setText("" + evaluation[0]); // true positive
-        this.jLabel22.setText("" + evaluation[2]); // false Positive
-        this.jLabel23.setText("" + evaluation[1]); // false negative
-        this.jLabel24.setText("" + evaluation[3]); // true negative
+    private void setLabelsEvaluationMod(String evaluation) {
+        String[] dataEvaluationSplitted = evaluation.split(Constants.QUEBRA_LINHA);
+        this.jLabel21.setText(dataEvaluationSplitted[0]); // true positive
+        this.jLabel22.setText(dataEvaluationSplitted[2]); // false Positive
+        this.jLabel23.setText(dataEvaluationSplitted[1]); // false negative
+        this.jLabel24.setText(dataEvaluationSplitted[3]); // true negative
 
-        this.jLabel28.setText("" + this.evaluationController.getPercentageTruePositive(evaluation[1], evaluation[0]) + "%");
-        this.jLabel29.setText("" + this.evaluationController.getPercentageFalsePositive(evaluation[2], evaluation[3]) + "%");
-        this.jLabel30.setText("" + this.evaluationController.getPercentageTrueNegative(evaluation[3], evaluation[2]) + "%");
-        this.jLabel31.setText("" + this.evaluationController.getPercentageFalseNegative(evaluation[1], evaluation[0]) + "%");
-        this.jLabel32.setText("" + this.evaluationController.getPercentageAccuracy(evaluation[0], evaluation[3], evaluation[2], evaluation[1]) + "%");
-        this.jLabel33.setText("" + this.evaluationController.getPercentagePrecision(evaluation[0], evaluation[2]) + "%");
+        this.jLabel28.setText(this.evaluationController.getPercentageOf(Constants.CALCULATE_METHOD_TRUE_POSITIVE, dataEvaluationSplitted[1], dataEvaluationSplitted[0]) + "%");
+        this.jLabel29.setText(this.evaluationController.getPercentageOf(Constants.CALCULATE_METHOD_FALSE_POSITIVE, dataEvaluationSplitted[2], dataEvaluationSplitted[3]) + "%");
+        this.jLabel30.setText(this.evaluationController.getPercentageOf(Constants.CALCULATE_METHOD_TRUE_NEGATIVE, dataEvaluationSplitted[3], dataEvaluationSplitted[2]) + "%");
+        this.jLabel31.setText(this.evaluationController.getPercentageOf(Constants.CALCULATE_METHOD_FALSE_NEGATIVE, dataEvaluationSplitted[1], dataEvaluationSplitted[0]) + "%");
+        this.jLabel32.setText(this.evaluationController.getPercentageOf(Constants.CALCULATE_METHOD_ACCURACY, dataEvaluationSplitted[0], dataEvaluationSplitted[3], dataEvaluationSplitted[2], dataEvaluationSplitted[1]) + "%");
+        this.jLabel33.setText(this.evaluationController.getPercentageOf(Constants.CALCULATE_METHOD_PRECISION, dataEvaluationSplitted[0], dataEvaluationSplitted[2]) + "%");
     }
 
     /**
@@ -457,8 +462,10 @@ public class MainPage extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Manual", jDesktopPane1);
 
-        jTabbedPane2.setMinimumSize(new java.awt.Dimension(654, 492));
-        jTabbedPane2.setPreferredSize(new java.awt.Dimension(654, 492));
+        jTabbedPane2.setMinimumSize(new java.awt.Dimension(670, 490));
+        jTabbedPane2.setPreferredSize(new java.awt.Dimension(671, 492));
+
+        jPanel2.setPreferredSize(new java.awt.Dimension(671, 492));
 
         jLabel3.setText("jLabel3");
 
@@ -467,13 +474,13 @@ public class MainPage extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 640, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 6, Short.MAX_VALUE))
+                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 644, Short.MAX_VALUE)
+                .addGap(0, 2, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
+                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -986,7 +993,6 @@ public class MainPage extends javax.swing.JFrame {
             LOG.log(Level.INFO, evt.getActionCommand());
             boolean wasFileSelected = fileSelectionController.fileSelectionEvent(evt.getActionCommand(), jTabbedPane1, true);
             if (wasFileSelected && MainResources.getInstance().getCurrentFrame().getPaletteFrame().exists()) {
-                MainResources.getInstance().getPalette().getFrames().stream().forEachOrdered(e -> e.setName(Constants.FRAME_ID_TAG + e.getName()));
                 switch (jTabbedPane1.getSelectedIndex()) {
                     case 0 -> {
                         jButton3.setEnabled(wasFileSelected);
@@ -1016,7 +1022,7 @@ public class MainPage extends javax.swing.JFrame {
 
             }
         } catch (DirectoryNotValidException | FileNotFoundException | ImageNotValidException | ReportNotValidException | HeadlessException ex) {
-            LOG.log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, ex.getMessage(), ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
@@ -1030,13 +1036,14 @@ public class MainPage extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(jPanel1, "Diretório não foi alterado. Por favor, verifique algumas possibilidades: a seleção da pasta foi cancelada, tentando alterar a pasta durante o processamento ou erro na seleção da pasta.");
             }
         } catch (DirectoryNotValidException | FileNotFoundException | ImageNotValidException | ReportNotValidException | HeadlessException ex) {
-            LOG.log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, ex.getMessage(), ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
         }
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         try {
+            String reportLocation;
             LOG.log(Level.INFO, evt.getActionCommand());
             if (MainResources.getInstance().getPalette().getFrames().iterator().hasNext()) {
                 jLabel10.setText("");
@@ -1052,17 +1059,18 @@ public class MainPage extends javax.swing.JFrame {
                 jLabel10.setText("");
                 jLabel9.setIcon(null);
                 MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
-                if (!fileSelectionController.fileSelectionEvent(Constants.ITEM_ACTION_COMMAND_SAVE_MANUAL_REPORT_PT_BR, jTabbedPane1, true)) {
+                reportLocation = this.manualProcessorController.onNewManualProcessPalette(Constants.TAB_NAME_MANUAL_PT_BR);
+                if (reportLocation.isBlank()) {
                     LOG.log(Level.WARNING, "It wasn't possible to save the Palette on a file");
                     JOptionPane.showMessageDialog(jPanel1, "It wasn't possible to save the Palette on a file");
                 } else {
                     LOG.log(Level.INFO, "The palette was saved successfully!");
-                    JOptionPane.showMessageDialog(jPanel1, "A paleta foi salva com sucesso em: " + fileSelectionController.getManualReportDestination()
+                    JOptionPane.showMessageDialog(jPanel1, "A paleta foi salva com sucesso em: " + reportLocation
                             + Constants.QUEBRA_LINHA + "Total de ovos: " + MainResources.getInstance().getPaletteToSave().getTheTotalNumberOfEggsPalette());
                 }
             }
-        } catch (ImageNotValidException | DirectoryNotValidException | FileNotFoundException | ReportNotValidException | HeadlessException ex) {
-            LOG.log(Level.SEVERE, null, ex);
+        } catch (ImageNotValidException | DirectoryNotValidException | HeadlessException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage(), ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
         }
     }//GEN-LAST:event_jButton3ActionPerformed
@@ -1072,7 +1080,7 @@ public class MainPage extends javax.swing.JFrame {
         Icon frame, subFrame;
         Point pointClick = new Point(evt.getX(), evt.getY());
         try {
-            frame = frameActionsController.paintFormat(pointClick, MainResources.getInstance().getCurrentFrame());
+            frame = frameActionsController.paintFormats(pointClick, MainResources.getInstance().getCurrentFrame());
             subFrame = frameActionsController.captureSubframe(pointClick,
                     MainResources.getInstance().getCurrentFrame());
             if (frame != null) {
@@ -1091,7 +1099,7 @@ public class MainPage extends javax.swing.JFrame {
                 LOG.log(Level.INFO, "Counting eggs in frame: {0}", MainResources.getInstance().getCurrentFrame().getName());
             }
         } catch (DirectoryNotValidException | ImageNotValidException | RegionNotValidException | CloneNotSupportedException ex) {
-            LOG.log(Level.SEVERE, null, ex);
+            LOG.log(Level.WARNING, ex.getMessage());
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
         }
     }//GEN-LAST:event_jLabel2MouseClicked
@@ -1195,7 +1203,7 @@ public class MainPage extends javax.swing.JFrame {
                         MainResources.getInstance().getPalette().getDirectory(),
                         MainResources.getInstance().getReports());
                 mainPageController.showFrameOnScreen(jLabel13, jLabel12,
-                        this.frameActionsController.paintFormatsOnFrameOnEvaluation(
+                        this.frameActionsController.paintFormats(
                                 MainResources.getInstance().getCurrentFrame().clone(),
                                 fileReaderController.getRegionsInFrameFile(MainResources.getInstance().getCurrentFrame().getName(),
                                         MainResources.getInstance().getReports()[0]),
@@ -1224,7 +1232,7 @@ public class MainPage extends javax.swing.JFrame {
                         MainResources.getInstance().getPalette().getDirectory(),
                         MainResources.getInstance().getReports());
                 mainPageController.showFrameOnScreen(jLabel13, jLabel12,
-                        this.frameActionsController.paintFormatsOnFrameOnEvaluation(
+                        this.frameActionsController.paintFormats(
                                 MainResources.getInstance().getCurrentFrame().clone(),
                                 fileReaderController.getRegionsInFrameFile(MainResources.getInstance().getCurrentFrame().getName(),
                                         MainResources.getInstance().getReports()[0]),

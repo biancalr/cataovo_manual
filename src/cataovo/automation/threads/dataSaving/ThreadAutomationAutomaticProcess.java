@@ -10,7 +10,7 @@ import cataovo.constants.Constants;
 import cataovo.entities.Frame;
 import cataovo.entities.Palette;
 import cataovo.exceptions.AutomationExecutionException;
-import cataovo.resources.fileChooser.handler.FileExtension;
+import cataovo.enums.FileExtension;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -48,13 +48,13 @@ public final class ThreadAutomationAutomaticProcess extends DataSavingThreadAuto
      * @param savingDirectory the directory where the results will be saved.
      * @param extension referes to the relatory's file extension where the text
      * data will be saved.
-     * @param parentName relates the tabName to the type of processing of a
+     * @param parentTabName relates the tabName to the type of processing of a
      * palette: Manual or Automatic. Also helps to create folders of each
      * processing type.
      * @param dateTime date to separeate each analisys by the folder
      */
-    public ThreadAutomationAutomaticProcess(Palette palette, String savingDirectory, FileExtension extension, String parentName, String dateTime) {
-        super(palette, savingDirectory, extension, parentName, dateTime);
+    public ThreadAutomationAutomaticProcess(final Palette palette, final String savingDirectory, final FileExtension extension, final String parentTabName, final String dateTime) {
+        super(palette, savingDirectory, extension, parentTabName, dateTime);
         this.imagesDestination = new StringBuffer(savingDirectory).append("/cataovo/").append(palette.getDirectory().getName()).append("/auto/").append(dateTime);
     }
 
@@ -102,8 +102,9 @@ public final class ThreadAutomationAutomaticProcess extends DataSavingThreadAuto
         StringBuffer result = new StringBuffer();
         Future<StringBuffer> task;
         DataProcessingThreadAutomation framesProcessor;
+        ExecutorService executorService;
         for (Frame frame : frames) {
-            ExecutorService executorService = Executors.newSingleThreadExecutor();
+            executorService = Executors.newSingleThreadExecutor();
             framesProcessor = new ThreadAutomaticFramesProcessor(frame, destination);
             task = executorService.submit(framesProcessor);
             synchronized (task) {

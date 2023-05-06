@@ -20,10 +20,7 @@ public class Constants {
      * ACTION COMMAND SELECIONAR PASTA DESTINO
      */
     public static final String ITEM_ACTION_COMMAND_SELECT_DESTINATION_FOLDER_PT_BR = "Selecionar Pasta Destino";
-    /**
-     * ACTION COMMAND SALVAR ARQUIVO FINAL
-     */
-    public static final String ITEM_ACTION_COMMAND_SAVE_MANUAL_REPORT_PT_BR = "Salvar Arquivo";
+
     /**
      * ACTION COMMAND SELECIONAR RELATORIO
      */
@@ -48,7 +45,7 @@ public class Constants {
     public static final String NO_PALETTE_SELECTED = "Escolha uma pasta";
 
     /**
-     * QUEBRA DE LINHA
+     * BREAK LINE.
      */
     public static final String QUEBRA_LINHA = "\n";
 
@@ -73,19 +70,6 @@ public class Constants {
      */
     public static final String CONTOURS_PNG = "/contours.png";
 
-    /**
-     * NAME MANUAL
-     */
-    public static final String NAME_MANUAL = "manual";
-    /**
-     * NAME AUTOMATICO
-     */
-    public static final String NAME_AUTOMATICO = "auto";
-    /**
-     * NAME AVALIACAO
-     */
-    public static final String NAME_AVALIACAO = "resut";
-
     public static final int STEPS_TO_POINT_SAVING = 5;
 
     public static final int FRAME_SLOT_TO_PROCESS = 5;
@@ -94,49 +78,104 @@ public class Constants {
     /**
      * Custom error message to REGION NOT VALID
      */
-    public static String ERROR_REGION_NOT_VALID_ENG_1 = "Axis(ies) with difference too small (less than 35px) or too large (more than 110px)";
+    public static final String ERROR_REGION_NOT_VALID_ENG_1 = "Axis(ies) with difference too small (less than 35px) or too large (more than 110px)";
 
     /**
      * Custom error message to DIRECTORY NOT VALID
      */
-    public static String ERROR_DIRECTORY_NOT_VALID_ENG_1 = "The file path does not represent a valid directory";
+    public static final String ERROR_DIRECTORY_NOT_VALID_ENG_1 = "The file path does not represent a valid directory";
 
     /**
      * Custom error message to IMAGE NOT VALID
      */
-    public static String ERROR_IMAGE_NOT_VALID_ENG_1 = "The file does not represent a valid image: *.jpg or *.png";
+    public static final String ERROR_IMAGE_NOT_VALID_ENG_1 = "The file does not represent a valid image: *.jpg or *.png";
 
     /**
      * Custom error message to TAB NOT VALID TO EVALUATE
      */
-    public static String ERROR_TAB_NOT_VALID_TO_EVALUATE_ENG_1 = "Must select Evaluation tab";
-    
+    public static final String ERROR_TAB_NOT_VALID_TO_EVALUATE_ENG_1 = "Must select Evaluation tab";
+
     /**
      * MINUMUM AXIS X DISTANCE ON REGION
      */
-    public static int MINUMUM_AXIS_X_DISTANCE_ON_REGION = 35;
-    
+    public static final int MINUMUM_AXIS_X_DISTANCE_ON_REGION = 35;
+
     /**
      * MINUMUM AXIS Y DISTANCE ON REGION
      */
-    public static int MINUMUM_AXIS_Y_DISTANCE_ON_REGION = 35;
-    
+    public static final int MINUMUM_AXIS_Y_DISTANCE_ON_REGION = 35;
+
     /**
      * MAXIMUM AXIS X DISTANCE ON REGION
      */
-    public static int MAXIMUM_AXIS_X_DISTANCE_ON_REGION = 110;
-    
+    public static final int MAXIMUM_AXIS_X_DISTANCE_ON_REGION = 110;
+
     /**
      * MAXIMUM AXIS Y DISTANCE ON REGION
      */
-    public static int MAXIMUM_AXIS_Y_DISTANCE_ON_REGION = 110;
-    
+    public static final int MAXIMUM_AXIS_Y_DISTANCE_ON_REGION = 110;
+
+    /**
+     * Error message when a folder wasn't created
+     */
     public static final String NO_FOLDER_WAS_CREATED = "No folder was created";
-    
+
+    /**
+     * Warning message when a report were aldeady selected but there is a trying
+     * to add another one.
+     */
     public static final String POSITION_OCCUPIED_EN = "position already occupied";
-    
+
+    /**
+     * Warning message when both reports were aldeady selected but there is a
+     * trying to add one.
+     */
     public static final String REPORTS_ALREADY_SELECTED_PT_BR = "Relatórios já foram selecionados.";
-    
+
+    /**
+     * Tag name added to help dealing with too small frame name tags.
+     */
     public static final String FRAME_ID_TAG = "frame_";
+
+    /**
+     * When reports selected for the same Palette are not equal in number of
+     * lines (Frames)
+     */
+    public static final String REPORTS_FRAME_QUANTITY_NOT_EQUAL_PT_BR = "Os relatórios não têm a mesma quatidade de Frames";
+
+    /**
+     * Rect format = 1
+     */
+    public static final int RECT_FORMAT = 1;
+
+    /**
+     * Circle format = 2
+     */
+    public static final int CIRCLE_FORMAT = 2;
+
+    /**
+     * PERCENTAGE OF TRUE POSITIVE
+     */
+    public static final int CALCULATE_METHOD_TRUE_POSITIVE = 0;
+    /**
+     * PERCENTAGE OF FALSE POSITIVE
+     */
+    public static final int CALCULATE_METHOD_FALSE_POSITIVE = 1;
+    /**
+     * PERCENTAGE OF TRUE NEGATIVE
+     */
+    public static final int CALCULATE_METHOD_TRUE_NEGATIVE = 2;
+    /**
+     * PERCENTAGE OF FALSE NEGATIVE
+     */
+    public static final int CALCULATE_METHOD_FALSE_NEGATIVE = 3;
+    /**
+     * PERCENTAGE OF PRECISION
+     */
+    public static final int CALCULATE_METHOD_PRECISION = 4;
+    /**
+     * PERCENTAGE OF ACCURACY
+     */
+    public static final int CALCULATE_METHOD_ACCURACY = 5;
 
 }

@@ -8,9 +8,9 @@ import cataovo.automation.threads.dataEvaluation.DataEvaluationThreadAutomation;
 import cataovo.automation.threads.dataEvaluation.ThreadAutomationEvaluation;
 import cataovo.automation.threads.dataSaving.DataSavingThreadAutomation;
 import cataovo.automation.threads.dataSaving.ThreadAutomationEvaluationProcess;
-import cataovo.controllers.EvaluationController;
+import cataovo.constants.Constants;
 import cataovo.entities.Palette;
-import cataovo.resources.fileChooser.handler.FileExtension;
+import cataovo.enums.FileExtension;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -22,29 +22,29 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import cataovo.controllers.EvaluationProcessorController;
 
 /**
  *
  * @author Bianca Leopoldo Ramos
  */
-public class EvaluationControllerImplements implements EvaluationController {
+public class EvaluationProcessorControllerImplements implements EvaluationProcessorController {
 
     /**
      * Logging for DataSavingThreadAutomation
      */
-    private static final Logger LOG = Logger.getLogger(EvaluationControllerImplements.class.getName());
-    private int[] evaluationResult;
+    private static final Logger LOG = Logger.getLogger(EvaluationProcessorControllerImplements.class.getName());
+    private String evaluationResult;
 
-    public EvaluationControllerImplements() {
+    public EvaluationProcessorControllerImplements() {
 
     }
 
     @Override
-    public int[] onEvaluateFileContentsOnPalette(String fileContentManual, String fileContentAuto) {
+    public String onEvaluateFileContentsOnPalette(String fileContentManual, String fileContentAuto) {
         try {
-            this.evaluationResult = new int[4];
             DataEvaluationThreadAutomation automation;
-            Future<int[]> task;
+            Future<String> task;
             ExecutorService executorService = Executors.newSingleThreadExecutor();
 
             automation = new ThreadAutomationEvaluation(fileContentManual, fileContentAuto);
@@ -53,66 +53,87 @@ public class EvaluationControllerImplements implements EvaluationController {
             this.evaluationResult = task.get();
             executorService.awaitTermination(1, TimeUnit.MILLISECONDS);
             executorService.shutdown();
-            LOG.log(Level.INFO, "Calculating results in evaluation {0}", Arrays.toString(this.evaluationResult));
+            LOG.log(Level.INFO, "Calculating results in evaluation {0}", Arrays.toString(this.evaluationResult.split(Constants.QUEBRA_LINHA)));
             return this.evaluationResult;
         } catch (InterruptedException | ExecutionException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            return new int[0];
+            return "";
         }
     }
-
-    /**
-     *
-     * @return
-     */
-    public int[] getEvaluationResult() {
-        return evaluationResult;
-    }
-
-    /**
-     *
-     * @param evaluationResult
-     */
-    public void setEvaluationResult(int[] evaluationResult) {
-        this.evaluationResult = evaluationResult;
-    }
-
+    
     @Override
+    public String getPercentageOf(final int method, final String strValue1, final String strValue2){
+        int value1 = Integer.parseInt(strValue1);
+        int value2 = Integer.parseInt(strValue2);
+        switch (method) {
+            case Constants.CALCULATE_METHOD_TRUE_POSITIVE -> {
+                return "" + getPercentageTruePositive(value1, value2);
+            }
+            case Constants.CALCULATE_METHOD_FALSE_POSITIVE -> {
+                return "" + getPercentageFalsePositive(value1, value2);
+            }
+            case Constants.CALCULATE_METHOD_TRUE_NEGATIVE -> {
+                return "" + getPercentageTrueNegative(value1, value2);
+            }
+            case Constants.CALCULATE_METHOD_FALSE_NEGATIVE -> {
+                return "" + getPercentageFalseNegative(value1, value2);
+            }
+            case Constants.CALCULATE_METHOD_PRECISION -> {
+                return "" + getPercentagePrecision(value1, value2);
+            }
+            default -> {
+                throw new AssertionError();
+            }
+        }
+    }
+    
+    @Override
+    public String getPercentageOf(final int method, final String strValue1, final String strValue2, final String strValue3, final String strValue4){
+        int value1 = Integer.parseInt(strValue1);
+        int value2 = Integer.parseInt(strValue2);
+        int value3 = Integer.parseInt(strValue3);
+        int value4 = Integer.parseInt(strValue4);
+        switch (method) {
+            case Constants.CALCULATE_METHOD_ACCURACY -> {
+                return "" + getPercentageAccuracy(value1, value2, value3, value4);
+            }
+            default -> {
+                throw new AssertionError();
+            }
+        }
+        
+    }
+
     public int getPercentageTruePositive(int falseNegative, int truePositive) {
         // TVP = VP / (FN+VP)
         LOG.log(Level.INFO, "Calculating Percentage: True Positive");
         return truePositive / (falseNegative + truePositive);
     }
 
-    @Override
     public int getPercentageFalsePositive(int falsePositive, int trueNegative) {
         //TFP = FP / (VN+FP)
         LOG.log(Level.INFO, "Calculating Percentage: False Positive");
         return falsePositive / (trueNegative + falsePositive);
     }
 
-    @Override
     public int getPercentageTrueNegative(int trueNegative, int falsePositive) {
         // TVN = VN / (VN+FP)
         LOG.log(Level.INFO, "Calculating Percentage: True Negative");
         return trueNegative / (trueNegative + falsePositive);
     }
 
-    @Override
     public int getPercentageFalseNegative(int falseNegative, int truePositive) {
         // TFN = FN / (FN+VP)
         LOG.log(Level.INFO, "Calculating Percentage: False Negative");
         return falseNegative / (falseNegative + truePositive);
     }
 
-    @Override
     public int getPercentageAccuracy(int truePositive, int trueNegative, int falsePositive, int falseNegative) {
         // Acc = (VP+VN) / (VP+VN+FP+FN)
         LOG.log(Level.INFO, "Calculating Percentage: Accuracy");
         return (truePositive + trueNegative) / (truePositive + trueNegative + falsePositive + falseNegative);
     }
 
-    @Override
     public int getPercentagePrecision(int truePositive, int falsePositive) {
         // Prec = VP / (VP+FP)
         LOG.log(Level.INFO, "Calculating Percentage: Precision");
@@ -120,9 +141,9 @@ public class EvaluationControllerImplements implements EvaluationController {
     }
 
     @Override
-    public String onActionComandSaveEvaluationRelatory(Palette palette, String savingDirectory, FileExtension fileExtension, String parentTabName) {
+    public String onActionComandSaveEvaluationRelatory(final Palette palette, final String savingDirectory, final FileExtension fileExtension, final String tabName) {
         if (this.evaluationResult != null) {
-            final String dateTime = getDateTime("dd-MM-yyyy_HH-mm");
+            final String dateTime = getDateTime("dd-MM-yyyy_HH-mm-ss");
             try {
                 String result;
                 DataSavingThreadAutomation automation;
@@ -133,7 +154,7 @@ public class EvaluationControllerImplements implements EvaluationController {
                         palette,
                         savingDirectory,
                         fileExtension,
-                        parentTabName,
+                        tabName,
                         this.evaluationResult, 
                         dateTime);
 
@@ -158,7 +179,7 @@ public class EvaluationControllerImplements implements EvaluationController {
      * @param datePattern the pattern to return the date
      * @return date and time according to the the datePattern
      */
-    private String getDateTime(String datePattern) {
+    private String getDateTime(final String datePattern) {
         DateFormat dateFormat = new SimpleDateFormat(datePattern);
         Date date = new Date();
         return dateFormat.format(date);

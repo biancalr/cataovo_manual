@@ -13,7 +13,7 @@ import cataovo.entities.Palette;
 import cataovo.exceptions.AutomationExecutionException;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.resources.MainResources;
-import cataovo.resources.fileChooser.handler.FileExtension;
+import cataovo.enums.FileExtension;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -45,16 +45,17 @@ public class AutomaticProcessorControllerImplements implements AutomaticProcesso
     private int slotRangeControl = 0;
 
     @Override
-    public String onNewAutoProcessPalette(JLabel jLabelImageName, JLabel jLabelImageFrame, Palette currentPalette, String savingFolderPath, String tabName) throws DirectoryNotValidException, AutomationExecutionException {
+    public String onNewAutoProcessPalette(final JLabel jLabelImageName, final JLabel jLabelImageFrame, final Palette currentPalette, final String savingFolderPath, final String tabName) throws DirectoryNotValidException, AutomationExecutionException {
         try {
             List<Palette> splitted = split(currentPalette, Constants.SLOT_FRAMES_TO_PROCESS_ON_PALETTE);
             String result = "";
             DataSavingThreadAutomation automation;
-            final String dateTime = getDateTime("dd-MM-yyyy_HH-mm");
+            final String dateTime = getDateTime("dd-MM-yyyy_HH-mm-ss");
             Future<String> task;
+            ExecutorService executorService;
             
             for (Palette palette : splitted) {
-                ExecutorService executorService = Executors.newSingleThreadExecutor();
+                executorService = Executors.newSingleThreadExecutor();
                 automation = new ThreadAutomationAutomaticProcess(
                         palette,
                         savingFolderPath,
@@ -87,7 +88,7 @@ public class AutomaticProcessorControllerImplements implements AutomaticProcesso
      * @return a subqueue based on the range.
      * @see #createContent()
      */
-    private List<Palette> split(Palette toSplit, int range) throws CloneNotSupportedException, DirectoryNotValidException {
+    private List<Palette> split(final Palette toSplit, final int range) throws CloneNotSupportedException, DirectoryNotValidException {
         List<Palette> list = new LinkedList<>();
         Palette subPalette;
         Object[] auxToSplit = toSplit.getFrames().toArray();
@@ -115,7 +116,7 @@ public class AutomaticProcessorControllerImplements implements AutomaticProcesso
      * @param datePattern the pattern to return the date
      * @return date and time according to the the datePattern
      */
-    private String getDateTime(String datePattern) {
+    private String getDateTime(final String datePattern) {
         DateFormat dateFormat = new SimpleDateFormat(datePattern);
         Date date = new Date();
         return dateFormat.format(date);

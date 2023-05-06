@@ -55,7 +55,7 @@ public class FrameActionsControllerImplements implements FrameActionsController 
      * @throws CloneNotSupportedException
      */
     @Override
-    public Icon paintFormat(Point point, Frame currentFrame) throws DirectoryNotValidException, RegionNotValidException, CloneNotSupportedException {
+    public Icon paintFormats(Point point, Frame currentFrame) throws DirectoryNotValidException, RegionNotValidException, CloneNotSupportedException {
         switch (clickCount) {
             case 0 -> {
                 clickCount++;
@@ -149,7 +149,7 @@ public class FrameActionsControllerImplements implements FrameActionsController 
      * @return 
      */
     @Override
-    public Icon paintFormatsOnFrameOnEvaluation(Frame currentFrame, Collection<RectWrapper> regions, Collection<PointWrapper> points) {
+    public Icon paintFormats(Frame currentFrame, Collection<RectWrapper> regions, Collection<PointWrapper> points) {
         this.frameUtils = new FrameActionsUtils(currentFrame);        
         return this.frameUtils.drawFormatsOnFrame(regions, points);
     }

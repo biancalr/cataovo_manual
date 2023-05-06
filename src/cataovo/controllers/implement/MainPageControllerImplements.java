@@ -25,7 +25,7 @@ import javax.swing.Icon;
 import javax.swing.JTabbedPane;
 
 /**
- * Controls the actions with the Frames
+ * Controls how the Frames are seen and iterated.
  *
  * @author Bianca Leopoldo Ramos
  */
@@ -273,6 +273,9 @@ public class MainPageControllerImplements implements MainPageController {
      * @param parentName
      */
     private void setLabelText(JLabel parentName, String text) {
+        if (text.contains(Constants.FRAME_ID_TAG)) {
+            text = text.replace(Constants.FRAME_ID_TAG, "");
+        }
         parentName.setText(text);
     }
 

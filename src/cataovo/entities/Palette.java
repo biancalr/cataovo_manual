@@ -63,7 +63,7 @@ public final class Palette implements Cloneable, Serializable {
         if (verifyPathIsDirectory(file.getAbsolutePath())) {
             this.pathName = file.getAbsolutePath();
             this.frames = new LinkedList<>();
-            this.directory = new File(file.getAbsolutePath());
+            this.directory = file;
         } else {
             throw new DirectoryNotValidException(Constants.ERROR_DIRECTORY_NOT_VALID_ENG_1);
         }
@@ -157,8 +157,8 @@ public final class Palette implements Cloneable, Serializable {
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append(pathName)
-                .append(getTheTotalNumberOfEggsPalette())
                 .append(",")
+                .append(getTheTotalNumberOfEggsPalette())
                 .append(frames.toString());
         return sb.toString();
     }

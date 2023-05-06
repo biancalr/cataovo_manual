@@ -26,6 +26,7 @@ public interface AutomaticProcessorController {
      * @param tabName
      * @return the final relatory's path
      * @throws cataovo.exceptions.DirectoryNotValidException
+     * @throws cataovo.exceptions.AutomationExecutionException
      */
     public String onNewAutoProcessPalette(JLabel jLabelImageName, JLabel jLabelImageFrame, Palette currentPalette, String savingFolderPath, String tabName) throws DirectoryNotValidException, AutomationExecutionException;
     

@@ -6,22 +6,25 @@
 package cataovo.resources.fileChooser.UI;
 
 import cataovo.exceptions.DirectoryNotValidException;
-import cataovo.resources.fileChooser.handler.FileExtension;
+import cataovo.enums.FileExtension;
 import cataovo.resources.fileChooser.handler.FileFilterExtensions;
 import cataovo.resources.MainResources;
 import java.awt.Component;
 import java.awt.HeadlessException;
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JTabbedPane;
 
 /**
  *
- * @author bibil
+ * @author Bianca Leopoldo Ramos
  */
 public class MyFileChooserUI extends JFileChooser{
 
     private FileExtension extensionType;
+    private static final Logger LOG = Logger.getLogger(MyFileChooserUI.class.getName());
 
     public MyFileChooserUI() {
         super.setFileFilter(new FileFilterExtensions(extensionType));
@@ -31,11 +34,13 @@ public class MyFileChooserUI extends JFileChooser{
         this.extensionType = extensionType;
         super.setFileFilter(new FileFilterExtensions(extensionType));
         super.setCurrentDirectory(directory);
+        LOG.log(Level.INFO, "Current directory: {0}", directory);
     }
 
     public MyFileChooserUI(File currentDirectory) {
         super.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         super.setCurrentDirectory(currentDirectory);
+        LOG.log(Level.INFO, "Current directory: {0}", currentDirectory);
     }
     
    /**
@@ -56,6 +61,7 @@ public class MyFileChooserUI extends JFileChooser{
             default -> {
             }
         }
+        LOG.log(Level.INFO, "Selected File: " + f == null ? f.getAbsolutePath() : "empty");
         return f;
     }  
     
@@ -89,7 +95,6 @@ public class MyFileChooserUI extends JFileChooser{
             default -> {
             }
         }
-        
         return f;
     }
 

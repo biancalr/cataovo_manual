@@ -7,7 +7,7 @@ package cataovo.opencvlib.automation.imageProcessing;
 import cataovo.constants.Constants;
 import cataovo.opencvlib.converters.Converter;
 import cataovo.opencvlib.wrappers.MatWrapper;
-import cataovo.resources.fileChooser.handler.FileExtension;
+import cataovo.enums.FileExtension;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;

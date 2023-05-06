@@ -8,8 +8,10 @@ import cataovo.opencvlib.automation.imageProcessing.AutomaticImageProcess;
 import cataovo.opencvlib.automation.imageProcessing.AutomaticImageProcessImplements;
 import cataovo.opencvlib.converters.Converter;
 import cataovo.opencvlib.wrappers.MatWrapper;
+import java.io.File;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 
 /**
@@ -21,25 +23,56 @@ public class AutomaticImageProcessTest {
     public static void main(String[] args) {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         
-        String orgn = "";
-        String dstn = "";
+        final String orign = "C:\\Users\\bianc\\OneDrive\\Documentos\\Paletas\\Placa\\original.png";
+        String dstn = "C:/Users/bianc/OneDrive/Documentos/Paletas/teste";
+        final String frameName = "/frame_" + orign.substring(orign.lastIndexOf("\\") + 1, orign.lastIndexOf("."));
+        File file = new File(dstn);
+        int sizeTag = file.listFiles().length + 1;
+        
+        dstn = dstn + "/teste_" + sizeTag;
+        file = new File(dstn);
+        if (!file.exists()) {
+            file.mkdir();
+        }
         
         AutomaticImageProcess imageProcess = new AutomaticImageProcessImplements();
         
-        Mat img = Imgcodecs.imread(orgn);
+        Mat img = Imgcodecs.imread(orign);
+        
+        Core.copyMakeBorder(img, img, 4, 4, 4, 4, Core.BORDER_CONSTANT, new Scalar(255.0, 255.0, 255.0));
+        
+        Imgcodecs.imwrite(dstn + frameName + "_1_original.png", img);
+        
+        
         Mat finalImage = img.clone();
         
-        img = imageProcess.applyBlurOnImage(dstn + "_blur.png", img, 5, 5);
+        /*
+         *  Reduzir o brilho
+        */
+        img.convertTo(img, -1, 1, -15);
+        Imgcodecs.imwrite(dstn + frameName + "_2_brightness.png", img);
         
-        img = imageProcess.applyBinaryOnImage(dstn + "_binary.png", Converter.getInstance().convertMatToPng(new MatWrapper(img, orgn)).get());
+        /*
+         * Aplicar Abertura 
+         */
+        img = imageProcess.applyMorphOnImage(dstn + frameName + "_3_morph_init.png", 3, 3, 2, img);
         
-        img = imageProcess.applyMorphOnImage(dstn + "_morph_1.png", 17, 35, 2, img);
-        img = imageProcess.applyMorphOnImage(dstn + "_morph_2.png", 40, 17, 2, img);
+        
+        img = imageProcess.applyBlurOnImage(dstn + frameName+ "_4_blur.png", img, 5, 5);
+        
+        img = imageProcess.applyBinaryOnImage(dstn + frameName + "_5_binary.png", Converter.getInstance().convertMatToPng(new MatWrapper(img, orign)).get());
+        
+        img = imageProcess.applyMorphOnImage(dstn + frameName + "_6_morph_1.png", 17, 40, 2, img);
+        img = imageProcess.applyMorphOnImage(dstn + frameName+ "_7_morph_2.png", 40, 17, 2, img);
 //        img = imageProcess.applyMorphOnImage(dstn + "_morph_3.png", 17, 35, 2, img);
 //        img = imageProcess.applyMorphOnImage(dstn + "_morph_4.png", 40, 17, 2, img);
         
-        finalImage = imageProcess.drawContoursOnImage(dstn + "_contours.png", finalImage, img, 800, 5000);
+
+        Core.copyMakeBorder(img, img, 1, 1, 1, 1, Core.BORDER_CONSTANT, new Scalar(255.0, 255.0, 255.0));
         
+        finalImage = imageProcess.drawContoursOnImage(dstn + frameName + "_8_contours.png", finalImage, img, 800, 5500);
+        
+        System.out.println(finalImage);
     }
     
 }

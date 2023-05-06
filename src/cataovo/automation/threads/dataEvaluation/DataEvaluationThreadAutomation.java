@@ -14,16 +14,15 @@ import java.util.logging.Logger;
  *
  * @author Bianca Leopoldo Ramos
  */
-public abstract class DataEvaluationThreadAutomation implements Callable<int[]> {
+public abstract class DataEvaluationThreadAutomation implements Callable<String> {
 
     /**
-     * Logging for DataSavingThreadAutomation
+     * Logging for DataEvaluationThreadAutomation
      */
-    private static final Logger LOG = Logger.getLogger(cataovo.automation.threads.dataSaving.DataSavingThreadAutomation.class.getName());
+    private static final Logger LOG = Logger.getLogger(DataEvaluationThreadAutomation.class.getName());
 
     private String fileContentManual;
     private String fileContentAuto;
-    private int[] evaluationResult;
 
     /**
      *
@@ -33,15 +32,10 @@ public abstract class DataEvaluationThreadAutomation implements Callable<int[]> 
     public DataEvaluationThreadAutomation(String fileContentManual, String fileContentAuto) {
         this.fileContentManual = fileContentManual;
         this.fileContentAuto = fileContentAuto;
-        this.evaluationResult = new int[4];
-        this.evaluationResult[0] = 0;
-        this.evaluationResult[1] = 0;
-        this.evaluationResult[2] = 0;
-        this.evaluationResult[3] = 0;
     }
 
     @Override
-    public int[] call() throws NumberFormatException, ReportNotValidException {
+    public String call() throws NumberFormatException, ReportNotValidException {
         return evaluationAnalysis();
     }
 
@@ -57,26 +51,36 @@ public abstract class DataEvaluationThreadAutomation implements Callable<int[]> 
      *
      * @return
      */
-    private synchronized int[] evaluationAnalysis() throws NumberFormatException, ReportNotValidException{
+    private synchronized String evaluationAnalysis() throws NumberFormatException, ReportNotValidException{
         LOG.log(Level.INFO, "Starting Evaluation...");
 
         //split both strings
         String[] regionsOnFrame = this.fileContentManual.split(Constants.QUEBRA_LINHA);
         String[] pointsOnFrame = this.fileContentAuto.split(Constants.QUEBRA_LINHA);
+        int[] evaluationResult;
+        StringBuilder resultString = new StringBuilder();
+        evaluationResult = new int[4];
+        for (int i = 0; i < evaluationResult.length; i++) {
+            evaluationResult[i] = 0;
+        }
 
         if (regionsOnFrame.length != pointsOnFrame.length) {
-            throw new ReportNotValidException("Os relatórios não têm a mesma quatidade de Frames");
+            throw new ReportNotValidException(Constants.REPORTS_FRAME_QUANTITY_NOT_EQUAL_PT_BR);
         }
 
         for (int i = 0; i < regionsOnFrame.length; i++) {
             int[] frameResult = evaluateFrame(regionsOnFrame[i], pointsOnFrame[i]);
-            this.evaluationResult[0] += frameResult[0];
-            this.evaluationResult[1] += frameResult[1];
-            this.evaluationResult[2] += frameResult[2];
-            this.evaluationResult[3] += frameResult[3];
+            evaluationResult[0] += frameResult[0];
+            evaluationResult[1] += frameResult[1];
+            evaluationResult[2] += frameResult[2];
+            evaluationResult[3] += frameResult[3];
         }
-
-        return this.evaluationResult;
+        
+        for (int i = 0; i < evaluationResult.length; i++) {
+            resultString.append(evaluationResult[i]).append(Constants.QUEBRA_LINHA);
+        }
+        
+        return resultString.toString();
     }
 
     public String getFileContentManual() {
@@ -93,10 +97,6 @@ public abstract class DataEvaluationThreadAutomation implements Callable<int[]> 
 
     public void setFileContentAuto(String fileContentAuto) {
         this.fileContentAuto = fileContentAuto;
-    }
-
-    public int[] getEvaluationResult() {
-        return evaluationResult;
     }
 
 }

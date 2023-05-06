@@ -4,6 +4,7 @@
  */
 package cataovo.automation.threads.dataEvaluation;
 
+import cataovo.constants.Constants;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
 import java.util.List;
@@ -19,57 +20,25 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
 
     private static final Logger LOG = Logger.getLogger(ThreadAutomationEvaluation.class.getName());
 
-    private int tp, tn, fp, fn;
-
     public ThreadAutomationEvaluation(String fileContentManual, String fileContentAuto) {
         super(fileContentManual, fileContentAuto);
-        this.tp = this.tn = this.fp = this.fn = 0;
-    }
-
-    public int getTp() {
-        return tp;
-    }
-
-    public void setTp(int tp) {
-        this.tp = tp;
-    }
-
-    public int getTn() {
-        return tn;
-    }
-
-    public void setTn(int tn) {
-        this.tn = tn;
-    }
-
-    public int getFp() {
-        return fp;
-    }
-
-    public void setFp(int fp) {
-        this.fp = fp;
-    }
-
-    public int getFn() {
-        return fn;
-    }
-
-    public void setFn(int fn) {
-        this.fn = fn;
     }
 
     @Override
     protected int[] evaluateFrame(String regionsLine, String pointsLine) throws NumberFormatException {
-        this.tp = this.tn = this.fp = this.fn = 0;
+        int tp = 0;
+        int tn = 0;
+        int fp = 0;
+        int fn = 0;
         //Separar a as regioes pela vírgula
-        List<Region> regions = splitRegions(regionsLine.split(","));
+        List<Region> regions = split(Constants.RECT_FORMAT, regionsLine.split(","));
         List<Region> regionsAux = regions;
         // Separar os pontos pela vírgula
-        List<Point> points = splitPoints(pointsLine.split(","));
+        List<Point> points = split(Constants.CIRCLE_FORMAT, pointsLine.split(","));
         List<Point> pointsAux = points;
         Region rect;
         int part;
-        boolean eggFound = false;
+        boolean eggFound;
         int[] metrics = new int[4];
 
         // Algoritmo começa aqui
@@ -103,7 +72,7 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
                 eggFound = false;
                 LOG.log(Level.INFO, "Nao casou um contorno com a marcacao {0}", eggFound);
                 // acrescenta a quantidade de falsos negativos
-                this.fn++;
+                fn++;
             }
 
         }
@@ -111,13 +80,52 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
         LOG.log(Level.INFO, "Regiões remanescentes {0}", regions.size());
         LOG.log(Level.INFO, "Pontos remanescentes {0}", points.size());
 
-        this.fp = points.size() / 78;
+        fp = points.size() / 78;
 
-        metrics[0] = this.tp;
-        metrics[1] = this.fn;
-        metrics[2] = this.fp;
-        metrics[3] = this.tn;
+        metrics[0] = tp;
+        metrics[1] = fn;
+        metrics[2] = fp;
+        metrics[3] = tn;
         return metrics;
+    }
+
+    private List split(int ofFormat, String[] data) throws NumberFormatException {
+        int jumpStep;
+        int atStartPoint;
+        List formatList;
+        switch (ofFormat) {
+            case Constants.RECT_FORMAT -> {
+                jumpStep = 4;
+                atStartPoint = 1;
+            }
+            case Constants.CIRCLE_FORMAT -> {
+                jumpStep = 2;
+                atStartPoint = 2;
+            }
+            default ->
+                throw new AssertionError();
+        }
+        formatList = iterateOver(data, ofFormat, atStartPoint, jumpStep);
+        return formatList;
+
+    }
+
+    private List<Region> iterateOver(String[] data, int ofFormat, int atStartPoint, int jumpStep) throws NumberFormatException {
+        List formatList = new CopyOnWriteArrayList<>();
+        for (int i = atStartPoint; i < data.length; i += jumpStep) {
+            if (data[i] != null && !data[i].isBlank()) {
+                switch (ofFormat) {
+                    case Constants.RECT_FORMAT ->
+                        formatList.add(addRegion(data, i));
+                    case Constants.CIRCLE_FORMAT ->
+                        formatList.add(addPoint(data, i));
+                    default ->
+                        throw new AssertionError();
+                }
+
+            }
+        }
+        return formatList;
     }
 
     /**
@@ -127,19 +135,11 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
      * @return the list of points
      * @throws NumberFormatException
      */
-    private List<Point> splitPoints(String[] data) throws NumberFormatException {
-        List<Point> points = new CopyOnWriteArrayList<>();
-        //Separar a string pela vírgula
-        // transformar os pontos de String para Lista
-        // ignorar a posição 1 e a 2 as quais representam o nome do frame e o total de ovos contidos
-        for (int i = 2; i < data.length; i += 2) {
-            if (data[i] != null && !data[i].isBlank()) {
-                points.add(new Point(
-                        Integer.parseInt(data[i].replace(".0", "").trim()),
-                        Integer.parseInt(data[i + 1].replace(".0", "").trim())));
-            }
-        }
-        return points;
+    private Point addPoint(String[] data, int ofPosition) throws NumberFormatException {
+        return new Point(
+                Integer.parseInt(data[ofPosition].replace(".0", "").trim()),
+                Integer.parseInt(data[ofPosition + 1].replace(".0", "").trim()));
+
     }
 
     /**
@@ -150,21 +150,14 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
      * @return the list of regions
      * @throws NumberFormatException
      */
-    private List<Region> splitRegions(String[] data) throws NumberFormatException {
-        List<Region> regions = new CopyOnWriteArrayList<>();
-        // transformar as regioes de String para Lista
-        // ignorar a posição 1 a qual representa o nome do frame
-        for (int i = 1; i < data.length; i += 4) {
-            if (data[i] != null && !data[i].isBlank()) {
-                regions.add(new Region(
-                        //Acrescentando correção em caso de valores negativos
-                        Integer.parseInt(data[i + 3]) > 0 ? Integer.parseInt(data[i + 3]) : Math.abs(Integer.parseInt(data[i + 3])),
-                        Integer.parseInt(data[i + 2]) > 0 ? Integer.parseInt(data[i + 2]) : Math.abs(Integer.parseInt(data[i + 2])),
-                        new Point(Integer.parseInt(data[i + 3]) > 0 ? (Integer.parseInt(data[i]) - Integer.parseInt(data[i + 3])) : Integer.parseInt(data[i]),
-                                Integer.parseInt(data[i + 1]) > 0 ? (Integer.parseInt(data[i + 1]) - Integer.parseInt(data[i + 2])) : Integer.parseInt(data[i + 1]))));
-            }
-        }
-        return regions;
+    private Region addRegion(String[] data, int ofPosition) throws NumberFormatException {
+        return new Region(
+                //Acrescentando correção em caso de valores negativos
+                Integer.parseInt(data[ofPosition + 3]) > 0 ? Integer.parseInt(data[ofPosition + 3]) : Math.abs(Integer.parseInt(data[ofPosition + 3])),
+                Integer.parseInt(data[ofPosition + 2]) > 0 ? Integer.parseInt(data[ofPosition + 2]) : Math.abs(Integer.parseInt(data[ofPosition + 2])),
+                new Point(Integer.parseInt(data[ofPosition + 3]) > 0 ? (Integer.parseInt(data[ofPosition]) - Integer.parseInt(data[ofPosition + 3])) : Integer.parseInt(data[ofPosition]),
+                        Integer.parseInt(data[ofPosition + 1]) > 0 ? (Integer.parseInt(data[ofPosition + 1]) - Integer.parseInt(data[ofPosition + 2])) : Integer.parseInt(data[ofPosition + 1])));
+
     }
 
 }

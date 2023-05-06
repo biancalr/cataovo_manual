@@ -8,12 +8,11 @@ import cataovo.constants.Constants;
 import cataovo.entities.Frame;
 import cataovo.opencvlib.converters.Converter;
 import cataovo.opencvlib.wrappers.MatWrapper;
-import java.util.Queue;
 import java.util.logging.Logger;
 
 /**
  * This thread is responsible for batch processing a
- * {@link cataovo.entities.Frame}. This processment is responsible for find each
+ * {@link cataovo.entities.Frame Frame}. This processment is responsible for find each
  * egg present in the frame.
  *
  * @author Bianca Leopoldo Ramos.
@@ -24,19 +23,15 @@ public class ThreadAutomaticFramesProcessor extends DataProcessingThreadAutomati
      * Logging for ThreadAutomaticFramesProcessor.
      */
     private static final Logger LOG = Logger.getLogger(ThreadAutomaticFramesProcessor.class.getName());
-
-    public ThreadAutomaticFramesProcessor(Queue<Frame> frames, String destination) {
-        super(frames, destination);
-    }
-    
-    public ThreadAutomaticFramesProcessor(Frame frame, String destination) {
+   
+    public ThreadAutomaticFramesProcessor(final Frame frame, final String destination) {
         super(frame, destination);
     }
 
     /**
      * <p>
-     * Sequence that processes each {@link cataovo.entities.Frame} of a
-     * {@link cataovo.entities.Palette}.</p>
+     * Sequence that processes each {@link cataovo.entities.Frame Frame} of a
+     * {@link cataovo.entities.Palette Pelette}.</p>
      *
      * <p>
      * Explicação das operações a serem aplicadas. </p>
@@ -48,7 +43,7 @@ public class ThreadAutomaticFramesProcessor extends DataProcessingThreadAutomati
      * @see cataovo.opencvlib.automation.imageProcessing.AutomaticImageProcess
      */
     @Override
-    public StringBuffer startSequence(Frame frame) {
+    public StringBuffer startSequence(final Frame frame) {
         LOG.info("Starting to process the frame");
         MatWrapper current = new MatWrapper(frame);
         String dstny = destination + "/" + frame.getName();

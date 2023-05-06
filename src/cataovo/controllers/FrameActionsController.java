@@ -15,26 +15,38 @@ import java.util.Collection;
 import javax.swing.Icon;
 
 /**
- * Controls the actions in a {@link cataovo.entities.Frame}.
+ * Controls the actions in a {@link cataovo.entities.Frame Frame}.
  *
  * @author Bianca Leopoldo Ramos.
  */
 public interface FrameActionsController {
 
     /**
-     * Chooses the format to paint the {@link cataovo.entities.Frame} whether is a dot or a rectangle
+     * Chooses the format to paint the {@link cataovo.entities.Frame Frame} whether is a dot or a rectangle
      *
      * @param point the point clicked in the frame
      * @param currentFrame
-     * @return the image correspondent to the quantoty of clicks in the frame.
+     * @return the image correspondent to the quantity of clicks in the frame.
      * @throws DirectoryNotValidException
      * @throws cataovo.exceptions.RegionNotValidException
      * @throws CloneNotSupportedException
      * @see cataovo.utils.frameUtils.FrameActionsUtils#drawCircle(cataovo.opencvlib.wrappers.PointWrapper) 
      * @see cataovo.utils.frameUtils.FrameActionsUtils#drawRectangle(cataovo.opencvlib.wrappers.RectWrapper) 
      */
-    public Icon paintFormat(Point point, Frame currentFrame) throws DirectoryNotValidException, RegionNotValidException, CloneNotSupportedException;
+    public Icon paintFormats(Point point, Frame currentFrame) throws DirectoryNotValidException, RegionNotValidException, CloneNotSupportedException;
 
+    /**
+     * Paint a collection of {@link cataovo.entities.Region Region} and {@link cataovo.entities.Point Point} in a {@link cataovo.entities.Frame Frame}.
+     * 
+     * @param currentFrame
+     * @param regions the regions found in the file for the frame.
+     * @param points the points found in the file for the frame.
+     * @return the image corresponding to the Regions and Points in the frame.
+     * @see cataovo.controllers.FileReaderController#getPointsInFrameFile(java.lang.String, java.lang.String) 
+     * @see cataovo.controllers.FileReaderController#getRegionsInFrameFile(java.lang.String, java.lang.String) 
+     */
+    public Icon paintFormats(Frame currentFrame, Collection<RectWrapper> regions, Collection<PointWrapper> points);
+    
     /**
      * Removes the last demarked {@link cataovo.entities.Region}.
      *
@@ -56,14 +68,5 @@ public interface FrameActionsController {
      * @see cataovo.utils.frameUtils.FrameActionsUtils#captureSubframe(cataovo.entities.Point, cataovo.entities.Point) 
      */
     public Icon captureSubframe(Point pointClick, Frame currentFrame) throws DirectoryNotValidException;
-
-    /**
-     * 
-     * @param currentFrame
-     * @param regions
-     * @param points
-     * @return 
-     */
-    public Icon paintFormatsOnFrameOnEvaluation(Frame currentFrame, Collection<RectWrapper> regions, Collection<PointWrapper> points);
 
 }

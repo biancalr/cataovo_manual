@@ -6,7 +6,7 @@ package cataovo.automation.threads.dataSaving;
 
 import cataovo.constants.Constants;
 import cataovo.entities.Palette;
-import cataovo.resources.fileChooser.handler.FileExtension;
+import cataovo.enums.FileExtension;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,18 +17,10 @@ import java.util.logging.Logger;
 public class ThreadAutomationEvaluationProcess extends DataSavingThreadAutomation {
 
     private static final Logger LOG = Logger.getLogger(ThreadAutomationEvaluationProcess.class.getName());
-    private int[] evaluationResult;
+    private String evaluationResult;
 
-    public ThreadAutomationEvaluationProcess(Palette palette, String savingDirectory, FileExtension fileExtension, String parentTabName, int[] evaluationResult, String dateTime) {
+    public ThreadAutomationEvaluationProcess(Palette palette, String savingDirectory, FileExtension fileExtension, String parentTabName, String evaluationResult, String dateTime) {
         super(palette, savingDirectory, fileExtension, parentTabName, dateTime);
-        this.evaluationResult = evaluationResult;
-    }
-
-    public int[] getEvaluationResult() {
-        return evaluationResult;
-    }
-
-    public void setEvaluationResult(int[] evaluationResult) {
         this.evaluationResult = evaluationResult;
     }
 
@@ -39,54 +31,96 @@ public class ThreadAutomationEvaluationProcess extends DataSavingThreadAutomatio
 //        evaluation[1]); // false negative
 //        evaluation[3]); // true negative
 
+        String[] resultLineSplitted = this.evaluationResult.split(Constants.QUEBRA_LINHA);
         StringBuffer sb = new StringBuffer(getPalette().getDirectory().getPath());
         sb.append(Constants.QUEBRA_LINHA);
-        sb.append("Verdadeiro Positivo: ").append(this.evaluationResult[0]).append(Constants.QUEBRA_LINHA);
-        sb.append("Falso Positivo: ").append(this.evaluationResult[2]).append(Constants.QUEBRA_LINHA);
-        sb.append("Falso Negativo: ").append(this.evaluationResult[1]).append(Constants.QUEBRA_LINHA);
-        sb.append("Verdadeiro Negativo: ").append(this.evaluationResult[3]).append(Constants.QUEBRA_LINHA);
+        sb.append("Verdadeiro Positivo: ").append(resultLineSplitted[0]).append(Constants.QUEBRA_LINHA);
+        sb.append("Falso Positivo: ").append(resultLineSplitted[2]).append(Constants.QUEBRA_LINHA);
+        sb.append("Falso Negativo: ").append(resultLineSplitted[1]).append(Constants.QUEBRA_LINHA);
+        sb.append("Verdadeiro Negativo: ").append(resultLineSplitted[3]).append(Constants.QUEBRA_LINHA);
         sb.append(Constants.QUEBRA_LINHA);
-        sb.append("Taxa de Verdadeiro Positivo: ").append(getPercentageTruePositive(this.evaluationResult[1], this.evaluationResult[0])).append("%").append(Constants.QUEBRA_LINHA);
-        sb.append("Taxa de Falso Positivo: ").append(getPercentageFalsePositive(evaluationResult[2], evaluationResult[3])).append("%").append(Constants.QUEBRA_LINHA);
-        sb.append("Taxa de Falso Negativo: ").append(getPercentageFalseNegative(evaluationResult[3], evaluationResult[2])).append("%").append(Constants.QUEBRA_LINHA);
-        sb.append("Taxa de Verdadeiro Negativo: ").append(getPercentageTrueNegative(evaluationResult[1], evaluationResult[0])).append("%").append(Constants.QUEBRA_LINHA);
-        sb.append("Taxa de Acurácia: ").append(getPercentageAccuracy(evaluationResult[0], evaluationResult[3], evaluationResult[2], evaluationResult[1])).append("%").append(Constants.QUEBRA_LINHA);
-        sb.append("Taxa de Precisão: ").append(getPercentagePrecision(evaluationResult[0], evaluationResult[2])).append("%").append(Constants.QUEBRA_LINHA);
+        sb.append("Taxa de Verdadeiro Positivo: ").append(getPercentageOf(Constants.CALCULATE_METHOD_TRUE_POSITIVE, resultLineSplitted[1], resultLineSplitted[0])).append("%").append(Constants.QUEBRA_LINHA);
+        sb.append("Taxa de Falso Positivo: ").append(getPercentageOf(Constants.CALCULATE_METHOD_FALSE_POSITIVE , resultLineSplitted[2], resultLineSplitted[3])).append("%").append(Constants.QUEBRA_LINHA);
+        sb.append("Taxa de Falso Negativo: ").append(getPercentageOf(Constants.CALCULATE_METHOD_FALSE_NEGATIVE, resultLineSplitted[3], resultLineSplitted[2])).append("%").append(Constants.QUEBRA_LINHA);
+        sb.append("Taxa de Verdadeiro Negativo: ").append(getPercentageOf(Constants.CALCULATE_METHOD_TRUE_NEGATIVE, resultLineSplitted[1], resultLineSplitted[0])).append("%").append(Constants.QUEBRA_LINHA);
+        sb.append("Taxa de Acurácia: ").append(getPercentageOf(Constants.CALCULATE_METHOD_ACCURACY, resultLineSplitted[0], resultLineSplitted[3], resultLineSplitted[2], resultLineSplitted[1])).append("%").append(Constants.QUEBRA_LINHA);
+        sb.append("Taxa de Precisão: ").append(getPercentageOf(Constants.CALCULATE_METHOD_PRECISION, resultLineSplitted[0], resultLineSplitted[2])).append("%").append(Constants.QUEBRA_LINHA);
 
         return sb;
     }
+    
+    private int getPercentageOf(int method, String strValue1, String strValue2){
+        int value1 = Integer.parseInt(strValue1);
+        int value2 = Integer.parseInt(strValue2);
+        switch (method) {
+            case Constants.CALCULATE_METHOD_TRUE_POSITIVE -> {
+                return getPercentageTruePositive(value1, value2);
+            }
+            case Constants.CALCULATE_METHOD_FALSE_POSITIVE -> {
+                return getPercentageFalsePositive(value1, value2);
+            }
+            case Constants.CALCULATE_METHOD_TRUE_NEGATIVE -> {
+                return getPercentageTrueNegative(value1, value2);
+            }
+            case Constants.CALCULATE_METHOD_FALSE_NEGATIVE -> {
+                return getPercentageFalseNegative(value1, value2);
+            }
+            case Constants.CALCULATE_METHOD_PRECISION -> {
+                return getPercentagePrecision(value1, value2);
+            }
+            default -> {
+                throw new AssertionError();
+            }
+        }
+    }
+    
+    private int getPercentageOf(int method, String strValue1, String strValue2, String strValue3, String strValue4){
+        int value1 = Integer.parseInt(strValue1);
+        int value2 = Integer.parseInt(strValue2);
+        int value3 = Integer.parseInt(strValue3);
+        int value4 = Integer.parseInt(strValue4);
+        switch (method) {
+            case Constants.CALCULATE_METHOD_ACCURACY -> {
+                return getPercentageAccuracy(value1, value2, value3, value4);
+            }
+            default -> {
+                throw new AssertionError();
+            }
+        }
+        
+    }
 
-    public int getPercentageTruePositive(int falseNegative, int truePositive) {
+    private int getPercentageTruePositive(int falseNegative, int truePositive) {
         // TVP = VP / (FN+VP)
         LOG.log(Level.INFO, "Calculating Percentage: True Positive");
         return truePositive / (falseNegative + truePositive);
     }
 
-    public int getPercentageFalsePositive(int falsePositive, int trueNegative) {
+    private int getPercentageFalsePositive(int falsePositive, int trueNegative) {
         //TFP = FP / (VN+FP)
         LOG.log(Level.INFO, "Calculating Percentage: False Positive");
         return falsePositive / (trueNegative + falsePositive);
     }
 
-    public int getPercentageTrueNegative(int trueNegative, int falsePositive) {
+    private int getPercentageTrueNegative(int trueNegative, int falsePositive) {
         // TVN = VN / (VN+FP)
         LOG.log(Level.INFO, "Calculating Percentage: True Negative");
         return trueNegative / (trueNegative + falsePositive);
     }
 
-    public int getPercentageFalseNegative(int falseNegative, int truePositive) {
+    private int getPercentageFalseNegative(int falseNegative, int truePositive) {
         // TFN = FN / (FN+VP)
         LOG.log(Level.INFO, "Calculating Percentage: False Negative");
         return falseNegative / (falseNegative + truePositive);
     }
 
-    public int getPercentageAccuracy(int truePositive, int trueNegative, int falsePositive, int falseNegative) {
+    private int getPercentageAccuracy(int truePositive, int trueNegative, int falsePositive, int falseNegative) {
         // Acc = (VP+VN) / (VP+VN+FP+FN)
         LOG.log(Level.INFO, "Calculating Percentage: Accuracy");
         return (truePositive + trueNegative) / (truePositive + trueNegative + falsePositive + falseNegative);
     }
 
-    public int getPercentagePrecision(int truePositive, int falsePositive) {
+    private int getPercentagePrecision(int truePositive, int falsePositive) {
         // Prec = VP / (VP+FP)
         LOG.log(Level.INFO, "Calculating Percentage: Precision");
         return truePositive / (truePositive + falsePositive);

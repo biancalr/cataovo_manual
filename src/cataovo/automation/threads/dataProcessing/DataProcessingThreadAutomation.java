@@ -8,7 +8,6 @@ import cataovo.constants.Constants;
 import cataovo.entities.Frame;
 import cataovo.opencvlib.automation.imageProcessing.AutomaticImageProcess;
 import cataovo.opencvlib.automation.imageProcessing.AutomaticImageProcessImplements;
-import java.util.Queue;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,14 +24,9 @@ public abstract class DataProcessingThreadAutomation implements Callable<StringB
     private static final Logger LOG = Logger.getLogger(DataProcessingThreadAutomation.class.getName());
 
     /**
-     * The a slot of the total frames in a palette to be processed.
-     */
-    private Queue<Frame> frames;
-
-    /**
      * The frame in a palette to be processed.
      */
-    private Frame frame;
+    private final Frame frame;
     /**
      * Where the frames wll be saved.
      */
@@ -45,16 +39,9 @@ public abstract class DataProcessingThreadAutomation implements Callable<StringB
     /**
      * The thread responsable for the automatic processing.
      *
-     * @param frames The a slot of the total {@link cataovo.entities.Frame}s in
-     * a palette to be processed.
-     * @param destination Where the frames wll be saved.
+     * @param frame
+     * @param destination
      */
-    public DataProcessingThreadAutomation(Queue<Frame> frames, String destination) {
-        this.frames = frames;
-        this.destination = destination;
-        this.imageProcess = new AutomaticImageProcessImplements();
-    }
-    
     public DataProcessingThreadAutomation(Frame frame, String destination) {
         this.frame = frame;
         this.destination = destination;
@@ -76,22 +63,13 @@ public abstract class DataProcessingThreadAutomation implements Callable<StringB
      *
      * @return the folder where the images and the relatory ware saved.
      * @throws Exception
-     * @see
-     * cataovo.automation.threads.dataSaving.NewThreadAutomationAutomaticProcess
      */
     @Override
     public StringBuffer call() throws Exception {
         LOG.log(Level.INFO, "Starting Sequence...");
         StringBuffer result = new StringBuffer();
-        if (this.frame == null) {
-            for (Frame f : frames) {
-                result.append(Constants.QUEBRA_LINHA).append(f.getName()).append(",");
-                result.append(startSequence(f));
-            }
-        } else {
-            result.append(Constants.QUEBRA_LINHA).append(this.frame.getName()).append(",");
-            result.append(startSequence(this.frame));
-        }
+        result.append(Constants.QUEBRA_LINHA).append(this.frame.getName()).append(",");
+        result.append(startSequence(this.frame));
         return result;
     }
 

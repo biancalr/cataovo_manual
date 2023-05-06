@@ -6,8 +6,9 @@ package cataovo.automation.threads.dataSaving;
 
 import cataovo.constants.Constants;
 import cataovo.entities.Palette;
+import cataovo.enums.ProcessingMode;
 import cataovo.exceptions.AutomationExecutionException;
-import cataovo.resources.fileChooser.handler.FileExtension;
+import cataovo.enums.FileExtension;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,23 +35,23 @@ public abstract class DataSavingThreadAutomation implements Callable<String> {
     /**
      * The palette to be processed.
      */
-    protected Palette palette;
+    protected final Palette palette;
     /**
      * The directory where the results will be saved.
      */
-    protected String savingDirectory;
+    protected final String savingDirectory;
     /**
      * Referes to the relatory's file extension where the text data will be
      * saved.
      */
-    protected FileExtension fileExtension;
+    protected final FileExtension fileExtension;
     /**
      * Relates the tabName to the type of processing of a palette: Manual or
      * Automatic. Also helps to create folders of each processing type.
      */
     private final String parentTabName;
     /**
-     *
+     * date and time captured when the process begin to create a relatory folder
      */
     protected final String dateTime;
 
@@ -66,7 +67,7 @@ public abstract class DataSavingThreadAutomation implements Callable<String> {
      * palette: Manual or Automatic.
      * @param dateTime
      */
-    public DataSavingThreadAutomation(Palette palette, String savingDirectory, FileExtension fileExtension, String parentTabName, String dateTime) {
+    public DataSavingThreadAutomation(Palette palette, final String savingDirectory, final FileExtension fileExtension, final String parentTabName, final String dateTime) {
         this.palette = palette;
         this.savingDirectory = savingDirectory;
         this.fileExtension = fileExtension;
@@ -100,7 +101,7 @@ public abstract class DataSavingThreadAutomation implements Callable<String> {
      */
     private synchronized String createFile() throws Exception {
         StringBuffer sb = new StringBuffer();
-        String processingMode = (this.parentTabName == null ? Constants.TAB_NAME_MANUAL_PT_BR == null : this.parentTabName.equals(Constants.TAB_NAME_MANUAL_PT_BR)) ? Constants.NAME_MANUAL : (this.parentTabName == null ? Constants.TAB_NAME_AUTOMATIC_PT_BR == null : this.parentTabName.equals(Constants.TAB_NAME_AUTOMATIC_PT_BR)) ? Constants.NAME_AUTOMATICO : Constants.NAME_AVALIACAO;
+        String processingMode = (this.parentTabName == null ? Constants.TAB_NAME_MANUAL_PT_BR == null : this.parentTabName.equals(Constants.TAB_NAME_MANUAL_PT_BR)) ? ProcessingMode.MANUAL.getProcessingMode() : (this.parentTabName == null ? Constants.TAB_NAME_AUTOMATIC_PT_BR == null : this.parentTabName.equals(Constants.TAB_NAME_AUTOMATIC_PT_BR)) ? ProcessingMode.AUTOMATIC.getProcessingMode() : ProcessingMode.EVALUATION.getProcessingMode();
         String dstn = palette.getDirectory().getName() + "/" + processingMode + "/" + this.dateTime;
         File directory = new File(savingDirectory + "/cataovo/" + palette.getDirectory().getName() + "/" + processingMode + "/" + this.dateTime);
         final String createdFile = savingDirectory + "/cataovo/" + dstn + "/Relatory." + this.fileExtension.getExtension();
@@ -108,7 +109,7 @@ public abstract class DataSavingThreadAutomation implements Callable<String> {
             directory.mkdirs();
         }
 
-        if (processingMode.equals(Constants.NAME_AUTOMATICO)) {
+        if (processingMode.equals(ProcessingMode.AUTOMATIC.getProcessingMode())) {
             sb.append(verifyFileAreadyExistent(createdFile));
         }
 
@@ -137,20 +138,23 @@ public abstract class DataSavingThreadAutomation implements Callable<String> {
         return sb;
     }
 
-    private synchronized StringBuffer readFile(File createdFile) throws AutomationExecutionException {
-        StringBuffer sb = new StringBuffer();
+    private synchronized StringBuffer readFile(final File createdFile) throws AutomationExecutionException {
         LOG.info("Starting to read the file");
-        try (InputStreamReader in = new InputStreamReader(new FileInputStream(createdFile)); BufferedReader csvReader = new BufferedReader(in);) {
-
-            csvReader.lines().filter(l -> !l.contains(palette.getPathName()) && l.length() > 4)
-                    .forEachOrdered(l -> sb.append(Constants.QUEBRA_LINHA).append(l));
-            sb.append(Constants.QUEBRA_LINHA);
-
+        try (InputStreamReader in = new InputStreamReader(new FileInputStream(createdFile)); 
+                BufferedReader csvReader = new BufferedReader(in);) {
+            return readContent(csvReader);
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());
             JOptionPane.showMessageDialog(null, e.getMessage());
             throw new AutomationExecutionException("Error while reading an existing file.");
         }
+    }
+
+    private StringBuffer readContent(final BufferedReader csvReader) {
+        StringBuffer sb = new StringBuffer();
+        csvReader.lines().filter(l -> !l.contains(palette.getPathName()) && l.length() > 4)
+                .forEachOrdered(l -> sb.append(Constants.QUEBRA_LINHA).append(l));
+        sb.append(Constants.QUEBRA_LINHA);
         return sb;
     }
 
@@ -162,15 +166,7 @@ public abstract class DataSavingThreadAutomation implements Callable<String> {
         return palette;
     }
 
-    /**
-     *
-     * @param palette the palette to set
-     */
-    public void setPalette(Palette palette) {
-        this.palette = palette;
-    }
-
-    /**
+   /**
      *
      * @return savingDirectory
      */
@@ -180,26 +176,10 @@ public abstract class DataSavingThreadAutomation implements Callable<String> {
 
     /**
      *
-     * @param savingDirectory the savingDirectory to set.
-     */
-    public void setSavingDirectory(String savingDirectory) {
-        this.savingDirectory = savingDirectory;
-    }
-
-    /**
-     *
      * @return fileExtension
      */
     public FileExtension getFileExtension() {
         return fileExtension;
-    }
-
-    /**
-     *
-     * @param fileExtension the fileExtension to set.
-     */
-    public void setFileExtension(FileExtension fileExtension) {
-        this.fileExtension = fileExtension;
     }
 
     /**

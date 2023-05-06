@@ -6,7 +6,7 @@ package cataovo.automation.threads.dataSaving;
 
 import cataovo.constants.Constants;
 import cataovo.entities.Palette;
-import cataovo.resources.fileChooser.handler.FileExtension;
+import cataovo.enums.FileExtension;
 
 /**
  *
@@ -22,12 +22,13 @@ public final class ThreadAutomationManualProcess extends DataSavingThreadAutomat
      * @param savingDirectory the directory where the results will be saved.
      * @param fileExtension referes to the relatory's file extension where the text
      * data will be saved.
-     * @param parent relates the tabName to the type of processing of a
+     * @param tabName relates the tabName to the type of processing of a
      * palette: Manual or Automatic. Also helps to create folders of each
      * processing type.
+     * @param dateTime the date and time when the process begun to name the relatory
      */
-    public ThreadAutomationManualProcess(Palette palette, String savingDirectory, FileExtension fileExtension, String parent, String dateTime) {
-        super(palette, savingDirectory, fileExtension, parent, dateTime);
+    public ThreadAutomationManualProcess(final Palette palette, final String savingDirectory, final FileExtension fileExtension, final String tabName, final String dateTime) {
+        super(palette, savingDirectory, fileExtension, tabName, dateTime);
     }
 
     @Override
@@ -35,7 +36,7 @@ public final class ThreadAutomationManualProcess extends DataSavingThreadAutomat
         StringBuffer sb = new StringBuffer(getPalette().getDirectory().getPath());
         sb.append(Constants.QUEBRA_LINHA);
         sb.append(getPalette().getTheTotalNumberOfEggsPalette());
-        getPalette().getFrames().parallelStream().forEach((f) -> {
+        getPalette().getFrames().stream().forEach((f) -> {
             sb.append(Constants.QUEBRA_LINHA);
             sb.append(f.getName());
             if (!f.getRegionsContainingEggs().isEmpty()) {

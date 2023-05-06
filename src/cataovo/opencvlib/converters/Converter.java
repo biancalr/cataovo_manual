@@ -7,7 +7,7 @@ package cataovo.opencvlib.converters;
 
 import cataovo.entities.Frame;
 import cataovo.entities.Point;
-import cataovo.resources.fileChooser.handler.FileExtension;
+import cataovo.enums.FileExtension;
 import cataovo.opencvlib.wrappers.MatOfBytesWrapper;
 import cataovo.opencvlib.wrappers.MatWrapper;
 import java.awt.Image;
