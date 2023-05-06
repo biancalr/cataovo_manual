@@ -9,7 +9,7 @@ import cataovo.constants.Constants;
 import cataovo.entities.Frame;
 import cataovo.entities.Palette;
 import cataovo.exceptions.DirectoryNotValidException;
-import cataovo.resources.fileChooser.UI.MyFileChooserUI;
+import cataovo.externals.swinglib.wrappers.FileChooserUI;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,7 +24,7 @@ import javax.swing.filechooser.FileSystemView;
 public class MainResources {
 
     private static final Logger LOG = Logger.getLogger(MainResources.class.getName());
-    private final MyFileChooserUI fileChooserUI;
+    private final FileChooserUI fileChooserUI;
     private Palette palette;
     private Palette paletteToSave;
     private Frame currentFrame;
@@ -38,7 +38,7 @@ public class MainResources {
         String homeDirectory = FileSystemView.getFileSystemView().getHomeDirectory().getPath();
         LOG.log(Level.INFO, "Selecting home directory: {0}", homeDirectory);
         savingFolder = getFileFolder(new File(homeDirectory));
-        fileChooserUI = new MyFileChooserUI(new File(homeDirectory));
+        fileChooserUI = new FileChooserUI(new File(homeDirectory));
         panelTabHelper = new PanelTabHelper(false, 0, "Manual");
     }
 
@@ -63,7 +63,7 @@ public class MainResources {
         this.savingFolder = getFileFolder(savingFolder);
     }
 
-    public MyFileChooserUI getFileChooserUI() {
+    public FileChooserUI getFileChooserUI() {
         return fileChooserUI;
     }
 

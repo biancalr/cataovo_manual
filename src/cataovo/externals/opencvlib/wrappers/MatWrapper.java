@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.opencvlib.wrappers;
+package cataovo.externals.opencvlib.wrappers;
 
 import cataovo.entities.Frame;
 import org.opencv.core.CvType;

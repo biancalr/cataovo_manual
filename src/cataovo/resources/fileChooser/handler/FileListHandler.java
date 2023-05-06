@@ -18,11 +18,11 @@ import java.util.logging.Level;
  * @author Bianca Leopoldo Ramos
  * @param <T> The type of the elements to deal in the List
  */
-public final class MyFileListHandler<T> {
+public final class FileListHandler<T> {
 
-    private static final Logger LOG = Logger.getLogger(MyFileListHandler.class.getName());
+    private static final Logger LOG = Logger.getLogger(FileListHandler.class.getName());
 
-    public MyFileListHandler() {
+    public FileListHandler() {
     }
 
     /**

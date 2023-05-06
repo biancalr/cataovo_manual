@@ -8,16 +8,16 @@ package cataovo.utils.frameUtils;
 import cataovo.entities.Frame;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
-import cataovo.opencvlib.converters.Converter;
-import cataovo.opencvlib.wrappers.MatWrapper;
-import cataovo.opencvlib.wrappers.PointWrapper;
-import cataovo.opencvlib.wrappers.RectWrapper;
+import cataovo.externals.opencvlib.converters.Converter;
+import cataovo.externals.opencvlib.wrappers.MatWrapper;
+import cataovo.externals.opencvlib.wrappers.PointWrapper;
+import cataovo.externals.opencvlib.wrappers.RectWrapper;
 import java.util.Collection;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 /**
- * Define the actions to do in a {@link cataovo.entities.Frame}.
+ * Define the actions to do in a {@link cataovo.entities.Frame Frame}.
  *
  * @author Bianca Leopoldo Ramos
  */

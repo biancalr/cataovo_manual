@@ -3,7 +3,7 @@
  * To change this template directory, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.resources.fileChooser.UI;
+package cataovo.externals.swinglib.wrappers;
 
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.enums.FileExtension;
@@ -21,23 +21,23 @@ import javax.swing.JTabbedPane;
  *
  * @author Bianca Leopoldo Ramos
  */
-public class MyFileChooserUI extends JFileChooser{
+public class FileChooserUI extends JFileChooser{
 
     private FileExtension extensionType;
-    private static final Logger LOG = Logger.getLogger(MyFileChooserUI.class.getName());
+    private static final Logger LOG = Logger.getLogger(FileChooserUI.class.getName());
 
-    public MyFileChooserUI() {
+    public FileChooserUI() {
         super.setFileFilter(new FileFilterExtensions(extensionType));
     }
 
-    public MyFileChooserUI(File directory, FileExtension extensionType) {
+    public FileChooserUI(File directory, FileExtension extensionType) {
         this.extensionType = extensionType;
         super.setFileFilter(new FileFilterExtensions(extensionType));
         super.setCurrentDirectory(directory);
         LOG.log(Level.INFO, "Current directory: {0}", directory);
     }
 
-    public MyFileChooserUI(File currentDirectory) {
+    public FileChooserUI(File currentDirectory) {
         super.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         super.setCurrentDirectory(currentDirectory);
         LOG.log(Level.INFO, "Current directory: {0}", currentDirectory);

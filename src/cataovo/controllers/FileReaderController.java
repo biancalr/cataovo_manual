@@ -4,8 +4,8 @@
  */
 package cataovo.controllers;
 
-import cataovo.opencvlib.wrappers.PointWrapper;
-import cataovo.opencvlib.wrappers.RectWrapper;
+import cataovo.externals.opencvlib.wrappers.PointWrapper;
+import cataovo.externals.opencvlib.wrappers.RectWrapper;
 import java.io.FileNotFoundException;
 import java.util.List;
 

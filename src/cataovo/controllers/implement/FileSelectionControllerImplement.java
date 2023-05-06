@@ -14,10 +14,10 @@ import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
 import cataovo.exceptions.ReportNotValidException;
 import cataovo.resources.MainResources;
-import cataovo.resources.fileChooser.UI.MyFileChooserUI;
+import cataovo.externals.swinglib.wrappers.FileChooserUI;
 import cataovo.enums.FileExtension;
 import cataovo.resources.fileChooser.handler.FileFilterExtensions;
-import cataovo.resources.fileChooser.handler.MyFileListHandler;
+import cataovo.resources.fileChooser.handler.FileListHandler;
 import java.awt.Component;
 import java.awt.HeadlessException;
 import java.io.File;
@@ -39,7 +39,7 @@ import javax.swing.JTabbedPane;
 public class FileSelectionControllerImplement implements FileSelectionController {
 
     private static final Logger LOG = Logger.getLogger(FileSelectionControllerImplement.class.getName());
-    private final MyFileChooserUI fileChooser;
+    private final FileChooserUI fileChooser;
 
     public FileSelectionControllerImplement() throws DirectoryNotValidException {
         fileChooser = MainResources.getInstance().getFileChooserUI();
@@ -109,7 +109,7 @@ public class FileSelectionControllerImplement implements FileSelectionController
      * @throws ImageNotValidException
      */
     private boolean actionCommandOpenFolder(boolean isADirectoryOnly, Component parent) throws FileNotFoundException, DirectoryNotValidException, ImageNotValidException, HeadlessException {
-        MyFileChooserUI chooser = this.fileChooser;
+        FileChooserUI chooser = this.fileChooser;
         chooser.resetChoosableFileFilters();
         chooser.setFileFilter(null);
         File file = chooser.dialogs(JFileChooser.OPEN_DIALOG, isADirectoryOnly, parent);
@@ -141,7 +141,7 @@ public class FileSelectionControllerImplement implements FileSelectionController
      * @throws HeadlessException
      */
     private boolean actionCommandSelectReport(final boolean isADirectoryOnly, final Component parent) throws DirectoryNotValidException, HeadlessException, ReportNotValidException {
-        MyFileChooserUI chooser = this.fileChooser;
+        FileChooserUI chooser = this.fileChooser;
         chooser.resetChoosableFileFilters();
         chooser.addChoosableFileFilter(new FileFilterExtensions(FileExtension.CSV));
         chooser.setFileFilter(new FileFilterExtensions(FileExtension.CSV));
@@ -219,7 +219,7 @@ public class FileSelectionControllerImplement implements FileSelectionController
      */
     private boolean actionCommandSetSavingFolder(boolean isADirectoryOnly, Component parent) throws DirectoryNotValidException {
         LOG.log(Level.INFO, "Setting a new saving Folder.");
-        MyFileChooserUI chooser = this.fileChooser;
+        FileChooserUI chooser = this.fileChooser;
         chooser.resetChoosableFileFilters();
         chooser.setFileFilter(null);
         File file = chooser.dialogs(JFileChooser.OPEN_DIALOG, isADirectoryOnly, parent);
@@ -273,7 +273,7 @@ public class FileSelectionControllerImplement implements FileSelectionController
      */
     private Queue<Frame> setPaletteFrames(File[] listFiles) throws DirectoryNotValidException, ImageNotValidException {
         Queue<Frame> frames = new LinkedList<>();
-        Collection<File> colection = new MyFileListHandler<File>().normalizeFilesOnAList(listFiles, FileExtension.PNG);
+        Collection<File> colection = new FileListHandler<File>().normalizeFilesOnAList(listFiles, FileExtension.PNG);
         Frame frame;
         for (File file1 : colection) {
             frame = new Frame(file1.getPath());

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.UI;
+package cataovo.UI.swing;
 
 import cataovo.constants.Constants;
 import cataovo.controllers.AutomaticProcessorController;

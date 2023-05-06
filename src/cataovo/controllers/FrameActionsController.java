@@ -9,8 +9,8 @@ import cataovo.entities.Frame;
 import cataovo.entities.Point;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.RegionNotValidException;
-import cataovo.opencvlib.wrappers.PointWrapper;
-import cataovo.opencvlib.wrappers.RectWrapper;
+import cataovo.externals.opencvlib.wrappers.PointWrapper;
+import cataovo.externals.opencvlib.wrappers.RectWrapper;
 import java.util.Collection;
 import javax.swing.Icon;
 
