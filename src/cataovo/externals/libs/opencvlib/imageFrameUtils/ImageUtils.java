@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.externals.opencvlib.imageFrameUtils;
+package cataovo.externals.libs.opencvlib.imageFrameUtils;
 
 import org.opencv.core.Mat;
 import org.opencv.core.Point;

@@ -4,10 +4,10 @@
  */
 package cataovo.test.opencvlib.automation.imageProcessing;
 
-import cataovo.externals.opencvlib.automation.imageProcessing.AutomaticImageProcess;
-import cataovo.externals.opencvlib.automation.imageProcessing.AutomaticImageProcessImplements;
-import cataovo.externals.opencvlib.converters.Converter;
-import cataovo.externals.opencvlib.wrappers.MatWrapper;
+import cataovo.externals.libs.opencvlib.automation.imageProcessing.AutomaticImageProcess;
+import cataovo.externals.libs.opencvlib.automation.imageProcessing.AutomaticImageProcessImplements;
+import cataovo.externals.libs.opencvlib.converters.Converter;
+import cataovo.externals.libs.opencvlib.wrappers.MatWrapper;
 import java.io.File;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;

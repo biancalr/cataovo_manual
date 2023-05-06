@@ -14,7 +14,7 @@ import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
 import cataovo.exceptions.ReportNotValidException;
 import cataovo.resources.MainResources;
-import cataovo.externals.swinglib.wrappers.FileChooserUI;
+import cataovo.externals.libs.swinglib.wrappers.FileChooserUI;
 import cataovo.enums.FileExtension;
 import cataovo.resources.fileChooser.handler.FileFilterExtensions;
 import cataovo.resources.fileChooser.handler.FileListHandler;

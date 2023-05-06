@@ -9,7 +9,7 @@ import cataovo.constants.Constants;
 import cataovo.entities.Frame;
 import cataovo.entities.Palette;
 import cataovo.exceptions.DirectoryNotValidException;
-import cataovo.externals.swinglib.wrappers.FileChooserUI;
+import cataovo.externals.libs.swinglib.wrappers.FileChooserUI;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;

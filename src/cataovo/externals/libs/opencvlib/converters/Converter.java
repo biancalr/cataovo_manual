@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.externals.opencvlib.converters;
+package cataovo.externals.libs.opencvlib.converters;
 
 import cataovo.entities.Frame;
 import cataovo.entities.Point;
 import cataovo.enums.FileExtension;
-import cataovo.externals.opencvlib.wrappers.MatOfBytesWrapper;
-import cataovo.externals.opencvlib.wrappers.MatWrapper;
+import cataovo.externals.libs.opencvlib.wrappers.MatOfBytesWrapper;
+import cataovo.externals.libs.opencvlib.wrappers.MatWrapper;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -76,11 +76,11 @@ public final class Converter {
 
     /**
      * Converts an image Frame to a
-     * {@link cataovo.externals.opencvlib.wrappers.MatWrapper Mat} in order to make
+     * {@link cataovo.externals.libs.opencvlib.wrappers.MatWrapper Mat} in order to make
      * operations with a {@link org.opencv.core.Mat Opencv.Mat}.
      *
      * @param current the Frame to make the conversion.
-     * @return a {@link cataovo.externals.opencvlib.wrappers.MatWrapper MatWrapper} that
+     * @return a {@link cataovo.externals.libs.opencvlib.wrappers.MatWrapper MatWrapper} that
      * encapsulates a {@link org.opencv.core.Mat Mat}
      * @see org.opencv.imgcodecs.Imgcodecs#imread(java.lang.String)
      */
@@ -94,11 +94,11 @@ public final class Converter {
     }
 
     /**
-     * Converts the current {@link cataovo.externals.opencvlib.wrappers.MatWrapper Mat} to
+     * Converts the current {@link cataovo.externals.libs.opencvlib.wrappers.MatWrapper Mat} to
      * a JPG file.
      *
      * @param current the current frame as
-     * {@link cataovo.externals.opencvlib.wrappers.MatWrapper MatWrapper}
+     * {@link cataovo.externals.libs.opencvlib.wrappers.MatWrapper MatWrapper}
      * @return an Optional of the BufferedImage ".jpg"
      * @see #matToBuffedImageConvert(cataovo.opencvlib.wrappers.MatWrapper,
      * cataovo.resources.fileChooser.handler.FileExtension)
@@ -108,11 +108,11 @@ public final class Converter {
     }
 
     /**
-     * Converts the current {@link cataovo.externals.opencvlib.wrappers.MatWrapper Mat} to
+     * Converts the current {@link cataovo.externals.libs.opencvlib.wrappers.MatWrapper Mat} to
      * a PNG file.
      *
      * @param current the current frame as
-     * {@link cataovo.externals.opencvlib.wrappers.MatWrapper MatWrapper}
+     * {@link cataovo.externals.libs.opencvlib.wrappers.MatWrapper MatWrapper}
      * @return an Optional of the BufferedImage ".png"
      * @see #matToBuffedImageConvert(cataovo.opencvlib.wrappers.MatWrapper,
      * cataovo.resources.fileChooser.handler.FileExtension)
@@ -125,7 +125,7 @@ public final class Converter {
      * Encodes an image into a memory buffer.
      *
      * @param current the current frame as
-     * {@link cataovo.externals.opencvlib.wrappers.MatWrapper MatWrapper}
+     * {@link cataovo.externals.libs.opencvlib.wrappers.MatWrapper MatWrapper}
      * @param extension the type of desired extension for the frame.
      * @return the image as given extension.
      */

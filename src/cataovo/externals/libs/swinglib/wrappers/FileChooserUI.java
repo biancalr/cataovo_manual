@@ -3,7 +3,7 @@
  * To change this template directory, choose Tools | Templates
  * and open the template in the editor.
  */
-package cataovo.externals.swinglib.wrappers;
+package cataovo.externals.libs.swinglib.wrappers;
 
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.enums.FileExtension;
