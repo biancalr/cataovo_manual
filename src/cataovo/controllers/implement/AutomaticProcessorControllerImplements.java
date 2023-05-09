@@ -4,7 +4,7 @@
  */
 package cataovo.controllers.implement;
 
-import cataovo.automation.threads.dataSaving.DataSavingThreadAutomation;
+import cataovo.externals.writers.csvWriter.CsvFileWriter;
 import cataovo.automation.threads.dataSaving.ThreadAutomationAutomaticProcess;
 import cataovo.constants.Constants;
 import cataovo.controllers.AutomaticProcessorController;
@@ -49,7 +49,7 @@ public class AutomaticProcessorControllerImplements implements AutomaticProcesso
         try {
             List<Palette> splitted = split(currentPalette, Constants.SLOT_FRAMES_TO_PROCESS_ON_PALETTE);
             String result = "";
-            DataSavingThreadAutomation automation;
+            CsvFileWriter automation;
             final String dateTime = getDateTime("dd-MM-yyyy_HH-mm-ss");
             Future<String> task;
             ExecutorService executorService;

@@ -4,6 +4,7 @@
  */
 package cataovo.automation.threads.dataSaving;
 
+import cataovo.externals.writers.csvWriter.CsvFileWriter;
 import cataovo.automation.threads.dataProcessing.DataProcessingThreadAutomation;
 import cataovo.automation.threads.dataProcessing.ThreadAutomaticFramesProcessor;
 import cataovo.constants.Constants;
@@ -26,7 +27,7 @@ import java.util.logging.Logger;
  *
  * @author Bianca Leopoldo Ramos
  */
-public final class ThreadAutomationAutomaticProcess extends DataSavingThreadAutomation {
+public final class ThreadAutomationAutomaticProcess extends CsvFileWriter {
 
     private static final Logger LOG = Logger.getLogger(ThreadAutomationAutomaticProcess.class.getName());
     /**

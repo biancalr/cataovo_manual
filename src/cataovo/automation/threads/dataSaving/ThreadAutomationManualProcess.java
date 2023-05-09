@@ -4,6 +4,7 @@
  */
 package cataovo.automation.threads.dataSaving;
 
+import cataovo.externals.writers.csvWriter.CsvFileWriter;
 import cataovo.constants.Constants;
 import cataovo.entities.Palette;
 import cataovo.enums.FileExtension;
@@ -12,7 +13,7 @@ import cataovo.enums.FileExtension;
  *
  * @author Bianca Leopoldo Ramos
  */
-public final class ThreadAutomationManualProcess extends DataSavingThreadAutomation{
+public final class ThreadAutomationManualProcess extends CsvFileWriter{
 
     /**
      * <p>

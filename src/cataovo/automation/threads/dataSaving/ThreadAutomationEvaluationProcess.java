@@ -4,6 +4,7 @@
  */
 package cataovo.automation.threads.dataSaving;
 
+import cataovo.externals.writers.csvWriter.CsvFileWriter;
 import cataovo.constants.Constants;
 import cataovo.entities.Palette;
 import cataovo.enums.FileExtension;
@@ -14,7 +15,7 @@ import java.util.logging.Logger;
  *
  * @author Bianca Leopoldo Ramos
  */
-public class ThreadAutomationEvaluationProcess extends DataSavingThreadAutomation {
+public class ThreadAutomationEvaluationProcess extends CsvFileWriter {
 
     private static final Logger LOG = Logger.getLogger(ThreadAutomationEvaluationProcess.class.getName());
     private String evaluationResult;

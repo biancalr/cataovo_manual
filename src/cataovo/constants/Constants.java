@@ -13,6 +13,21 @@ package cataovo.constants;
 public class Constants {
 
     /**
+     * APPLICATION FOLDER
+     */
+    public static final String APPLICATION_FOLDER = "/cataovo/";
+    
+    /**
+     * REPORT FILE NAME
+     */
+    public static final String REPORT_FILE_NAME = "Report";
+    
+    /**
+     * FRAME ORIGINAL NAME TAG
+     */
+    public static final String FRAME_ORIGINAL_NAME_TAG = "original";
+    
+    /**
      * ACTION COMMAND ABRIR PASTA
      */
     public static final String ITEM_ACTION_COMMAND_OPEN_PALETTE_PT_BR = "Abrir Paleta";

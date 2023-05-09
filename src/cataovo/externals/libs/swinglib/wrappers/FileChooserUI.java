@@ -15,7 +15,6 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
-import javax.swing.JTabbedPane;
 
 /**
  *
@@ -82,7 +81,7 @@ public class FileChooserUI extends JFileChooser{
         switch (returnInterval) {
             case JFileChooser.APPROVE_OPTION -> {
                 f = super.getSelectedFile();
-                MainResources.getInstance().adjustPanelTab((JTabbedPane)parent, true);
+                MainResources.getInstance().adjustPanelTab(parent, true);
             }
             case JFileChooser.CANCEL_OPTION -> {
                 f = null;

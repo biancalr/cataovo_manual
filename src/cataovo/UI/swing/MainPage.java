@@ -40,6 +40,7 @@ import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import org.opencv.core.Core;
 import cataovo.controllers.EvaluationProcessorController;
+import cataovo.externals.libs.swinglib.wrappers.TabbedPane;
 
 /**
  * Module that interacts with the user. This is the main face of this

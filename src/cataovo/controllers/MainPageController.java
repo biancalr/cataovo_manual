@@ -13,13 +13,12 @@ import java.awt.Component;
 import java.io.File;
 import javax.swing.Icon;
 import javax.swing.JLabel;
-import javax.swing.JTabbedPane;
 
 /**
  * Controls how the frames are demonstrated on screen and how to move from one
  * to the other
  *
- * @author bibil
+ * @author Bianca Leopoldo Ramos
  */
 public interface MainPageController {
 
@@ -43,7 +42,7 @@ public interface MainPageController {
      * @throws ImageNotValidException
      * @throws DirectoryNotValidException
      */
-    public void onNextFrameInAutomatic(JLabel parentName, JTabbedPane jTabbedPane, File paletteSavingFolder, String paletteName) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException;
+    public void onNextFrameInAutomatic(JLabel parentName, Component jTabbedPane, File paletteSavingFolder, String paletteName) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException;
 
     /**
      *
@@ -109,7 +108,7 @@ public interface MainPageController {
      * @throws DirectoryNotValidException
      * @throws ArrayIndexOutOfBoundsException
      */
-    public void onPreviousFrameInAutomatic(JLabel parentName, JTabbedPane jTabbedPane, File savingFolder, String paletteDirectoryName) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException ;
+    public void onPreviousFrameInAutomatic(JLabel parentName, Component jTabbedPane, File savingFolder, String paletteDirectoryName) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException ;
 
     /**
      *

@@ -10,10 +10,11 @@ import cataovo.entities.Frame;
 import cataovo.entities.Palette;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.externals.libs.swinglib.wrappers.FileChooserUI;
+import cataovo.externals.libs.swinglib.wrappers.TabbedPane;
+import java.awt.Component;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JTabbedPane;
 import javax.swing.filechooser.FileSystemView;
 
 /**
@@ -145,10 +146,12 @@ public class MainResources {
         }
     }
 
-    public void adjustPanelTab(JTabbedPane pane, boolean isActualTabProcessing) {
+    public void adjustPanelTab(Component pane, boolean isActualTabProcessing) {
+        TabbedPane tb = new TabbedPane(pane);
         panelTabHelper.setIsActualTabProcessing(isActualTabProcessing);
-        panelTabHelper.setTabIndex(pane.getSelectedIndex());
-        panelTabHelper.setTabName(pane.getTitleAt(pane.getSelectedIndex()));
+        panelTabHelper.setTabIndex(tb.getTabbedPane().getSelectedIndex());
+        panelTabHelper.setTabName(tb.getTabbedPane().getTitleAt(tb.getTabbedPane().getSelectedIndex()));
+
     }
 
     public void resetSavingFolder() throws DirectoryNotValidException {

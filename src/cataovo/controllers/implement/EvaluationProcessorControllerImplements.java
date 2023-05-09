@@ -6,7 +6,7 @@ package cataovo.controllers.implement;
 
 import cataovo.automation.threads.dataEvaluation.DataEvaluationThreadAutomation;
 import cataovo.automation.threads.dataEvaluation.ThreadAutomationEvaluation;
-import cataovo.automation.threads.dataSaving.DataSavingThreadAutomation;
+import cataovo.externals.writers.csvWriter.CsvFileWriter;
 import cataovo.automation.threads.dataSaving.ThreadAutomationEvaluationProcess;
 import cataovo.constants.Constants;
 import cataovo.entities.Palette;
@@ -31,7 +31,7 @@ import cataovo.controllers.EvaluationProcessorController;
 public class EvaluationProcessorControllerImplements implements EvaluationProcessorController {
 
     /**
-     * Logging for DataSavingThreadAutomation
+     * Logging for CsvFileWriter
      */
     private static final Logger LOG = Logger.getLogger(EvaluationProcessorControllerImplements.class.getName());
     private String evaluationResult;
@@ -146,7 +146,7 @@ public class EvaluationProcessorControllerImplements implements EvaluationProces
             final String dateTime = getDateTime("dd-MM-yyyy_HH-mm-ss");
             try {
                 String result;
-                DataSavingThreadAutomation automation;
+                CsvFileWriter automation;
                 Future<String> task;
                 ExecutorService executorService = Executors.newSingleThreadExecutor();
 

@@ -4,7 +4,7 @@
  */
 package cataovo.controllers.implement;
 
-import cataovo.automation.threads.dataSaving.DataSavingThreadAutomation;
+import cataovo.externals.writers.csvWriter.CsvFileWriter;
 import cataovo.automation.threads.dataSaving.ThreadAutomationManualProcess;
 import cataovo.controllers.ManualProcessorController;
 import cataovo.exceptions.DirectoryNotValidException;
@@ -35,7 +35,7 @@ public class ManualProcessorControllerImplements implements ManualProcessorContr
         LOG.log(Level.INFO, "Final file save: start");
         String manualRelatoryDestination;
         try {
-            DataSavingThreadAutomation newCreateRelatories;
+            CsvFileWriter newCreateRelatories;
             Future<String> task;
             ExecutorService executorService = Executors.newSingleThreadExecutor();
             final String dateTime = getDateTime("dd-MM-yyyy_HH-mm-ss");

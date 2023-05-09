@@ -12,17 +12,17 @@ import cataovo.entities.Frame;
 import cataovo.entities.Point;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
+import cataovo.externals.libs.swinglib.wrappers.TabbedPane;
 import cataovo.resources.MainResources;
 import java.awt.Color;
 import java.awt.Component;
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import java.util.logging.Logger;
-import java.util.logging.Level;
-import javax.swing.Icon;
-import javax.swing.JTabbedPane;
 
 /**
  * Controls how the Frames are seen and iterated.
@@ -134,7 +134,7 @@ public class MainPageControllerImplements implements MainPageController {
      * @throws DirectoryNotValidException
      */
     @Override
-    public void onNextFrameInAutomatic(JLabel parentName, JTabbedPane jTabbedPane, File paletteSavingFolder, String paletteName) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException {
+    public void onNextFrameInAutomatic(JLabel parentName, Component jTabbedPane, File paletteSavingFolder, String paletteName) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException {
         // Verificar as palavras-chave que formam o caminho de um diretório do processamento automático no projeto: (nome da paleta) e "auto". 
         if (!paletteSavingFolder.getAbsolutePath().contains(paletteName)
                 || !paletteSavingFolder.getAbsolutePath().contains("auto")) {
@@ -162,7 +162,7 @@ public class MainPageControllerImplements implements MainPageController {
     }
 
     @Override
-    public void onPreviousFrameInAutomatic(JLabel parentName, JTabbedPane jTabbedPane, File savingFolder, String paletteDirectoryName) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException {
+    public void onPreviousFrameInAutomatic(JLabel parentName, Component jTabbedPane, File savingFolder, String paletteDirectoryName) throws ImageNotValidException, DirectoryNotValidException, ArrayIndexOutOfBoundsException {
         // Verificar as palavras-chave que formam o caminho de um diretório do processamento automático no projeto: (nome da paleta) e "auto". 
         if (!savingFolder.getAbsolutePath().contains(paletteDirectoryName)
                 || !savingFolder.getAbsolutePath().contains("auto")) {
@@ -191,20 +191,21 @@ public class MainPageControllerImplements implements MainPageController {
 
     /**
      *
-     * @param jTabbedPane
+     * @param tabbedPane
      * @param currentFrameDirectory
      * @param current
      * @param parentName
      * @return
      * @throws ImageNotValidException
      */
-    private Frame putFileOnFrame(JTabbedPane jTabbedPane, File currentFrameDirectory, JLabel parentName) throws ImageNotValidException {
+    private Frame putFileOnFrame(Component tabbedPane, File currentFrameDirectory, JLabel parentName) throws ImageNotValidException {
+        TabbedPane pane = new TabbedPane(tabbedPane);
         // Recuperar as imagens resultantes e inserí-las nas abas correspondentes
         Frame current = new Frame();
-        for (int i = 0; i < jTabbedPane.getComponents().length; i++) {
-            Component component = jTabbedPane.getComponents()[i];
+        for (int i = 0; i < pane.getTabbedPane().getComponents().length; i++) {
+            Component component = pane.getTabbedPane().getComponents()[i];
             Frame frame = new Frame(currentFrameDirectory.listFiles()[i].getAbsolutePath());
-            if (frame.getName().equalsIgnoreCase("original")) {
+            if (frame.getName().equalsIgnoreCase(Constants.FRAME_ORIGINAL_NAME_TAG)) {
                 current = frame;
             }
             // Posicionar as imagens nos componentes
@@ -315,30 +316,28 @@ public class MainPageControllerImplements implements MainPageController {
      */
     @Override
     public void showFramesOnSelectedTabScreen(Component tabComponent, JLabel parentNameLabel, JLabel parentLabel, Object frame) throws ImageNotValidException, DirectoryNotValidException, UnsupportedOperationException, AssertionError {
-        if (tabComponent instanceof JTabbedPane jTabbedPane) { // if the component is another type of component just add another conditional
-            switch (jTabbedPane.getSelectedIndex()) {
-                case 0 -> {
-                    parentLabel.setText(null);
-                    parentLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                    this.frameCounter = -1;
-                    showFrameOnScreen(parentNameLabel, parentLabel, frame);
-                }
-                case 1 -> {
-                    this.frameCounter = -1;
-                    showFrameOnScreen(parentNameLabel, parentLabel, frame);
-                }
-                case 2 -> {
-                    parentLabel.setText(null);
-                    parentLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                    this.frameCounter = -1;
-                    showFrameOnScreen(parentNameLabel, parentLabel, frame);
-                }
-                default ->
-                    throw new AssertionError("No tab with such index");
+        TabbedPane pane = new TabbedPane(tabComponent);
+        switch (pane.getTabbedPane().getSelectedIndex()) {
+            case 0 -> {
+                parentLabel.setText(null);
+                parentLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                this.frameCounter = -1;
+                showFrameOnScreen(parentNameLabel, parentLabel, frame);
             }
-        } else {
-            throw new UnsupportedOperationException("Operation not supported with such component.");
+            case 1 -> {
+                this.frameCounter = -1;
+                showFrameOnScreen(parentNameLabel, parentLabel, frame);
+            }
+            case 2 -> {
+                parentLabel.setText(null);
+                parentLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                this.frameCounter = -1;
+                showFrameOnScreen(parentNameLabel, parentLabel, frame);
+            }
+            default ->
+                throw new AssertionError("No tab with such index");
         }
+
     }
 
     @Override
