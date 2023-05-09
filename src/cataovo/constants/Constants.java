@@ -192,5 +192,22 @@ public class Constants {
      * PERCENTAGE OF ACCURACY
      */
     public static final int CALCULATE_METHOD_ACCURACY = 5;
+    
+    /**
+     * Type value indicating that the <code>JFileChooser</code> supports an
+     * "Open" file operation.
+     */
+    public static final int OPEN_DIALOG = 0;
+
+    /**
+     * Type value indicating that the <code>JFileChooser</code> supports a
+     * "Save" file operation.
+     */
+    public static final int SAVE_DIALOG = 1;
+    
+    /**
+     * ROOT C FOLDER
+     */
+    public static final String ROOT_FOLDER="C:";
 
 }

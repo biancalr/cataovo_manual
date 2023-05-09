@@ -4,16 +4,16 @@
  */
 package cataovo.controllers.implement;
 
-import cataovo.externals.writers.csvWriter.CsvFileWriter;
+import cataovo.automation.threads.dataSaving.DataSavingThreadAutomation;
 import cataovo.automation.threads.dataSaving.ThreadAutomationAutomaticProcess;
 import cataovo.constants.Constants;
 import cataovo.controllers.AutomaticProcessorController;
 import cataovo.entities.Frame;
 import cataovo.entities.Palette;
+import cataovo.enums.FileExtension;
 import cataovo.exceptions.AutomationExecutionException;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.resources.MainResources;
-import cataovo.enums.FileExtension;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -49,7 +49,7 @@ public class AutomaticProcessorControllerImplements implements AutomaticProcesso
         try {
             List<Palette> splitted = split(currentPalette, Constants.SLOT_FRAMES_TO_PROCESS_ON_PALETTE);
             String result = "";
-            CsvFileWriter automation;
+            DataSavingThreadAutomation automation;
             final String dateTime = getDateTime("dd-MM-yyyy_HH-mm-ss");
             Future<String> task;
             ExecutorService executorService;

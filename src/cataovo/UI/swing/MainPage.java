@@ -1173,8 +1173,8 @@ public class MainPage extends javax.swing.JFrame {
             LOG.log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
         } catch (AutomationExecutionException ex) {
-           LOG.log(Level.SEVERE, null, ex);
-           JOptionPane.showMessageDialog(jPanel1, Constants.NO_FOLDER_WAS_CREATED);
+            LOG.log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(jPanel1, Constants.NO_FOLDER_WAS_CREATED);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -1281,10 +1281,17 @@ public class MainPage extends javax.swing.JFrame {
                 MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
             }
 
-            int numberOfEvaluationReports = countEvaluationReports();
-
-            if (numberOfEvaluationReports == 2) {
-                calculateEvaluation();
+            switch (countEvaluationReports()) {
+                case 1 -> {
+                    String msg = "Relatório adicionado.";
+                    JOptionPane.showMessageDialog(jDesktopPane3, msg);
+                }
+                case 2 -> {
+                    String msg = "Relatório adicionado.";
+                    JOptionPane.showMessageDialog(jDesktopPane3, msg);
+                    calculateEvaluation();
+                }
+                default -> {}
             }
 
         } catch (DirectoryNotValidException | ImageNotValidException | FileNotFoundException | TabNotValidToEvaluationException | HeadlessException | CloneNotSupportedException ex) {

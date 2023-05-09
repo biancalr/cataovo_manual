@@ -4,14 +4,13 @@
  */
 package cataovo.automation.threads.dataSaving;
 
-import cataovo.externals.writers.csvWriter.CsvFileWriter;
 import cataovo.automation.threads.dataProcessing.DataProcessingThreadAutomation;
 import cataovo.automation.threads.dataProcessing.ThreadAutomaticFramesProcessor;
 import cataovo.constants.Constants;
 import cataovo.entities.Frame;
 import cataovo.entities.Palette;
-import cataovo.exceptions.AutomationExecutionException;
 import cataovo.enums.FileExtension;
+import cataovo.exceptions.AutomationExecutionException;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -27,7 +26,7 @@ import java.util.logging.Logger;
  *
  * @author Bianca Leopoldo Ramos
  */
-public final class ThreadAutomationAutomaticProcess extends CsvFileWriter {
+public final class ThreadAutomationAutomaticProcess extends DataSavingThreadAutomation {
 
     private static final Logger LOG = Logger.getLogger(ThreadAutomationAutomaticProcess.class.getName());
     /**
@@ -66,7 +65,7 @@ public final class ThreadAutomationAutomaticProcess extends CsvFileWriter {
         String destination;
         this.slotRangeControl = 0;
         do {
-            splitted = split(palette.getFrames(), Constants.FRAME_SLOT_TO_PROCESS);
+            splitted = split(getPalette().getFrames(), Constants.FRAME_SLOT_TO_PROCESS);
             try {
                 for (Frame frame : splitted) {
                     destination = imagesDestination.toString() + "/" + frame.getName();
@@ -81,7 +80,7 @@ public final class ThreadAutomationAutomaticProcess extends CsvFileWriter {
                 throw new AutomationExecutionException("Error while executing automation on frame");
             }
 
-        } while (slotRangeControl != palette.getPaletteSize());
+        } while (slotRangeControl != getPalette().getPaletteSize());
         return result;
     }
 

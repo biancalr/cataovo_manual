@@ -8,13 +8,10 @@ import cataovo.constants.Constants;
 import cataovo.controllers.FileReaderController;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
+import cataovo.externals.fileHandlers.csvReader.CsvFileReader;
 import cataovo.externals.libs.opencvlib.wrappers.PointWrapper;
 import cataovo.externals.libs.opencvlib.wrappers.RectWrapper;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,12 +26,18 @@ public class FileReaderControllerImplements implements FileReaderController {
 
     private static final Logger LOG = Logger.getLogger(FileReaderControllerImplements.class.getName());
 
+    private final CsvFileReader csvFileReader;
+
+    public FileReaderControllerImplements() {
+        csvFileReader = new CsvFileReader();
+    }
+
     @Override
     public List<RectWrapper> getRegionsInFrameFile(String frameName, String report) throws FileNotFoundException, NumberFormatException {
         List<RectWrapper> regions = new ArrayList<>();
 
-        try (InputStreamReader in = new InputStreamReader(new FileInputStream(report)); BufferedReader csvReader = new BufferedReader(in)) {
-            Optional<String> optLine = csvReader.lines().filter((line) -> line.contains(frameName)).findFirst();
+        try {
+            Optional<String> optLine = csvFileReader.readLine(frameName, report);
 
             optLine.ifPresent(line -> {
 
@@ -63,11 +66,6 @@ public class FileReaderControllerImplements implements FileReaderController {
         } catch (NumberFormatException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
             throw new NumberFormatException("Error while converting a data string to number");
-        } catch (FileNotFoundException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            throw new FileNotFoundException(ex.getMessage());
-        } catch (IOException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
         }
         LOG.log(Level.INFO, "Regions size: {0}", regions.size());
         return regions;
@@ -77,10 +75,10 @@ public class FileReaderControllerImplements implements FileReaderController {
     public List<PointWrapper> getPointsInFrameFile(String frameName, String report) throws FileNotFoundException, NumberFormatException {
         List<PointWrapper> points = new ArrayList<>();
 
-        try (InputStreamReader in = new InputStreamReader(new FileInputStream(report)); BufferedReader csvReader = new BufferedReader(in)) {
+        try {
 
             // encontrando o frame filtrando pelo nome
-            Optional<String> optLine = csvReader.lines().filter((line) -> line.contains(frameName)).findFirst();
+            Optional<String> optLine = csvFileReader.readLine(frameName, report);
 
             LOG.log(Level.INFO, "LINE: {0}", optLine.get());
 
@@ -108,34 +106,19 @@ public class FileReaderControllerImplements implements FileReaderController {
         } catch (NumberFormatException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
             throw new NumberFormatException("Error while converting a data string to number");
-        } catch (FileNotFoundException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            throw new FileNotFoundException(ex.getMessage());
-        } catch (IOException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
-        }
+        } 
         LOG.log(Level.INFO, "Points size: {0}", points.size());
         return points;
     }
 
     @Override
-    public StringBuilder readFullFileContent(String report) throws FileNotFoundException {
+    public StringBuilder readFullFileContent(String report) {
         StringBuilder builder = new StringBuilder();
-        try (InputStreamReader in = new InputStreamReader(new FileInputStream(report)); BufferedReader csvReader = new BufferedReader(in)) {
-            // remove as linhas que não contém necessariamente os pontos e as regiões
-            csvReader.lines().filter((line) -> !line.contains("C:") && line.length() > 5 && !line.isBlank()).forEach((l) -> {
-                builder.append(l);
-                builder.append(Constants.QUEBRA_LINHA);
-            });
-
-            LOG.log(Level.INFO, report + " size {0}", csvReader.lines().count());
-
-        } catch (FileNotFoundException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            throw new FileNotFoundException();
-        } catch (IOException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
-        }
+        // remove as linhas que não contém necessariamente os pontos e as regiões
+        csvFileReader.readContent(report).forEach((line) -> {
+            builder.append(line);
+            builder.append(Constants.QUEBRA_LINHA);
+        });
 
         return builder;
     }
