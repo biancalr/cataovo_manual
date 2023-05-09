@@ -60,6 +60,13 @@ public class CsvFileWriter implements Writer{
 
     }
 
+    /**
+     * 
+     * @param createdFile
+     * @param palettePathName
+     * @return
+     * @throws AutomationExecutionException 
+     */
     public StringBuffer verifyFileAreadyExistent(final String createdFile, final String palettePathName) throws AutomationExecutionException {
         StringBuffer sb = new StringBuffer();
         File f = new File(createdFile);
