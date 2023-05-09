@@ -39,10 +39,14 @@ public class CsvFileWriter implements Writer{
      * @throws java.lang.Exception
      * @see #createContent()
      */
-    public String createFile(final StringBuffer content, final String fileLocation, final String folderLocation) throws Exception {
+    public String createFile(final StringBuffer content, final String fileLocation, final String folderLocation) throws FileCsvWriterException {
         StringBuffer sb = new StringBuffer();
         File directory = new File(folderLocation);
 
+        if (!fileLocation.contains(folderLocation)) {
+            throw new FileCsvWriterException(fileLocation + " and " + folderLocation + "doesn't match.");
+        }
+        
         if (!directory.exists()) {
             directory.mkdirs();
         }
