@@ -2,11 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package cataovo.externals.fileHandlers.csvWriter;
+package cataovo.externals.fileHandlers.writers.csv.csvWriter;
 
 import cataovo.constants.Constants;
 import cataovo.exceptions.AutomationExecutionException;
 import cataovo.exceptions.FileCsvWriterException;
+import cataovo.externals.fileHandlers.writers.Writer;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,7 +22,7 @@ import javax.swing.JOptionPane;
  *
  * @author Bianca Leopoldo Ramos
  */
-public class CsvFileWriter {
+public class CsvFileWriter implements Writer{
 
     /**
      * Logging for CsvFileWriter

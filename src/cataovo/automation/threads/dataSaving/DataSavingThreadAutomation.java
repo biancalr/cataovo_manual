@@ -9,7 +9,8 @@ import cataovo.entities.Palette;
 import cataovo.enums.FileExtension;
 import cataovo.enums.ProcessingMode;
 import cataovo.exceptions.AutomationExecutionException;
-import cataovo.externals.fileHandlers.csvWriter.CsvFileWriter;
+import cataovo.externals.fileHandlers.writers.Writer;
+import cataovo.externals.fileHandlers.writers.csv.csvWriter.CsvFileWriter;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,7 +24,7 @@ public abstract class DataSavingThreadAutomation implements Callable<String> {
     /**
      * Csv File Writer
      */
-    private final CsvFileWriter csvFileWriter;
+    private final Writer csvFileWriter;
     /**
      * Logging for CsvFileWriter
      */
@@ -51,7 +52,14 @@ public abstract class DataSavingThreadAutomation implements Callable<String> {
      */
     protected final String dateTime;
 
-    
+    /**
+     * 
+     * @param palette
+     * @param savingDirectory
+     * @param fileExtension
+     * @param parentTabName
+     * @param dateTime 
+     */
     public DataSavingThreadAutomation(Palette palette, String savingDirectory, FileExtension fileExtension, String parentTabName, String dateTime) {
         this.palette = palette;
         this.savingDirectory = savingDirectory;

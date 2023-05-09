@@ -8,7 +8,8 @@ import cataovo.constants.Constants;
 import cataovo.controllers.FileReaderController;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
-import cataovo.externals.fileHandlers.csvReader.CsvFileReader;
+import cataovo.externals.fileHandlers.readers.Reader;
+import cataovo.externals.fileHandlers.readers.csv.csvReader.CsvFileReader;
 import cataovo.externals.libs.opencvlib.wrappers.PointWrapper;
 import cataovo.externals.libs.opencvlib.wrappers.RectWrapper;
 import java.io.FileNotFoundException;
@@ -26,7 +27,7 @@ public class FileReaderControllerImplements implements FileReaderController {
 
     private static final Logger LOG = Logger.getLogger(FileReaderControllerImplements.class.getName());
 
-    private final CsvFileReader csvFileReader;
+    private final Reader csvFileReader;
 
     public FileReaderControllerImplements() {
         csvFileReader = new CsvFileReader();

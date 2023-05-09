@@ -2,9 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package cataovo.externals.fileHandlers.csvReader;
+package cataovo.externals.fileHandlers.readers.csv.csvReader;
 
 import cataovo.constants.Constants;
+import cataovo.externals.fileHandlers.readers.Reader;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -19,10 +20,11 @@ import java.util.logging.Logger;
  *
  * @author Bianca leopoldo Ramos
  */
-public class CsvFileReader {
+public class CsvFileReader implements Reader{
 
     private static final Logger LOG = Logger.getLogger(CsvFileReader.class.getName());
 
+    @Override
     public Optional<String> readLine(String frameName, String report) {
         Optional<String> line = null;
         try (InputStreamReader in = new InputStreamReader(new FileInputStream(report)); BufferedReader csvReader = new BufferedReader(in)) {
@@ -37,6 +39,7 @@ public class CsvFileReader {
         return line;
     }
     
+    @Override
     public List<String> readContent(String report) {
         List<String> content = null;
         
