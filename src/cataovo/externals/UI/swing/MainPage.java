@@ -7,6 +7,7 @@ package cataovo.externals.UI.swing;
 
 import cataovo.constants.Constants;
 import cataovo.controllers.AutomaticProcessorController;
+import cataovo.controllers.EvaluationProcessorController;
 import cataovo.controllers.FileReaderController;
 import cataovo.controllers.FileSelectionController;
 import cataovo.controllers.FrameActionsController;
@@ -20,6 +21,7 @@ import cataovo.controllers.implement.FrameActionsControllerImplements;
 import cataovo.controllers.implement.MainPageControllerImplements;
 import cataovo.controllers.implement.ManualProcessorControllerImplements;
 import cataovo.entities.Point;
+import cataovo.enums.FileExtension;
 import cataovo.exceptions.AutomationExecutionException;
 import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.exceptions.ImageNotValidException;
@@ -27,7 +29,6 @@ import cataovo.exceptions.RegionNotValidException;
 import cataovo.exceptions.ReportNotValidException;
 import cataovo.exceptions.TabNotValidToEvaluationException;
 import cataovo.resources.MainResources;
-import cataovo.enums.FileExtension;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
@@ -39,8 +40,6 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import org.opencv.core.Core;
-import cataovo.controllers.EvaluationProcessorController;
-import cataovo.externals.libs.swinglib.wrappers.TabbedPane;
 
 /**
  * Module that interacts with the user. This is the main face of this
