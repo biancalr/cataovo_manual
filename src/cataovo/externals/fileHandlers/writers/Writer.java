@@ -29,6 +29,6 @@ public interface Writer {
      * @return
      * @throws AutomationExecutionException 
      */
-    public StringBuffer verifyFileAreadyExistent(final String createdFile, final String palettePathName) throws AutomationExecutionException;
+    public StringBuffer verifyAndAppendFileAreadyExistent(final String createdFile, final String palettePathName) throws AutomationExecutionException;
     
 }

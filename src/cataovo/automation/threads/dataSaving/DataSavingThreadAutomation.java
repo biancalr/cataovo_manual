@@ -75,7 +75,7 @@ public abstract class DataSavingThreadAutomation implements Callable<String> {
     }
     
     /**
-     * Responsible for creating the contents of each report needed to save the
+     * Responsable for creating the contents of each report needed to save the
      * resulted products
      *
      * @return the content of the file;
@@ -100,16 +100,26 @@ public abstract class DataSavingThreadAutomation implements Callable<String> {
         final String dstn = palette.getDirectory().getName() + "/" + processingMode + "/" + dateTime;
         final String fileDirecto = savingDirectory + Constants.APPLICATION_FOLDER + dstn;
         final String createdFile = savingDirectory + Constants.APPLICATION_FOLDER + dstn + "/" + Constants.REPORT_FILE_NAME + "." + fileExtension.getExtension();
-
-        if (processingMode.equals(ProcessingMode.AUTOMATIC.getProcessingMode())) {
-            sb.append(csvFileWriter.verifyFileAreadyExistent(createdFile, palette.getPathName()));
-        }
+       
+        sb.append(addModeSpecificities(processingMode, createdFile));
         
         sb.append(createContent());
         
         LOG.log(Level.INFO, "the report will be created under the name: {0}", createdFile);
         return this.csvFileWriter.createFile(sb, createdFile, fileDirecto);
         
+    }
+
+    private StringBuffer addModeSpecificities(final String processingMode, final String createdFile) throws AutomationExecutionException {
+        StringBuffer sb = new StringBuffer();
+        switch (processingMode) {
+            case Constants.PROCESSING_MODE_NAME_AUTO ->  {
+                sb.append(csvFileWriter.verifyAndAppendFileAreadyExistent(createdFile, palette.getPathName()));
+                break;
+            }
+            default ->  { break; }
+        }
+        return sb;
     }
 
     public Palette getPalette() {

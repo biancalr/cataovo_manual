@@ -12,7 +12,7 @@ public enum ProcessingMode {
     
     MANUAL("manual"), AUTOMATIC("auto"), EVALUATION("result");
     
-    public String processingMode;
+    private String processingMode;
 
     private ProcessingMode(String processingMode) {
         this.processingMode = processingMode;

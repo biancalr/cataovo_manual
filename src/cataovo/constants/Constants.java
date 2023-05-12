@@ -209,5 +209,10 @@ public class Constants {
      * ROOT C FOLDER
      */
     public static final String ROOT_FOLDER="C:";
+    
+    /**
+     * PROCESSING MODE NAME 'AUTO'
+     */
+    public static final String PROCESSING_MODE_NAME_AUTO = "auto"; 
 
 }
