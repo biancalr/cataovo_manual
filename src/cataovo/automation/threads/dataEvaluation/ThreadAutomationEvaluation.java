@@ -110,7 +110,7 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
 
     }
 
-    private List<Region> iterateOver(String[] data, int ofFormat, int atStartPoint, int jumpStep) throws NumberFormatException {
+    private List iterateOver(String[] data, int ofFormat, int atStartPoint, int jumpStep) throws NumberFormatException {
         List formatList = new CopyOnWriteArrayList<>();
         for (int i = atStartPoint; i < data.length; i += jumpStep) {
             if (data[i] != null && !data[i].isBlank()) {
