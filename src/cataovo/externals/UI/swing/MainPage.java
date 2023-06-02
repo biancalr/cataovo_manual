@@ -997,6 +997,7 @@ public class MainPage extends javax.swing.JFrame {
                     case 0 -> {
                         jButton3.setEnabled(wasFileSelected);
                         jButton2.setEnabled(wasFileSelected);
+                        MainResources.getInstance().adjustPanelTab(jTabbedPane1, true);
                         mainPageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel1, jLabel2, MainResources.getInstance().getCurrentFrame());
                     }
                     case 1 -> {
@@ -1005,6 +1006,7 @@ public class MainPage extends javax.swing.JFrame {
                         jButton4.setEnabled(wasFileSelected);
                         jButton5.setEnabled(wasFileSelected);
                         jTabbedPane2.setSelectedIndex(4);
+                        MainResources.getInstance().adjustPanelTab(jTabbedPane1, true);
                         mainPageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel4, jLabel8, MainResources.getInstance().getCurrentFrame());
                     }
                     case 2 -> {
@@ -1132,6 +1134,7 @@ public class MainPage extends javax.swing.JFrame {
                     jTabbedPane2,
                     MainResources.getInstance().getSavingFolder(),
                     MainResources.getInstance().getPalette().getDirectory().getName());
+            jLabel11.setText("");
         } catch (ImageNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
@@ -1276,9 +1279,10 @@ public class MainPage extends javax.swing.JFrame {
             }
 
             boolean result = this.fileSelectionController.fileSelectionEvent(evt.getActionCommand(), jTabbedPane1, false);
+            
             if (!result) {
-                MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
-            }
+                MainResources.getInstance().adjustPanelTab(jTabbedPane1, false);
+            } 
 
             switch (countEvaluationReports()) {
                 case 1 -> {
@@ -1288,11 +1292,12 @@ public class MainPage extends javax.swing.JFrame {
                 case 2 -> {
                     String msg = "Relatório adicionado.";
                     JOptionPane.showMessageDialog(jDesktopPane3, msg);
+                    MainResources.getInstance().adjustPanelTab(jTabbedPane1, true);
                     calculateEvaluation();
                 }
                 default -> {}
             }
-
+            MainResources.getInstance().adjustPanelTab(jTabbedPane1, false);
         } catch (DirectoryNotValidException | ImageNotValidException | FileNotFoundException | TabNotValidToEvaluationException | HeadlessException | CloneNotSupportedException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());

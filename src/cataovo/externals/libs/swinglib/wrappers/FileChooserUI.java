@@ -81,7 +81,6 @@ public class FileChooserUI extends JFileChooser{
         switch (returnInterval) {
             case JFileChooser.APPROVE_OPTION -> {
                 f = super.getSelectedFile();
-                MainResources.getInstance().adjustPanelTab(parent, true);
             }
             case JFileChooser.CANCEL_OPTION -> {
                 f = null;
