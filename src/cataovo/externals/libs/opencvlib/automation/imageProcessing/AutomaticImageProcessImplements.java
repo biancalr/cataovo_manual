@@ -171,27 +171,8 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
     public List<MatOfPoint> findContours(Mat src) {
         LOG.log(Level.INFO, "Finding objects...");
         List<MatOfPoint> contours = new ArrayList<>();
-        Mat dstny = Mat.zeros(src.size(), CvType.CV_8UC1);
-        src.convertTo(dstny, CvType.CV_8UC1);
         Imgproc.findContours(src, contours, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
         return contours;
-    }
-
-    /**
-     * Transforms a three channels image to a single channel image.
-     *
-     * @param src the image to split the channels
-     * @return a single channel result image
-     */
-    private Mat getChannelImage(Mat src) {
-        Mat matR = Mat.zeros(src.size(), CvType.CV_8UC1);
-        for (int i = 0; i < src.rows(); i++) {
-            for (int j = 0; j < src.cols(); j++) {
-                double temp[] = src.get(i, j);
-                matR.put(i, j, temp[0]);
-            }
-        }
-        return matR;
     }
 
     /**
