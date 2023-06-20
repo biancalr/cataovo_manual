@@ -56,15 +56,15 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
     private List<MatOfPoint> eggsContours = new ArrayList<>();
 
     public AutomaticImageProcessImplements() {
-        this.BLACK = new double[]{0, 0, 0};
-        this.WHITE = new double[]{255, 255, 255};
+        this.BLACK = new double[]{0};
+        this.WHITE = new double[]{255};
     }
 
     @Override
     public Mat applyBlurOnImage(String savingPath, Mat imageMatToBlur, int ksize_width, int ksize_height) {
         saveImage(imageMatToBlur, savingPath.replace(Constants.BLUR_PNG, Constants.ORIGINAL_PNG));
         LOG.log(Level.INFO, "Applying blur...");
-        Mat dstn = Mat.zeros(imageMatToBlur.size(), CvType.CV_8U);
+        Mat dstn = Mat.zeros(imageMatToBlur.size(), CvType.CV_8UC1);
         Imgproc.cvtColor(imageMatToBlur.clone(), dstn, Imgproc.COLOR_BGR2GRAY);
         Imgproc.blur(dstn, dstn, new Size(ksize_width, ksize_height));
         if (saveImage(dstn, savingPath)) {
@@ -76,7 +76,7 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
     @Override
     public Mat applyBinaryOnImage(String savingPath, BufferedImage buffImgToBinary) {
         LOG.log(Level.INFO, "Applying binary...");
-        Mat dstn = Mat.zeros(new Size(buffImgToBinary.getWidth(), buffImgToBinary.getHeight()), CvType.CV_8UC3);
+        Mat dstn = Mat.zeros(new Size(buffImgToBinary.getWidth(), buffImgToBinary.getHeight()), CvType.CV_8UC1);
         for (int i = 0; i < buffImgToBinary.getWidth(); i++) {
             for (int j = 0; j < buffImgToBinary.getHeight(); j++) {
                 Color color = new Color(buffImgToBinary.getRGB(i, j));
@@ -171,8 +171,9 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
     public List<MatOfPoint> findContours(Mat src) {
         LOG.log(Level.INFO, "Finding objects...");
         List<MatOfPoint> contours = new ArrayList<>();
-        Mat dstny = getChannelImage(src);
-        Imgproc.findContours(dstny, contours, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
+        Mat dstny = Mat.zeros(src.size(), CvType.CV_8UC1);
+        src.convertTo(dstny, CvType.CV_8UC1);
+        Imgproc.findContours(src, contours, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
         return contours;
     }
 
@@ -187,7 +188,7 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
         for (int i = 0; i < src.rows(); i++) {
             for (int j = 0; j < src.cols(); j++) {
                 double temp[] = src.get(i, j);
-                matR.put(i, j, temp[2]);
+                matR.put(i, j, temp[0]);
             }
         }
         return matR;
