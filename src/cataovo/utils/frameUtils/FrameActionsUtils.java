@@ -112,7 +112,7 @@ public class FrameActionsUtils extends FrameUtils {
      * @param circles
      * @return 
      */
-    public Icon drawFormatsOnFrame(Collection<RectWrapper> rects, Collection<PointWrapper> circles) {
+    public Icon drawFormatsOnFrame(Collection<RectWrapper> rects, Collection<Collection<PointWrapper>> circles) {
         matWrapper = new MatWrapper(frame);
         matWrapper.setOpencvMat(super.drawMultipleRectangles(rects).getOpencvMat());
         matWrapper.setOpencvMat(super.drawMultiplePoints(circles).getOpencvMat());

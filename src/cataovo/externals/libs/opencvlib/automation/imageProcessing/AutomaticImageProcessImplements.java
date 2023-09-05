@@ -147,7 +147,8 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
      *
      * @param dstn the image transformed.
      * @param savingPath directory where the transformed image will be saved.
-     * @return <code>True</code> if the saving was ok, <code>False</code> otherwise.
+     * @return <code>True</code> if the saving was ok, <code>False</code>
+     * otherwise.
      */
     private boolean saveImage(Mat dstn, String savingPath) {
         try {
@@ -183,11 +184,11 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
      * quantity of coodinates that forms each object.
      */
     @Override
-    public StringBuffer generateAutomaticRelatory() {
+    public StringBuffer generateAutoReport() {
         StringBuffer builder = new StringBuffer(Integer.toString(this.quantityOfEggs));
         List<Point> auxlist;
         List<Point> mainPoints = new ArrayList<>();
-        for (int i = 0; i < this.eggsContours.size(); i++) {
+        for (var i = 0; i < this.eggsContours.size(); i++) {
             MatOfPoint get = this.eggsContours.get(i);
 
             auxlist = get.toList();
@@ -198,13 +199,21 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
                     mainPoints.add(auxlist.get(j));
                 }
             }
+           
+           for (var j = 0; j < mainPoints.size(); j++) {
+               if (j!=0) {
+                   builder.append(Constants.SEPARATOR);
+               } else {
+                   builder.append(Constants.OBJECT_SEPARATOR);
+               }
+               builder.append(mainPoints.get(j).x);
+               builder.append(",");
+               builder.append(mainPoints.get(j).y);
+           }
+            
+           mainPoints = new ArrayList<>();
+            
         }
-        mainPoints.stream().forEach((p) -> {
-            builder.append(",");
-            builder.append(p.x);
-            builder.append(",");
-            builder.append(p.y);
-        });
 
         return builder;
     }

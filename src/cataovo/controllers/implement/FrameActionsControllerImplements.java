@@ -149,7 +149,7 @@ public class FrameActionsControllerImplements implements FrameActionsController 
      * @return 
      */
     @Override
-    public Icon paintFormats(Frame currentFrame, Collection<RectWrapper> regions, Collection<PointWrapper> points) {
+    public Icon paintFormats(Frame currentFrame, Collection<RectWrapper> regions, Collection points) {
         this.frameUtils = new FrameActionsUtils(currentFrame);        
         return this.frameUtils.drawFormatsOnFrame(regions, points);
     }

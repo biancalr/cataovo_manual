@@ -214,5 +214,20 @@ public class Constants {
      * PROCESSING MODE NAME 'AUTO'
      */
     public static final String PROCESSING_MODE_NAME_AUTO = "auto"; 
+    
+    /**
+     * DECIMAL FORMAT PATTERN
+     */
+    public static final String DECIMAL_FORMAT = "#,##0.00";
+    
+    /**
+     * Separetes an egg from other
+     */
+    public static String OBJECT_SEPARATOR = "#";
+    
+    /**
+     * Separator
+     */
+    public static String SEPARATOR = ",";
 
 }

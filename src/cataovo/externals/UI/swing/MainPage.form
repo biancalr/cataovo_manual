@@ -878,17 +878,17 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel25">
               <Properties>
-                <Property name="text" type="java.lang.String" value="TVP (%)"/>
+                <Property name="text" type="java.lang.String" value="Recall"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel26">
               <Properties>
-                <Property name="text" type="java.lang.String" value="TFP (%)"/>
+                <Property name="text" type="java.lang.String" value="TFP"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel27">
               <Properties>
-                <Property name="text" type="java.lang.String" value="TVN (%)"/>
+                <Property name="text" type="java.lang.String" value="TVN"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel28">
@@ -923,7 +923,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel34">
               <Properties>
-                <Property name="text" type="java.lang.String" value="TFN (%)"/>
+                <Property name="text" type="java.lang.String" value="TFN"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel35">

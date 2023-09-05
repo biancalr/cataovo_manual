@@ -44,7 +44,7 @@ public class FileReaderControllerImplements implements FileReaderController {
 
                 LOG.log(Level.INFO, "LINE: {0}", optLine.get());
 
-                String[] data = line.split(",");
+                String[] data = line.split(Constants.SEPARATOR);
                 if (data.length > 2) {
                     // ignorando posição 0 pois representa o nome do frame, o qual não é necessário
                     for (int i = 1; i < data.length; i += 4) {
@@ -73,8 +73,8 @@ public class FileReaderControllerImplements implements FileReaderController {
     }
 
     @Override
-    public List<PointWrapper> getPointsInFrameFile(String frameName, String report) throws FileNotFoundException, NumberFormatException {
-        List<PointWrapper> points = new ArrayList<>();
+    public List<List<PointWrapper>> getPointsInFrameFile(String frameName, String report) throws FileNotFoundException, NumberFormatException {
+        List<List<PointWrapper>> eggs = new ArrayList<>();
 
         try {
 
@@ -85,31 +85,52 @@ public class FileReaderControllerImplements implements FileReaderController {
 
             optLine.ifPresent(line -> {
 
-                String[] data = line.split(",");
-                if (data.length > 3) {
-                    // ignorando posição 0 pois representa o nome do frame, o qual não é necessário
-                    // ignorando a posição 1 pois ela representa a quantidade de ovos no frame, o qual também não é necessário
-                    // Não é necessário ler todos os pontos salvos ou pode poluir o visual do frame por isso i pula 4
-                    for (int i = 2; i < data.length; i += 4) {
-                        String string = data[i];
-                        if (string != null) {
-                            PointWrapper current = new PointWrapper(
-                                    new Point(
-                                            Integer.parseInt(data[i].replace(".0", "").trim()),
-                                            Integer.parseInt(data[i + 1].replace(".0", "").trim())));
-                            points.add(current);
+                String[] majorData = line.split(Constants.OBJECT_SEPARATOR);
+                // Maior que 1 pois existem frames sem ovos, nesse caso a linha não splitta
+                if (majorData.length > 1) {
+                    // ignorando posição 0 pois representa o nome do frame e a quantidade de ovos, os quais não são necessários
+                    for (int i = 1; i < majorData.length; i++) {
+                        String eggObject = majorData[i];
+                        if (!eggObject.isBlank()) {
+                            eggs.add(getPoints(eggObject));
+
                         }
                     }
-
                 }
             });
 
         } catch (NumberFormatException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
             throw new NumberFormatException("Error while converting a data string to number");
-        } 
-        LOG.log(Level.INFO, "Points size: {0}", points.size());
-        return points;
+        }
+        LOG.log(Level.INFO, "Points size: {0}", eggs.size());
+        return eggs;
+    }
+
+    /**
+     *
+     * @param object
+     * @return
+     * @throws NumberFormatException
+     */
+    private List<PointWrapper> getPoints(String object) throws NumberFormatException {
+        List<PointWrapper> pointsAux = new ArrayList<>();
+        String[] data = object.split(Constants.SEPARATOR);
+        if (data.length > 3) {
+            // Não é necessário ler todos os pontos salvos ou pode poluir o visual do frame por isso j pula 4
+            for (int j = 2; j < data.length; j += 4) {
+                String string = data[j];
+                if (string != null) {
+                    PointWrapper current = new PointWrapper(
+                            new Point(
+                                    Integer.parseInt(data[j].replace(".0", "").trim()),
+                                    Integer.parseInt(data[j + 1].replace(".0", "").trim())));
+                    pointsAux.add(current);
+                }
+            }
+
+        }
+        return pointsAux;
     }
 
     @Override

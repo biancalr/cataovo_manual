@@ -70,7 +70,7 @@ public class ThreadAutomaticFramesProcessor extends DataProcessingThreadAutomati
                 new MatWrapper(frame).getOpencvMat(), current.getOpencvMat(), 800, 5000));
 
         LOG.info("Finising the processment of the frame");
-        return imageProcess.generateAutomaticRelatory();
+        return imageProcess.generateAutoReport();
     }
 
 }

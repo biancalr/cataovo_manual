@@ -175,7 +175,7 @@ public class MainPage extends javax.swing.JFrame {
      * @throws DirectoryNotValidException
      * @throws FileNotFoundException
      */
-    private void calculateEvaluation() throws CloneNotSupportedException, NumberFormatException, ImageNotValidException, DirectoryNotValidException, FileNotFoundException {
+    private void generateEvaluation() throws CloneNotSupportedException, NumberFormatException, ImageNotValidException, DirectoryNotValidException, FileNotFoundException {
         String manualReport = MainResources.getInstance().getReports()[0];
         String autoReport = MainResources.getInstance().getReports()[1];
         MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(true);
@@ -206,16 +206,16 @@ public class MainPage extends javax.swing.JFrame {
     private void setLabelsEvaluationMod(String evaluation) {
         String[] dataEvaluationSplitted = evaluation.split(Constants.QUEBRA_LINHA);
         this.jLabel21.setText(dataEvaluationSplitted[0]); // true positive
-        this.jLabel22.setText(dataEvaluationSplitted[2]); // false Positive
         this.jLabel23.setText(dataEvaluationSplitted[1]); // false negative
+        this.jLabel22.setText(dataEvaluationSplitted[2]); // false Positive
         this.jLabel24.setText(dataEvaluationSplitted[3]); // true negative
 
-        this.jLabel28.setText(this.evaluationController.getPercentageOf(Constants.CALCULATE_METHOD_TRUE_POSITIVE, dataEvaluationSplitted[1], dataEvaluationSplitted[0]) + "%");
-        this.jLabel29.setText(this.evaluationController.getPercentageOf(Constants.CALCULATE_METHOD_FALSE_POSITIVE, dataEvaluationSplitted[2], dataEvaluationSplitted[3]) + "%");
-        this.jLabel30.setText(this.evaluationController.getPercentageOf(Constants.CALCULATE_METHOD_TRUE_NEGATIVE, dataEvaluationSplitted[3], dataEvaluationSplitted[2]) + "%");
-        this.jLabel31.setText(this.evaluationController.getPercentageOf(Constants.CALCULATE_METHOD_FALSE_NEGATIVE, dataEvaluationSplitted[1], dataEvaluationSplitted[0]) + "%");
-        this.jLabel32.setText(this.evaluationController.getPercentageOf(Constants.CALCULATE_METHOD_ACCURACY, dataEvaluationSplitted[0], dataEvaluationSplitted[3], dataEvaluationSplitted[2], dataEvaluationSplitted[1]) + "%");
-        this.jLabel33.setText(this.evaluationController.getPercentageOf(Constants.CALCULATE_METHOD_PRECISION, dataEvaluationSplitted[0], dataEvaluationSplitted[2]) + "%");
+        this.jLabel28.setText(this.evaluationController.getPercentageOf(Constants.CALCULATE_METHOD_TRUE_POSITIVE, dataEvaluationSplitted[0], dataEvaluationSplitted[1]));
+        this.jLabel29.setText(this.evaluationController.getPercentageOf(Constants.CALCULATE_METHOD_FALSE_POSITIVE, dataEvaluationSplitted[2], dataEvaluationSplitted[3]));
+        this.jLabel30.setText(this.evaluationController.getPercentageOf(Constants.CALCULATE_METHOD_TRUE_NEGATIVE, dataEvaluationSplitted[3], dataEvaluationSplitted[2]));
+        this.jLabel31.setText(this.evaluationController.getPercentageOf(Constants.CALCULATE_METHOD_FALSE_NEGATIVE, dataEvaluationSplitted[1], dataEvaluationSplitted[0]));
+        this.jLabel33.setText(this.evaluationController.getPercentageOf(Constants.CALCULATE_METHOD_PRECISION, dataEvaluationSplitted[0], dataEvaluationSplitted[2]));
+        this.jLabel32.setText(this.evaluationController.getPercentageOf(Constants.CALCULATE_METHOD_ACCURACY, dataEvaluationSplitted[0], dataEvaluationSplitted[3], dataEvaluationSplitted[2], dataEvaluationSplitted[1]));
     }
 
     /**
@@ -714,11 +714,11 @@ public class MainPage extends javax.swing.JFrame {
 
         jLabel24.setText("VN");
 
-        jLabel25.setText("TVP (%)");
+        jLabel25.setText("Recall");
 
-        jLabel26.setText("TFP (%)");
+        jLabel26.setText("TFP");
 
-        jLabel27.setText("TVN (%)");
+        jLabel27.setText("TVN");
 
         jLabel28.setText("jLabel28");
 
@@ -732,7 +732,7 @@ public class MainPage extends javax.swing.JFrame {
 
         jLabel33.setText("jLabel33");
 
-        jLabel34.setText("TFN (%)");
+        jLabel34.setText("TFN");
 
         jLabel35.setText("Acurácia");
 
@@ -1279,10 +1279,10 @@ public class MainPage extends javax.swing.JFrame {
             }
 
             boolean result = this.fileSelectionController.fileSelectionEvent(evt.getActionCommand(), jTabbedPane1, false);
-            
+
             if (!result) {
                 MainResources.getInstance().adjustPanelTab(jTabbedPane1, false);
-            } 
+            }
 
             switch (countEvaluationReports()) {
                 case 1 -> {
@@ -1293,9 +1293,10 @@ public class MainPage extends javax.swing.JFrame {
                     String msg = "Relatório adicionado.";
                     JOptionPane.showMessageDialog(jDesktopPane3, msg);
                     MainResources.getInstance().adjustPanelTab(jTabbedPane1, true);
-                    calculateEvaluation();
+                    generateEvaluation();
                 }
-                default -> {}
+                default -> {
+                }
             }
             MainResources.getInstance().adjustPanelTab(jTabbedPane1, false);
         } catch (DirectoryNotValidException | ImageNotValidException | FileNotFoundException | TabNotValidToEvaluationException | HeadlessException | CloneNotSupportedException ex) {

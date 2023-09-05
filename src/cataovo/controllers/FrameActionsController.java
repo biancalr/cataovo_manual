@@ -45,7 +45,7 @@ public interface FrameActionsController {
      * @see cataovo.controllers.FileReaderController#getPointsInFrameFile(java.lang.String, java.lang.String) 
      * @see cataovo.controllers.FileReaderController#getRegionsInFrameFile(java.lang.String, java.lang.String) 
      */
-    public Icon paintFormats(Frame currentFrame, Collection<RectWrapper> regions, Collection<PointWrapper> points);
+    public Icon paintFormats(Frame currentFrame, Collection<RectWrapper> regions, Collection points);
     
     /**
      * Removes the last demarked {@link cataovo.entities.Region}.

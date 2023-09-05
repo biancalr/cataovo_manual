@@ -75,6 +75,6 @@ public interface AutomaticImageProcess {
      * @return A text containg the total of the eggs and a list of a certain
      * quantity of coodinates that forms each object.
      */
-    public StringBuffer generateAutomaticRelatory();
+    public StringBuffer generateAutoReport();
 
 }

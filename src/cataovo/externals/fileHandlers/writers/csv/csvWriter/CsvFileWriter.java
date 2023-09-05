@@ -36,9 +36,10 @@ public class CsvFileWriter implements Writer{
      * @param fileLocation
      * @param folderLocation
      * @return the filepath's relatory.
-     * @throws java.lang.Exception
+     * @throws cataovo.exceptions.FileCsvWriterException
      * @see #createContent()
      */
+    @Override
     public String createFile(final StringBuffer content, final String fileLocation, final String folderLocation) throws FileCsvWriterException {
         StringBuffer sb = new StringBuffer();
         File directory = new File(folderLocation);
@@ -71,13 +72,14 @@ public class CsvFileWriter implements Writer{
      * @return
      * @throws AutomationExecutionException 
      */
+    @Override
     public StringBuffer verifyAndAppendFileAreadyExistent(final String createdFile, final String palettePathName) throws AutomationExecutionException {
         StringBuffer sb = new StringBuffer();
         File f = new File(createdFile);
         LOG.info("Verifying if the file already exists.");
+        sb.append(palettePathName);
         if (f.exists() && f.isFile()) {
             LOG.info("Reading the existing file to append its previous");
-            sb.append(palettePathName).append(Constants.QUEBRA_LINHA);
             sb.append(readFile(f, palettePathName));
         }
         return sb;
@@ -98,7 +100,6 @@ public class CsvFileWriter implements Writer{
         StringBuffer sb = new StringBuffer();
         csvReader.lines().filter(l -> !l.contains(palettePathName) && l.length() > 4)
                 .forEachOrdered(l -> sb.append(Constants.QUEBRA_LINHA).append(l));
-        sb.append(Constants.QUEBRA_LINHA);
         return sb;
     }
 

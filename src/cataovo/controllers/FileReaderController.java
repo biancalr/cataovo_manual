@@ -33,7 +33,7 @@ public interface FileReaderController {
      * @throws java.io.FileNotFoundException
      * @throws NumberFormatException
      */
-    public List<PointWrapper> getPointsInFrameFile(String frameName, String report) throws FileNotFoundException, NumberFormatException;
+    public List<List<PointWrapper>> getPointsInFrameFile(String frameName, String report) throws FileNotFoundException, NumberFormatException;
 
     /**
      *

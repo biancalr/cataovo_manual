@@ -12,6 +12,8 @@ import cataovo.constants.Constants;
 import cataovo.controllers.EvaluationProcessorController;
 import cataovo.entities.Palette;
 import cataovo.enums.FileExtension;
+import cataovo.utils.evaluationUtils.EvaluationCalcType;
+import cataovo.utils.evaluationUtils.PercentageCalcUtils;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -31,7 +33,7 @@ import java.util.logging.Logger;
 public class EvaluationProcessorControllerImplements implements EvaluationProcessorController {
 
     /**
-     * Logging for CsvFileWriter
+     * Logging for EvaluationProcessorControllerImplements
      */
     private static final Logger LOG = Logger.getLogger(EvaluationProcessorControllerImplements.class.getName());
     private String evaluationResult;
@@ -60,84 +62,56 @@ public class EvaluationProcessorControllerImplements implements EvaluationProces
             return "";
         }
     }
-    
+
     @Override
-    public String getPercentageOf(final int method, final String strValue1, final String strValue2){
-        int value1 = Integer.parseInt(strValue1);
-        int value2 = Integer.parseInt(strValue2);
+    public String getPercentageOf(final int method, final String strValue1, final String strValue2) {
+        // TVP = VP / (FN+VP)
+        // TFP = FP / (VN+FP)
+        // TVN = VN / (FP+VN)
+        // TFN = FN / (VP+FN)
+        float value1 = Integer.parseInt(strValue1);
+        float value2 = Integer.parseInt(strValue2);
+        final PercentageCalcUtils calcUtils = new PercentageCalcUtils();
+
         switch (method) {
-            case Constants.CALCULATE_METHOD_TRUE_POSITIVE -> {
-                return "" + getPercentageTruePositive(value1, value2);
+            case Constants.CALCULATE_METHOD_TRUE_POSITIVE -> { // TVP = VP / (FN+VP)
+                return calcUtils.calculate(EvaluationCalcType.RECALL, value1, value2, null, null);
             }
-            case Constants.CALCULATE_METHOD_FALSE_POSITIVE -> {
-                return "" + getPercentageFalsePositive(value1, value2);
+            case Constants.CALCULATE_METHOD_FALSE_POSITIVE -> { // TFP = FP / (VN+FP)
+                return calcUtils.calculate(EvaluationCalcType.BASIC_FORMULA, value1, value2, null, null);
             }
-            case Constants.CALCULATE_METHOD_TRUE_NEGATIVE -> {
-                return "" + getPercentageTrueNegative(value1, value2);
+            case Constants.CALCULATE_METHOD_TRUE_NEGATIVE -> { // TVN = VN / (FP+VN)
+                return calcUtils.calculate(EvaluationCalcType.BASIC_FORMULA, value1, value2, null, null);
             }
-            case Constants.CALCULATE_METHOD_FALSE_NEGATIVE -> {
-                return "" + getPercentageFalseNegative(value1, value2);
+            case Constants.CALCULATE_METHOD_FALSE_NEGATIVE -> { // TFN = FN / (VP+FN)
+                return calcUtils.calculate(EvaluationCalcType.BASIC_FORMULA, value1, value2, null, null);
             }
             case Constants.CALCULATE_METHOD_PRECISION -> {
-                return "" + getPercentagePrecision(value1, value2);
+                return calcUtils.calculate(EvaluationCalcType.PRECISION, value1, value2, null, null);
             }
             default -> {
                 throw new AssertionError();
             }
         }
     }
-    
+
     @Override
-    public String getPercentageOf(final int method, final String strValue1, final String strValue2, final String strValue3, final String strValue4){
-        int value1 = Integer.parseInt(strValue1);
-        int value2 = Integer.parseInt(strValue2);
-        int value3 = Integer.parseInt(strValue3);
-        int value4 = Integer.parseInt(strValue4);
+    public String getPercentageOf(final int method, final String strValue1, final String strValue2, final String strValue3, final String strValue4) {
+        float value1 = Integer.parseInt(strValue1);
+        float value2 = Integer.parseInt(strValue2);
+        float value3 = Integer.parseInt(strValue3);
+        float value4 = Integer.parseInt(strValue4);
+        final PercentageCalcUtils calcUtils = new PercentageCalcUtils();
+
         switch (method) {
             case Constants.CALCULATE_METHOD_ACCURACY -> {
-                return "" + getPercentageAccuracy(value1, value2, value3, value4);
+                return calcUtils.calculate(EvaluationCalcType.ACCURACY, value1, value2, value3, value4);
             }
             default -> {
                 throw new AssertionError();
             }
         }
-        
-    }
 
-    public int getPercentageTruePositive(int falseNegative, int truePositive) {
-        // TVP = VP / (FN+VP)
-        LOG.log(Level.INFO, "Calculating Percentage: True Positive");
-        return truePositive / (falseNegative + truePositive);
-    }
-
-    public int getPercentageFalsePositive(int falsePositive, int trueNegative) {
-        //TFP = FP / (VN+FP)
-        LOG.log(Level.INFO, "Calculating Percentage: False Positive");
-        return falsePositive / (trueNegative + falsePositive);
-    }
-
-    public int getPercentageTrueNegative(int trueNegative, int falsePositive) {
-        // TVN = VN / (VN+FP)
-        LOG.log(Level.INFO, "Calculating Percentage: True Negative");
-        return trueNegative / (trueNegative + falsePositive);
-    }
-
-    public int getPercentageFalseNegative(int falseNegative, int truePositive) {
-        // TFN = FN / (FN+VP)
-        LOG.log(Level.INFO, "Calculating Percentage: False Negative");
-        return falseNegative / (falseNegative + truePositive);
-    }
-
-    public int getPercentageAccuracy(int truePositive, int trueNegative, int falsePositive, int falseNegative) {
-        // Acc = (VP+VN) / (VP+VN+FP+FN)
-        LOG.log(Level.INFO, "Calculating Percentage: Accuracy");
-        return (truePositive + trueNegative) / (truePositive + trueNegative + falsePositive + falseNegative);
-    }
-
-    public int getPercentagePrecision(int truePositive, int falsePositive) {
-        // Prec = VP / (VP+FP)
-        LOG.log(Level.INFO, "Calculating Percentage: Precision");
-        return truePositive / (truePositive + falsePositive);
     }
 
     @Override
@@ -155,7 +129,7 @@ public class EvaluationProcessorControllerImplements implements EvaluationProces
                         savingDirectory,
                         fileExtension,
                         tabName,
-                        this.evaluationResult, 
+                        this.evaluationResult,
                         dateTime);
 
                 task = executorService.submit(automation);
@@ -172,7 +146,7 @@ public class EvaluationProcessorControllerImplements implements EvaluationProces
             return null;
         }
     }
-    
+
     /**
      * Calculates the date and the time.
      *

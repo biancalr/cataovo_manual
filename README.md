@@ -31,41 +31,26 @@ computer vision.</p>
 <li>Provide a database containing the worksheets and images resulting from the processing</li>
 </ul>
 
-<p lang="en">The monolithic architecture was chosen because one of the criteria of this project is to be an application with the lowest possible cost.</p>
-<p lang="en">Another criterion is to be an application that is simple to develop and that can be run locally on the operator user's machine.</p>
-<p lang="en">Among the advantages of architecture there are:
-<ul>
-<li>Simpler to develop: the organization is concentrated in a single system;</li>
-<li>Simple to test: you can test the application end-to-end in one place;</li>
-<li>Simple to scale: as it is only one application, if you need to add more items, you simply add what is needed.</li>
-</ul>
-</p>
-
-<img src="/images/arquitetura_aplicacao_monolitica.png" alt="Image of the monolithic architecture adopted in the project" style="width:245px;height:367px"/>
-<p>Source: https://learn.microsoft.com/pt-br/azure/architecture/microservices/migrate-monolith</p>
-
 <h4>Structuring the Application Modules</h4>
 <p lang="en">The complete software consists of three modules:</p>
 <ul>
-<li>Manual Counting Module</li>
+<li>Gold Standard Generation Module</li>
 <li>Automatic Counting Module</li>
 <li>Evaluation Module</li>
 </ul>
  
 <div>
-<h4>Manual Counting Module</h4>
+<h4>Gold Standard Generation Module</h4>
 <section>
-<p lang="en">This is the module that this work will focus on developing.</p>
-<p lang="en">The Manual Counting module is the first of the three modules that make up the application. It makes it possible to carry out the counting and identification of eggs manually by an operator. The application, as shown in the figure below, has the advantage of abstracting the manipulation of microscopes for counting eggs, eliminating failures caused by lack of dexterity in handling this equipment.</p>
-<p lang="en">It will also be used as the gold standard for the entire project, as it is up to the operator to define what is egg or not.</p>
+<p lang="en">In the Gold Standard Generation Module, a manual egg counting tool is provided. In this module, the application offers a tool which allows, for each frame that makes up a palette, the area where each egg is located individually must be manually demarcated on the screen. The amount of eggs will be the amount of demarcated regions.</p>
 </section>
-<img src="/images/mod_manual_3.png" alt="Manual Counting Module Image" style="width:600px;height:400px"/>
+<img src="/images/mod_manual_3.png" alt="Gold Standard Generation Module" style="width:600px;height:400px"/>
 </div>
 
 <div>
 <h4>Automatic Counting Module</h4>
 <section>
-<p lang="en">In the Automatic Counting Module, the selected palette is processed automatically by the software.</p>
+<p lang="en">In the Automatic Counting Module, the selected palette is provided with an automatic counting solution by the application. In this module, it will be the responsibility of the algorithm provided by the tool to analyze the images and, based on the defined heuristics, identify and count the eggs in the palette frames.</p>
 </section>
 <img src="/images/mod_auto_3.png" alt="Auto Counting Module Image" style="width:600px;height:400px"/>
 </div>
@@ -73,9 +58,7 @@ computer vision.</p>
 <div>
 <h4>Evaluation Module</h4>
 <section>
-<p lang="en">The Evaluation Module will be responsible for crossing the other modules and comparing them to obtain a success metric.</p>
-<p>Each of the counting modules produces a final report containing data on eggs found. The Assessment Module makes use of these artifacts and,
-using manual counting as the gold standard, it confronts the data with automatic counting in order to extract some hit metrics.</p>
+<p lang="en">To monitor the assertiveness of the automatic counting algorithm, it is necessary to automate a dedicated evaluator. This evaluator must use the manual module as a fundamental truth (Ground Truth), since it represents the actual location of the eggs found by a human. This is the responsibility of the Evaluation Module: to provide an algorithm that evaluates the assertiveness of the solution developed in the Automatic count based on the generated gold standard.</p>
 </section>
 <img src="/images/mod_result_3.png" alt="Assessment Module Image" style="width:600px;height:400px"/>
 </div>
@@ -111,41 +94,26 @@ de visão computacional.</p>
 </li>
 </ul>
 
-<p lang="pt-BR">A arquitetura monolítica foi escolhida porque um dos critérios deste projeto é ser uma aplicação do menor custo possível.</p>
-<p lang="pt-BR">Outro critétio é ser uma aplicação simples de desenvolver e que seja possível executar localmente na máquina do usuário operador.</p>
-<p lang="pt-BR">Entre as vantagens da arquitetura, há:
-<ul>
-<li>Mais simples de desenvolver: a organização fica concentrada em um único sistema;</li>
-<li>Simples de testar: é possível testar a aplicação de ponta a ponta em um único lugar;</li>
-<li>Simples de escalar: como é apenas uma aplicação, se necessário adicionar mais itens, simplesmente se adiciona o que for necessário.</li>
-</ul>
-</p>
-
-<img src="/images/arquitetura_aplicacao_monolitica.png" alt="Imagem da arquitetura monolítica adotada no projeto" style="width:245px;height:367px"/>
-<p>Fonte: https://learn.microsoft.com/pt-br/azure/architecture/microservices/migrate-monolith</p>
-
 <h4>Estruturação dos Módulos da Aplicação</h4>
 <p lang="pt-BR">O software completo é composto por três módulos:</p>
 <ul>
-<li>Módulo de Contagem Manual</li>
+<li>Módulo Geração do Padrão Ouro</li>
 <li>Módulo de Contagem Automática</li>
 <li>Módulo de Avaliação</li>
 </ul>
  
 <div>
-<h4>Módulo de Contagem Manual</h4>
+<h4>Módulo Geração do Padrão Ouro</h4>
 <section>
-<p lang="pt-BR">Este é o módulo em que este trabalho irá se concentrar em desenvolver.</p>
-<p lang="pt-BR">O módulo de Contagem Manual é o primeiro dos três módulos que formam a aplicação. Ele possibilita realizar a contagem e identificação dos ovos manualmente por uma pessoa operadora. A aplicação, como mostra a figura abaixo, apresenta a vantagem de abstrair a manipulação de microscópios para a contagem dos ovos, eliminando as falhas causadas pela falta de destreza na manipulação deste equipamento.</p>
-<p lang="pt-BR">Ele também será usado como padrão ouro para todo o projeto, já que fica a critério do operador definir o que é ovo ou não.</p>
+<p lang="pt-BR">No Módulo de Geração do Padrão Ouro, é fornecida uma ferramenta de contagem manual dos ovos. Neste módulo aplicação oferece uma ferramenta a qual permite que, para cada quadro que compõe uma paleta, deve ser demarcada manualmente na tela a área em que se localiza cada ovo individualmente. A quantidade de ovos será a quantidade de regiões demarcadas.</p>
 </section>
-<img src="/images/mod_manual_3.png" alt="Imagem do Módulo de Contagem Manual" style="width:600px;height:400px"/>
+<img src="/images/mod_manual_3.png" alt="Módulo Geração do Padrão Ouro" style="width:600px;height:400px"/>
 </div>
 
 <div>
 <h4>Módulo de Contagem Automática</h4>
 <section>
-<p lang="pt-BR">No Módulo de Contagem Automática, a paleta selecionada é processada automaticamente pelo software.</p>
+<p lang="pt-BR">No Módulo de Contagem Automática, à paleta selecionada é fornecida uma solução de contagem automática pela aplicação. Neste módulo, será de responsabilidade do algoritmo fornecido pela ferramenta analisar as imagens e, baseado nas heurísticas definidas, identificar e contar os ovos nos quadros da paleta.</p>
 </section>
 <img src="/images/mod_auto_3.png" alt="Imagem do Módulo de Contagem Automática" style="width:600px;height:400px"/>
 </div>
@@ -153,9 +121,7 @@ de visão computacional.</p>
 <div>
 <h4>Módulo de Avaliação</h4>
 <section>
-<p lang="pt-BR">O Módulo de Avaliação, será o responsável por realizar o cruzamento dos outros módulos e compará-los para obter uma métrica de acerto.</p>
-<p lang="pt-BR">Cada um dos módulos de contagem produz um relatório final contendo os dados dos ovos encontrados. O Módulo de Avaliação faz o uso destes artefatos e, 
-utilizando a contagem manual como padrão ouro, confronta os dados com a contagem automática a fim de extrair algumas métricas de acerto.</p>
+<p lang="pt-BR">Para monitorar a assertividade do algoritmo de contagem automática, se faz necessário automatizar um avaliador dedicado. Esse avaliador deve utilizar o módulo manual como verdade fundamental (Ground Truth), já que ele representa a localização real dos ovos encontrada por um humano. Esta é a responsabilidade do Módulo de Avaliação: fornecer um algoritmo que avalia a assertividade da solução desenvolvida na contagem Automática baseado no padrão ouro gerado.</p>
 </section>
 <img src="/images/mod_result_3.png" alt="Imagem do Módulo de Avaliação" style="width:600px;height:400px"/>
 </div>
@@ -192,41 +158,26 @@ visión artificial.</p>
 </li>
 </ul>
 
-<p lang="es">Se eligió la arquitectura monolítica porque uno de los criterios de este proyecto es ser una aplicación con el menor costo posible.</p>
-<p lang="es">Otro criterio es ser una aplicación que sea simple de desarrollar y que pueda ejecutarse localmente en la máquina del usuario operador.</p>
-<p lang="es">Entre las ventajas de la arquitectura se encuentran:
-<ul>
-<li>Más simple de desarrollar: la organización se concentra en un solo sistema;</li>
-<li>Fácil de probar: puede probar la aplicación de principio a fin en un solo lugar;</li>
-<li>Fácil de escalar: como es solo una aplicación, si necesita agregar más elementos, simplemente agregue lo que se necesita.</li>
-</ul>
-</p>
-
-<img src="/images/arquitetura_aplicacao_monolitica.png" alt="Imagen de la arquitectura monolítica adoptada en el proyecto" style="width:245px;height:367px"/>
-<p>Fuente: https://learn.microsoft.com/pt-br/azure/architecture/microservices/migrate-monolith</p>
-
 <h4>Estructuración de los módulos de la aplicación</h4>
 <p>El software completo consta de tres módulos:</p>
 <ul>
-<li>Módulo de conteo manual</li>
+<li>Módulo de Generación del Ground Truth</li>
 <li>Módulo de conteo automático</li>
 <li>Módulo de Evaluación</li>
 </ul>
  
 <div>
-<h4>Módulo de conteo manual</h4>
+<h4>Módulo de Generación del Ground Truth</h4>
 <sección>
-<p lang="es">Este es el módulo en el que este trabajo se centrará en desarrollar.</p>
-<p lang="es">El módulo de Conteo Manual es el primero de los tres módulos que componen la aplicación. Permite realizar el conteo e identificación de huevos manualmente por un operario. La aplicación, como se muestra en la siguiente figura, tiene la ventaja de abstraer la manipulación de microscopios para el conteo de huevos, eliminando fallas causadas por falta de destreza en el manejo de este equipo.</p>
-<p lang="es">También se usará como el estándar de oro para todo el proyecto, ya que depende del operador definir qué es huevo o no.</p>
+<p lang="es">En el Módulo de Generación del Ground Truth, se proporciona una herramienta de conteo manual de huevos. En este módulo, la aplicación ofrece una herramienta que permite, para cada cuadro que compone una paleta, marcar manualmente en pantalla la zona donde se encuentra cada huevo individual. La cantidad de huevos será la cantidad de regiones demarcadas.</p>
 </sección>
-<img src="/images/mod_manual_3.png" alt="Imagen del módulo de conteo manual" style="width:600px;height:400px"/>
+<img src="/images/mod_manual_3.png" alt="Módulo de Generación del Ground Truth" style="width:600px;height:400px"/>
 </div>
 
 <div>
 <h4>Módulo de conteo automático</h4>
 <sección>
-<p lang="es">En el módulo de conteo automático, la paleta seleccionada es procesada automáticamente por el software.</p>
+<p lang="es">En el Módulo de conteo automático, la aplicación proporciona a la paleta seleccionada una solución de conteo automático. En este módulo será responsabilidad del algoritmo proporcionado por la herramienta analizar las imágenes y, en base a las heurísticas definidas, identificar y contar los huevos en los marcos de la paleta.</p>
 </sección>
 <img src="/images/mod_auto_3.png" alt="Imagen del módulo de conteo automático" style="width:600px;height:400px"/>
 </div>
@@ -234,9 +185,7 @@ visión artificial.</p>
 <div>
 <h4>Módulo de Evaluación</h4>
 <sección>
-<p lang="es">El Módulo de Evaluación se encargará de cruzar los demás módulos y compararlos para obtener una métrica de éxito.</p>
-<p lang="es">Cada uno de los módulos de conteo produce un informe final que contiene datos sobre los huevos encontrados. El módulo de evaluación hace uso de estos artefactos y,
-utilizando el conteo manual como estándar de oro, confronta los datos con el conteo automático para extraer algunas métricas de aciertos.</p>
+<p lang="es">Para controlar la asertividad del algoritmo de conteo automático, es necesario automatizar un evaluador dedicado. Este evaluador debe utilizar el módulo manual como verdad fundamental (Ground Truth), ya que representa la ubicación real de los huevos encontrados por un humano. Esta es responsabilidad del Módulo de Evaluación: proporcionar un algoritmo que evalúe la asertividad de la solución desarrollada en el Conteo Automático con base en el estándar oro generado.</p>
 </sección>
 <img src="/images/mod_result_3.png" alt="Imagen del módulo de evaluación" style="width:600px;height:400px"/>
 </div>

@@ -160,7 +160,7 @@ public abstract class FrameUtils {
      * @param circles
      * @return
      */
-    protected MatWrapper drawMultiplePoints(Collection<PointWrapper> circles) {
+    protected MatWrapper drawMultiplePoints(Collection<Collection<PointWrapper>> circles) {
         return drawMultipleCircles(circles);
     }
 
@@ -276,11 +276,11 @@ public abstract class FrameUtils {
      * @param circles
      * @return
      */
-    private MatWrapper drawMultipleCircles(Collection<PointWrapper> circles) {
+    private MatWrapper drawMultipleCircles(Collection<Collection<PointWrapper>> circles) {
         MatWrapper mw = this.matWrapper;
-        circles.stream().forEach((c) -> {
-            mw.setOpencvMat(imageUtils.circle(c.getOpencvPoint(), mw.getOpencvMat()).clone());
-        });
+        circles.stream().forEach((col) -> {col.stream().forEach((c) -> {
+                mw.setOpencvMat(imageUtils.circle(c.getOpencvPoint(), mw.getOpencvMat()).clone());
+        });});
         return mw;
     }
 }

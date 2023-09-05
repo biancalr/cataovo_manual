@@ -7,6 +7,8 @@ package cataovo.automation.threads.dataEvaluation;
 import cataovo.constants.Constants;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
@@ -25,62 +27,83 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
     }
 
     @Override
-    protected int[] evaluateFrame(String regionsLine, String pointsLine) throws NumberFormatException {
+    protected float[] evaluateFrame(String regionsLine, String eggsLine) throws NumberFormatException {
         int tp = 0;
         int tn = 0;
         int fp = 0;
         int fn = 0;
+        float[] metrics = new float[4];
+        String eggLine;
+        List<String> eggs;
+        double percentual = 0;
+
         //Separar a as regioes pela vírgula
-        List<Region> regions = split(Constants.RECT_FORMAT, regionsLine.split(","));
-        List<Region> regionsAux = regions;
-        // Separar os pontos pela vírgula
-        List<Point> points = split(Constants.CIRCLE_FORMAT, pointsLine.split(","));
-        List<Point> pointsAux = points;
-        Region rect;
-        int part;
-        boolean eggFound;
-        int[] metrics = new int[4];
+        List<Region> regions = split(Constants.RECT_FORMAT, regionsLine.split(Constants.SEPARATOR));
+        //Separa as áreas dos ovos pela cerquilha
+        eggs = new CopyOnWriteArrayList<>(List.of(eggsLine.split(Constants.OBJECT_SEPARATOR)));
+        
+        // Caso não haja ovos detectados pelo automático, a linha não será splitada
+        if (eggs.size() > 1) {
 
-        // Algoritmo começa aqui
-        // Percorrendo as marcações
-        for (int i = 0; i < regionsAux.size(); i++) {
-            rect = regionsAux.get(i);
-            part = 0;
-            //percorrendo os pontos
-            for (Point point : pointsAux) {
-                // se a região contém um ponto
-                if (rect.contains(point)) {
-                    LOG.log(Level.INFO, "The point {0} was found in a region", point);
-                    // remover o ponto
-//                    points.remove(point);
-                    // acrescenta na quantidade de partes encontradas
-                    part++;
-                    LOG.log(Level.INFO, "Points found in {0}: {1}", new Object[]{rect, part});
-                    break;
+            List<String> eggsAux = eggs;
+            // Começar a partir do 1 pois essa posição não contém coordenadas de pontos
+            List<Point> points;
+            for (int idx = 1; idx < eggs.size(); idx++) {
+                eggLine = eggs.get(idx);
+                
+                // Separar os pontos do ovo pela vírgula
+                points = split(Constants.CIRCLE_FORMAT, eggLine.split(Constants.SEPARATOR));
+                List<Region> regionsAux = regions;
+                Region rect;
+                boolean eggFound;
+
+                LOG.log(Level.INFO, "Total of points {0}", points.size());
+                // Comparação começa aqui
+                // Percorrendo as marcações
+                for (int i = 0; i < regionsAux.size(); i++) {
+                    rect = regionsAux.get(i);
+                    //percorrendo os pontos
+                    for (Point point : points) {
+                        // se a região contém o ponto
+                        if (rect.contains(point)) {
+                            LOG.log(Level.INFO, "The point {0} was found in a region", point);
+                            // acrescenta na quantidade de partes encontradas
+                            percentual++;
+                            LOG.log(Level.INFO, "Points found in {0}: {1}", new Object[]{rect, point});
+                        }
+                    }
+                    LOG.log(Level.INFO, "Total of points detected: {0}", eggs.size());
+                    LOG.log(Level.INFO, "The points found inside the region {0}", percentual);
+                    LOG.log(Level.INFO, "The percentual for the egg {0}", (percentual / points.size()));
+                    if ((percentual > 0.0) && ((percentual / points.size()) > 0.5)) {
+                        // se foram encontrados os pontos na região demarcada
+                        // acrescenta os verdadeiros positivos
+                        tp++;
+                        eggFound = true;
+                        LOG.log(Level.INFO, "The region has found matching points : {0}", eggFound);
+                        // remove a região a qual os pontos foram encontrados
+                        regions.remove(rect);
+                        eggsAux.remove(eggLine);
+                        
+                    }
+                    percentual = 0;
                 }
-            }
-            if (part > 0) {
-                // se foram encontrados os pontos na região demarcada
-                // acrescenta os verdadeiros positivos
-                tp++;
-                eggFound = true;
-                LOG.log(Level.INFO, "The region has found matching points : {0}", eggFound);
-                // remove a região a qual os pontos foram encontrados
-                regions.remove(rect);
-            } else {
-                // se foram encontrados os pontos na região demarcada
-                eggFound = false;
-                LOG.log(Level.INFO, "Nao casou um contorno com a marcacao {0}", eggFound);
-                // acrescenta a quantidade de falsos negativos
-                fn++;
-            }
 
+            }
+            
+            // Caso tenha sobrado regiões que não foram detectados ovos ou foram detectadas incorretamente
+            fn = regions.size();
+            // Caso tenha sobrado ovos que não foram detectados ou foram detectados incorretamente
+            // Reduzir 1 do pois a posição 1 não contém coordenadas de pontos
+            fp = eggsAux.size() - 1;
+            
+            LOG.log(Level.INFO, "Regiões remanescentes {0}", regions.size());
+            LOG.log(Level.INFO, "Ovos remanescentes {0}", (eggs.size() - 1));
+
+        } else {
+            // Incrementa os falsos negativos caso o automático não tenha encontrado ovos
+            fn = regions.size();
         }
-
-        LOG.log(Level.INFO, "Regiões remanescentes {0}", regions.size());
-        LOG.log(Level.INFO, "Pontos remanescentes {0}", points.size());
-
-        fp = points.size() / 78;
 
         metrics[0] = tp;
         metrics[1] = fn;
@@ -100,7 +123,7 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
             }
             case Constants.CIRCLE_FORMAT -> {
                 jumpStep = 2;
-                atStartPoint = 2;
+                atStartPoint = 0;
             }
             default ->
                 throw new AssertionError();
