@@ -72,7 +72,7 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
                     LOG.log(Level.INFO, "Total de ovos encontrados no frame pelo automático: {0}", eggs.size());
                     LOG.log(Level.INFO, "Pontos encontrados dentro da região {0}", percentual);
                     LOG.log(Level.INFO, "Percentual para o ovo {0}", (percentual / points.size()));
-                    if ((percentual > 0.0) && ((percentual / points.size()) > 0.8)) {
+                    if ((percentual > 0.0) && ((percentual / points.size()) > 0.9)) {
                         // se foram encontrados os pontos na região demarcada
                         // acrescenta os verdadeiros positivos
                         tp++;
