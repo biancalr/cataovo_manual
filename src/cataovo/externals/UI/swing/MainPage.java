@@ -1189,6 +1189,10 @@ public class MainPage extends javax.swing.JFrame {
                 jTabbedPane1.setSelectedIndex(MainResources.getInstance().getPanelTabHelper().getTabIndex());
             } else {
                 MainResources.getInstance().adjustPanelTab(jTabbedPane1, false);
+                MainResources.getInstance().setPalette(null);
+                MainResources.getInstance().setPaletteToSave(null);
+                MainResources.getInstance().setCurrentFrame(null);
+                resetInitialComponents();
             }
         } catch (DirectoryNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
