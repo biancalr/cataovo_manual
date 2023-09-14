@@ -7,8 +7,6 @@ package cataovo.automation.threads.dataEvaluation;
 import cataovo.constants.Constants;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
@@ -33,7 +31,6 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
         int fp = 0;
         int fn = 0;
         float[] metrics = new float[4];
-        String eggLine;
         List<String> eggs;
         double percentual = 0;
 
@@ -41,15 +38,15 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
         List<Region> regions = split(Constants.RECT_FORMAT, regionsLine.split(Constants.SEPARATOR));
         //Separa as áreas dos ovos pela cerquilha
         eggs = new CopyOnWriteArrayList<>(List.of(eggsLine.split(Constants.OBJECT_SEPARATOR)));
+        // Posição zero contém apenas nome e a quantidade de ovos
+        eggs.remove(0);
         
         // Caso não haja ovos detectados pelo automático, a linha não será splitada
-        if (eggs.size() > 1) {
-
-            List<String> eggsAux = eggs;
+        if (eggs.size() >= 1) {
+            
             // Começar a partir do 1 pois essa posição não contém coordenadas de pontos
             List<Point> points;
-            for (int idx = 1; idx < eggs.size(); idx++) {
-                eggLine = eggs.get(idx);
+            for (String eggLine : eggs) {
                 
                 // Separar os pontos do ovo pela vírgula
                 points = split(Constants.CIRCLE_FORMAT, eggLine.split(Constants.SEPARATOR));
@@ -72,10 +69,10 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
                             LOG.log(Level.INFO, "Points found in {0}: {1}", new Object[]{rect, point});
                         }
                     }
-                    LOG.log(Level.INFO, "Total of points detected: {0}", eggs.size());
-                    LOG.log(Level.INFO, "The points found inside the region {0}", percentual);
-                    LOG.log(Level.INFO, "The percentual for the egg {0}", (percentual / points.size()));
-                    if ((percentual > 0.0) && ((percentual / points.size()) > 0.5)) {
+                    LOG.log(Level.INFO, "Total de ovos encontrados no frame pelo automático: {0}", eggs.size());
+                    LOG.log(Level.INFO, "Pontos encontrados dentro da região {0}", percentual);
+                    LOG.log(Level.INFO, "Percentual para o ovo {0}", (percentual / points.size()));
+                    if ((percentual > 0.0) && ((percentual / points.size()) > 0.8)) {
                         // se foram encontrados os pontos na região demarcada
                         // acrescenta os verdadeiros positivos
                         tp++;
@@ -83,7 +80,7 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
                         LOG.log(Level.INFO, "The region has found matching points : {0}", eggFound);
                         // remove a região a qual os pontos foram encontrados
                         regions.remove(rect);
-                        eggsAux.remove(eggLine);
+                        eggs.remove(eggLine);
                         
                     }
                     percentual = 0;
@@ -95,10 +92,10 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
             fn = regions.size();
             // Caso tenha sobrado ovos que não foram detectados ou foram detectados incorretamente
             // Reduzir 1 do pois a posição 1 não contém coordenadas de pontos
-            fp = eggsAux.size() - 1;
+            fp = eggs.size();
             
             LOG.log(Level.INFO, "Regiões remanescentes {0}", regions.size());
-            LOG.log(Level.INFO, "Ovos remanescentes {0}", (eggs.size() - 1));
+            LOG.log(Level.INFO, "Ovos remanescentes {0}", eggs.size());
 
         } else {
             // Incrementa os falsos negativos caso o automático não tenha encontrado ovos
@@ -115,7 +112,6 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
     private List split(int ofFormat, String[] data) throws NumberFormatException {
         int jumpStep;
         int atStartPoint;
-        List formatList;
         switch (ofFormat) {
             case Constants.RECT_FORMAT -> {
                 jumpStep = 4;
@@ -128,8 +124,7 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
             default ->
                 throw new AssertionError();
         }
-        formatList = iterateOver(data, ofFormat, atStartPoint, jumpStep);
-        return formatList;
+        return iterateOver(data, ofFormat, atStartPoint, jumpStep);
 
     }
 
@@ -178,8 +173,8 @@ public class ThreadAutomationEvaluation extends DataEvaluationThreadAutomation {
                 //Acrescentando correção em caso de valores negativos
                 Integer.parseInt(data[ofPosition + 3]) > 0 ? Integer.parseInt(data[ofPosition + 3]) : Math.abs(Integer.parseInt(data[ofPosition + 3])),
                 Integer.parseInt(data[ofPosition + 2]) > 0 ? Integer.parseInt(data[ofPosition + 2]) : Math.abs(Integer.parseInt(data[ofPosition + 2])),
-                new Point(Integer.parseInt(data[ofPosition + 3]) > 0 ? (Integer.parseInt(data[ofPosition]) - Integer.parseInt(data[ofPosition + 3])) : Integer.parseInt(data[ofPosition]),
-                        Integer.parseInt(data[ofPosition + 1]) > 0 ? (Integer.parseInt(data[ofPosition + 1]) - Integer.parseInt(data[ofPosition + 2])) : Integer.parseInt(data[ofPosition + 1])));
+                new Point(Integer.parseInt(data[ofPosition + 2]) > 0 ? (Integer.parseInt(data[ofPosition]) - Integer.parseInt(data[ofPosition + 2])) : Integer.parseInt(data[ofPosition]),
+                        Integer.parseInt(data[ofPosition + 3]) > 0 ? (Integer.parseInt(data[ofPosition + 1]) - Integer.parseInt(data[ofPosition + 3])) : Integer.parseInt(data[ofPosition + 1])));
 
     }
 

@@ -206,8 +206,8 @@ public class MainPage extends javax.swing.JFrame {
     private void setLabelsEvaluationMod(String evaluation) {
         String[] dataEvaluationSplitted = evaluation.split(Constants.QUEBRA_LINHA);
         this.jLabel21.setText(dataEvaluationSplitted[0]); // true positive
-        this.jLabel23.setText(dataEvaluationSplitted[1]); // false negative
-        this.jLabel22.setText(dataEvaluationSplitted[2]); // false Positive
+        this.jLabel23.setText(dataEvaluationSplitted[2]); // false negative
+        this.jLabel22.setText(dataEvaluationSplitted[1]); // false positive
         this.jLabel24.setText(dataEvaluationSplitted[3]); // true negative
 
         this.jLabel28.setText(this.evaluationController.getPercentageOf(Constants.CALCULATE_METHOD_TRUE_POSITIVE, dataEvaluationSplitted[0], dataEvaluationSplitted[1]));

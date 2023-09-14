@@ -127,9 +127,9 @@ public final class Region implements Cloneable, Serializable {
         StringBuffer sb = new StringBuffer();
         sb.append(",").append(initialPoint.toString())
                 .append(",")
-                .append(height)
+                .append(width)
                 .append(",")
-                .append(width);
+                .append(height);
         return sb.toString();
     }
 
