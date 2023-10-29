@@ -17,7 +17,7 @@ public enum EvaluationCalcType {
             // TFP = FP / (VN+FP)
             // TVN = VN / (FP+VN)
             // TFN = FN / (VP+FN)
-            return value1 / (value1 + value2);
+            return value1 / ((value1 + value2) == 0.0f ? 1.0f : (value1 + value2));
         }
     },
     RECALL() {

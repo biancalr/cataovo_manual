@@ -28,6 +28,6 @@ public interface AutomaticProcessorController {
      * @throws cataovo.exceptions.DirectoryNotValidException
      * @throws cataovo.exceptions.AutomationExecutionException
      */
-    public String onNewAutoProcessPalette(JLabel jLabelImageName, JLabel jLabelImageFrame, Palette currentPalette, String savingFolderPath, String tabName) throws DirectoryNotValidException, AutomationExecutionException;
+    public String[] onNewAutoProcessPalette(JLabel jLabelImageName, JLabel jLabelImageFrame, Palette currentPalette, String savingFolderPath, String tabName) throws DirectoryNotValidException, AutomationExecutionException;
     
 }

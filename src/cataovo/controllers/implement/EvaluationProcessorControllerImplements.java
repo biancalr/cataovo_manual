@@ -10,10 +10,15 @@ import cataovo.automation.threads.dataSaving.DataSavingThreadAutomation;
 import cataovo.automation.threads.dataSaving.ThreadAutomationEvaluationProcess;
 import cataovo.constants.Constants;
 import cataovo.controllers.EvaluationProcessorController;
+import cataovo.entities.Frame;
 import cataovo.entities.Palette;
 import cataovo.enums.FileExtension;
+import cataovo.exceptions.DirectoryNotValidException;
+import cataovo.exceptions.ImageNotValidException;
+import cataovo.resources.MainResources;
 import cataovo.utils.evaluationUtils.EvaluationCalcType;
 import cataovo.utils.evaluationUtils.PercentageCalcUtils;
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -69,8 +74,8 @@ public class EvaluationProcessorControllerImplements implements EvaluationProces
         // TFP = FP / (VN+FP)
         // TVN = VN / (FP+VN)
         // TFN = FN / (VP+FN)
-        float value1 = Integer.parseInt(strValue1);
-        float value2 = Integer.parseInt(strValue2);
+        float value1 = Float.parseFloat(strValue1);
+        float value2 = Float.parseFloat(strValue2);
         final PercentageCalcUtils calcUtils = new PercentageCalcUtils();
 
         switch (method) {
@@ -157,6 +162,30 @@ public class EvaluationProcessorControllerImplements implements EvaluationProces
         DateFormat dateFormat = new SimpleDateFormat(datePattern);
         Date date = new Date();
         return dateFormat.format(date);
+    }
+
+    /**
+     *
+     * @param paletteDirectoryOnManual
+     * @param paletteDirectoryOnAuto
+     * @return
+     * @throws DirectoryNotValidException
+     */
+    @Override
+    public Palette getPalettDirByReport(String paletteDirectoryOnManual, String paletteDirectoryOnAuto) throws DirectoryNotValidException, ImageNotValidException{
+        if (new File(paletteDirectoryOnManual).exists() && new File(paletteDirectoryOnAuto).exists()) {
+             String reportName = paletteDirectoryOnManual.substring(paletteDirectoryOnManual.lastIndexOf("\\"), paletteDirectoryOnManual.length());
+             if (paletteDirectoryOnAuto.contains(reportName)) {
+                 Palette palette = new Palette(paletteDirectoryOnAuto);
+                 File frame = palette.getDirectory().listFiles()[0];
+                 MainResources.getInstance().setCurrentFrame(new Frame(frame.getAbsolutePath()));
+                 return palette;
+             } else {
+                 throw new DirectoryNotValidException("The reports are not from the same Palette");
+             }
+         } else {
+             throw new DirectoryNotValidException("One or more reports do not exist");
+         }
     }
 
 }

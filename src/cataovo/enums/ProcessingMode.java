@@ -18,10 +18,18 @@ public enum ProcessingMode {
         this.processingMode = processingMode;
     }
 
+    /**
+     * 
+     * @return the Processing Mode wich are Manual, Automatic or Evaluation
+     */
     public String getProcessingMode() {
         return processingMode;
     }
 
+    /**
+     * 
+     * @param processingMode 
+     */
     public void setProcessingMode(String processingMode) {
         this.processingMode = processingMode;
     }

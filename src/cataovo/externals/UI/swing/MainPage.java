@@ -158,6 +158,9 @@ public class MainPage extends javax.swing.JFrame {
      * Clean texts in labels
      */
     private void cleanTexts() {
+        jLabel1.setText(Constants.NO_PALETTE_SELECTED);
+        jLabel4.setText(Constants.NO_PALETTE_SELECTED);
+        jLabel13.setText(Constants.NO_ARTIFACT_SELECTED);
         jLabel11.setText("");
         jLabel28.setText("");
         jLabel29.setText("");
@@ -165,6 +168,10 @@ public class MainPage extends javax.swing.JFrame {
         jLabel31.setText("");
         jLabel32.setText("");
         jLabel33.setText("");
+        jLabel21.setText("");
+        jLabel22.setText("");
+        jLabel23.setText("");
+        jLabel24.setText("");
     }
 
     /**
@@ -179,6 +186,31 @@ public class MainPage extends javax.swing.JFrame {
         String manualReport = MainResources.getInstance().getReports()[0];
         String autoReport = MainResources.getInstance().getReports()[1];
         MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(true);
+        if (MainResources.getInstance().getPalette() == null || MainResources.getInstance().getPalette().getPathName() == null) {
+            MainResources.getInstance().setPalette(this.evaluationController.getPalettDirByReport(this.fileReaderController.readPaletteDirectoryFromReport(manualReport), this.fileReaderController.readPaletteDirectoryFromReport(autoReport)));
+            mainPageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel13, jLabel12, MainResources.getInstance().getCurrentFrame());
+        }
+        loadEvalContents(manualReport, autoReport);
+        String evaluation = this.evaluationController.onEvaluateFileContentsOnPalette(
+                this.fileReaderController.readFullFileContent(manualReport).toString(),
+                this.fileReaderController.readFullFileContent(autoReport).toString());
+        setLabelsEvaluationMod(evaluation);
+        MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
+//        MainResources.getInstance().setReports(new String[2]);
+        LOG.log(Level.INFO, "Evaluation Finished!");
+    }
+
+    /**
+     *
+     * @param manualReport
+     * @param autoReport
+     * @throws FileNotFoundException
+     * @throws CloneNotSupportedException
+     * @throws NumberFormatException
+     * @throws ImageNotValidException
+     * @throws DirectoryNotValidException
+     */
+    private void loadEvalContents(String manualReport, String autoReport) throws FileNotFoundException, CloneNotSupportedException, NumberFormatException, ImageNotValidException, DirectoryNotValidException {
         this.mainPageController.onNextFrameInEvaluation(jLabel13, jLabel12,
                 MainResources.getInstance().getPalette().getDirectory(),
                 MainResources.getInstance().getReports());
@@ -190,12 +222,6 @@ public class MainPage extends javax.swing.JFrame {
                         this.fileReaderController.getPointsInFrameFile(MainResources.getInstance().getCurrentFrame().getName(),
                                 autoReport)))
         );
-        String evaluation = this.evaluationController.onEvaluateFileContentsOnPalette(
-                this.fileReaderController.readFullFileContent(manualReport).toString(),
-                this.fileReaderController.readFullFileContent(autoReport).toString());
-        setLabelsEvaluationMod(evaluation);
-        MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
-        LOG.log(Level.INFO, "Evaluation Finished!");
     }
 
     /**
@@ -671,7 +697,7 @@ public class MainPage extends javax.swing.JFrame {
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel13.setText("Escolha a Paleta");
+        jLabel13.setText("Selecione os Artefatos");
 
         jButton6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton6.setText("< Anterior");
@@ -693,7 +719,7 @@ public class MainPage extends javax.swing.JFrame {
         jLabel14.setText("Métricas");
 
         jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel15.setText("Valores Esperados");
+        jLabel15.setText("Valores Obtidos");
 
         jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel16.setText("Valores Reais");
@@ -993,6 +1019,8 @@ public class MainPage extends javax.swing.JFrame {
             LOG.log(Level.INFO, evt.getActionCommand());
             boolean wasFileSelected = fileSelectionController.fileSelectionEvent(evt.getActionCommand(), jTabbedPane1, true);
             if (wasFileSelected && MainResources.getInstance().getCurrentFrame().getPaletteFrame().exists()) {
+                cleanTabs();
+                cleanTexts();
                 switch (jTabbedPane1.getSelectedIndex()) {
                     case 0 -> {
                         jButton3.setEnabled(wasFileSelected);
@@ -1001,21 +1029,13 @@ public class MainPage extends javax.swing.JFrame {
                         mainPageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel1, jLabel2, MainResources.getInstance().getCurrentFrame());
                     }
                     case 1 -> {
-                        cleanTabs();
                         jButton1.setEnabled(wasFileSelected);
-                        jButton4.setEnabled(wasFileSelected);
-                        jButton5.setEnabled(wasFileSelected);
                         jTabbedPane2.setSelectedIndex(4);
                         MainResources.getInstance().adjustPanelTab(jTabbedPane1, true);
                         mainPageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel4, jLabel8, MainResources.getInstance().getCurrentFrame());
                     }
                     case 2 -> {
-                        cleanTabs();
-                        cleanTexts();
                         MainResources.getInstance().setReports(new String[2]);
-                        jButton6.setEnabled(wasFileSelected);
-                        jButton7.setEnabled(wasFileSelected);
-                        jButton8.setEnabled(wasFileSelected);
                         mainPageController.showFramesOnSelectedTabScreen(jTabbedPane1, jLabel13, jLabel12, MainResources.getInstance().getCurrentFrame());
                     }
                     default ->
@@ -1052,10 +1072,10 @@ public class MainPage extends javax.swing.JFrame {
                 jLabel10.setIcon(null);
                 jLabel9.setIcon(null);
                 jLabel9.setText("");
-                mainPageController.onFrameFinished(jLabel1, jLabel2, MainResources.getInstance().getCurrentFrame());
+                mainPageController.onFrameFinishedManual(jLabel1, jLabel2, MainResources.getInstance().getCurrentFrame());
             } else {
                 LOG.info("You've reached the end of the Palette.");
-                mainPageController.onFrameFinished(jLabel1, jLabel2, MainResources.getInstance().getCurrentFrame());
+                mainPageController.onFrameFinishedManual(jLabel1, jLabel2, MainResources.getInstance().getCurrentFrame());
                 jButton3.setEnabled(false);
                 jButton2.setEnabled(false);
                 jLabel10.setText("");
@@ -1134,7 +1154,6 @@ public class MainPage extends javax.swing.JFrame {
                     jTabbedPane2,
                     MainResources.getInstance().getSavingFolder(),
                     MainResources.getInstance().getPalette().getDirectory().getName());
-            jLabel11.setText("");
         } catch (ImageNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
@@ -1149,9 +1168,8 @@ public class MainPage extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         LOG.log(Level.INFO, evt.getActionCommand());
-        jLabel11.setText("");
-        String result;
-        jLabel11.setText("");
+        String result[];
+        String mensagem;
         try {
             result = automaticProcessorController.onNewAutoProcessPalette(
                     jLabel4,
@@ -1159,18 +1177,21 @@ public class MainPage extends javax.swing.JFrame {
                     MainResources.getInstance().getPalette(),
                     MainResources.getInstance().getSavingFolder().getAbsolutePath(),
                     MainResources.getInstance().getPanelTabHelper().getTabName());
-            jLabel11.setText("Busca Finalizada!");
             // Ao final do processamento, liberar os botões e a mudança de tab
             MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
-            this.jTabbedPane2.setSelectedIndex(2); // abre a aba dos contornos desenhados
-            JOptionPane.showMessageDialog(jPanel1, "O diretório foi criado sob o nome: " + result);
-            MainResources.getInstance().setSavingFolder(new File(result));
+            this.jTabbedPane2.setSelectedIndex(2); // abre a aba dos ovos encontrados desenhados
+            mensagem = "O diretório foi criado sob o nome: " + result[0] + Constants.QUEBRA_LINHA + "Total de ovos: " + result[1];
+            JOptionPane.showMessageDialog(jPanel1, mensagem);
+            MainResources.getInstance().setSavingFolder(new File(result[0]));
             MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(false);
             mainPageController.onNextFrameInAutomatic(
                     jLabel4,
                     jTabbedPane2,
                     MainResources.getInstance().getSavingFolder(),
                     MainResources.getInstance().getPalette().getDirectory().getName());
+            jLabel11.setText("Total de ovos: " + result[1]);
+            jButton4.setEnabled(true);
+            jButton5.setEnabled(true);
         } catch (DirectoryNotValidException | ImageNotValidException | ArrayIndexOutOfBoundsException ex) {
             LOG.log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(jPanel1, ex.getMessage());
@@ -1192,7 +1213,9 @@ public class MainPage extends javax.swing.JFrame {
                 MainResources.getInstance().setPalette(null);
                 MainResources.getInstance().setPaletteToSave(null);
                 MainResources.getInstance().setCurrentFrame(null);
-                resetInitialComponents();
+                MainResources.getInstance().setReports(new String[2]);
+                cleanTabs();
+                cleanTexts();
             }
         } catch (DirectoryNotValidException ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -1298,6 +1321,9 @@ public class MainPage extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(jDesktopPane3, msg);
                     MainResources.getInstance().adjustPanelTab(jTabbedPane1, true);
                     generateEvaluation();
+                    jButton6.setEnabled(true);
+                    jButton7.setEnabled(true);
+                    jButton8.setEnabled(true);
                 }
                 default -> {
                 }

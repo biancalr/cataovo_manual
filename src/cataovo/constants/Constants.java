@@ -44,7 +44,7 @@ public class Constants {
     /**
      * TAB NAME MANUAL
      */
-    public static final String TAB_NAME_MANUAL_PT_BR = "Manual";
+    public static final String TAB_NAME_MANUAL_PT_BR = "Gerador Padrão Ouro";
     /**
      * TAB NAME AUTOMATICO
      */
@@ -58,6 +58,11 @@ public class Constants {
      * NO PALETTE SELECTED
      */
     public static final String NO_PALETTE_SELECTED = "Escolha uma pasta";
+    
+    /**
+     * NO ARTIFACT SELECTED
+     */
+    public static final String NO_ARTIFACT_SELECTED = "Escolha os Artefatos";
 
     /**
      * BREAK LINE.
@@ -87,8 +92,8 @@ public class Constants {
 
     public static final int STEPS_TO_POINT_SAVING = 5;
 
-    public static final int FRAME_SLOT_TO_PROCESS = 5;
-    public static final int SLOT_FRAMES_TO_PROCESS_ON_PALETTE = 20;
+    public static final int FRAME_SLOT_TO_PROCESS = 10;
+    public static final int SLOT_FRAMES_TO_PROCESS_ON_PALETTE = 30;
 
     /**
      * Custom error message to REGION NOT VALID
@@ -113,12 +118,12 @@ public class Constants {
     /**
      * MINUMUM AXIS X DISTANCE ON REGION
      */
-    public static final int MINUMUM_AXIS_X_DISTANCE_ON_REGION = 35;
+    public static final int MINUMUM_AXIS_X_DISTANCE_ON_REGION = 30;
 
     /**
      * MINUMUM AXIS Y DISTANCE ON REGION
      */
-    public static final int MINUMUM_AXIS_Y_DISTANCE_ON_REGION = 35;
+    public static final int MINUMUM_AXIS_Y_DISTANCE_ON_REGION = 30;
 
     /**
      * MAXIMUM AXIS X DISTANCE ON REGION
@@ -221,12 +226,12 @@ public class Constants {
     public static final String DECIMAL_FORMAT = "#,##0.00";
     
     /**
-     * Separetes an egg from other
+     * A sharp ('#') separator. Separetes an egg from other
      */
     public static String OBJECT_SEPARATOR = "#";
     
     /**
-     * Separator
+     * A comma (',') separator.
      */
     public static String SEPARATOR = ",";
 

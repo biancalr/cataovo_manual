@@ -147,7 +147,7 @@ public class FileSelectionControllerImplement implements FileSelectionController
         chooser.setFileFilter(new FileFilterExtensions(FileExtension.CSV));
         chooser.setExtensionType(FileExtension.CSV);
         File file = chooser.dialogs(Constants.OPEN_DIALOG, isADirectoryOnly, parent);
-        if (isAValidFileReportOnPalette(file, MainResources.getInstance().getPalette())) {
+        if (isAValidFileReportOnPalette(file)) {
             return setReports(file);
         } else {
             LOG.log(Level.WARNING, "Couldn't pass all the validations for a csv report");
@@ -183,12 +183,9 @@ public class FileSelectionControllerImplement implements FileSelectionController
 
     }
 
-    private boolean isAValidFileReportOnPalette(File file, Palette palette) throws DirectoryNotValidException {
+    private boolean isAValidFileReportOnPalette(File file) throws DirectoryNotValidException {
         return file != null && file.exists() && file.isFile()
-                && file.getAbsolutePath().contains(FileExtension.CSV.getExtension())
-                && (palette != null && palette.getDirectory() != null
-                && !palette.getDirectory().getName().isBlank())
-                && (file.getAbsolutePath().contains(palette.getDirectory().getName()));
+                && file.getAbsolutePath().contains(FileExtension.CSV.getExtension());
     }
 
     /**

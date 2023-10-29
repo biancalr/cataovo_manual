@@ -15,11 +15,11 @@ public interface Reader {
     
     /**
      * 
-     * @param frameName
+     * @param lineToFind
      * @param report
      * @return 
      */
-    public Optional<String> readLine(String frameName, String report);
+    public Optional<String> readLine(String lineToFind, String report);
     
     /**
      * 

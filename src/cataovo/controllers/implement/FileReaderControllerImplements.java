@@ -8,6 +8,8 @@ import cataovo.constants.Constants;
 import cataovo.controllers.FileReaderController;
 import cataovo.entities.Point;
 import cataovo.entities.Region;
+import cataovo.enums.ProcessingMode;
+import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.externals.fileHandlers.readers.Reader;
 import cataovo.externals.fileHandlers.readers.csv.csvReader.CsvFileReader;
 import cataovo.externals.libs.opencvlib.wrappers.PointWrapper;
@@ -143,6 +145,17 @@ public class FileReaderControllerImplements implements FileReaderController {
         });
 
         return builder;
+    }
+
+    @Override
+    public String readPaletteDirectoryFromReport(String report) throws DirectoryNotValidException{
+        boolean valid = (report.toLowerCase().contains(ProcessingMode.MANUAL.getProcessingMode()) 
+                || report.toLowerCase().contains(ProcessingMode.AUTOMATIC.getProcessingMode()));
+        if (valid) {
+            return this.csvFileReader.readLine("C:", report).get();
+        } else {
+            throw new DirectoryNotValidException("No valid reports were selected");
+        }
     }
 
 }

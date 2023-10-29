@@ -4,6 +4,7 @@
  */
 package cataovo.controllers;
 
+import cataovo.exceptions.DirectoryNotValidException;
 import cataovo.externals.libs.opencvlib.wrappers.PointWrapper;
 import cataovo.externals.libs.opencvlib.wrappers.RectWrapper;
 import java.io.FileNotFoundException;
@@ -38,9 +39,17 @@ public interface FileReaderController {
     /**
      *
      * @param report
-     * @return
+     * @return full report content
      * @throws java.io.FileNotFoundException
      */
     public StringBuilder readFullFileContent(String report) throws FileNotFoundException;
+
+    /**
+     * 
+     * @param report
+     * @return the palette which the report belong to.
+     * @throws cataovo.exceptions.DirectoryNotValidException 
+     */
+    public String readPaletteDirectoryFromReport(String report) throws DirectoryNotValidException;
 
 }

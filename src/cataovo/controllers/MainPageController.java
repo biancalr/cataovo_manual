@@ -64,7 +64,7 @@ public interface MainPageController {
      * @throws cataovo.exceptions.ImageNotValidException
      * @throws cataovo.exceptions.DirectoryNotValidException
      */
-    public void onFrameFinished(JLabel parentName, JLabel parent, Frame currentFrame) throws ImageNotValidException, DirectoryNotValidException;
+    public void onFrameFinishedManual(JLabel parentName, JLabel parent, Frame currentFrame) throws ImageNotValidException, DirectoryNotValidException;
 
     /**
      *

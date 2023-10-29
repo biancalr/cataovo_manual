@@ -13,6 +13,8 @@ import cataovo.entities.Palette;
 import cataovo.enums.FileExtension;
 import cataovo.exceptions.AutomationExecutionException;
 import cataovo.exceptions.DirectoryNotValidException;
+import cataovo.externals.fileHandlers.readers.Reader;
+import cataovo.externals.fileHandlers.readers.csv.csvReader.CsvFileReader;
 import cataovo.resources.MainResources;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -37,6 +39,7 @@ import javax.swing.JLabel;
 public class AutomaticProcessorControllerImplements implements AutomaticProcessorController {
 
     private static final Logger LOG = Logger.getLogger(AutomaticProcessorControllerImplements.class.getName());
+    private final Reader reader = new CsvFileReader();
 
     /**
      * .
@@ -45,7 +48,7 @@ public class AutomaticProcessorControllerImplements implements AutomaticProcesso
     private int slotRangeControl = 0;
 
     @Override
-    public String onNewAutoProcessPalette(final JLabel jLabelImageName, final JLabel jLabelImageFrame, final Palette currentPalette, final String savingFolderPath, final String tabName) throws DirectoryNotValidException, AutomationExecutionException {
+    public String[] onNewAutoProcessPalette(final JLabel jLabelImageName, final JLabel jLabelImageFrame, final Palette currentPalette, final String savingFolderPath, final String tabName) throws DirectoryNotValidException, AutomationExecutionException {
         try {
             List<Palette> splitted = split(currentPalette, Constants.SLOT_FRAMES_TO_PROCESS_ON_PALETTE);
             String result = "";
@@ -53,6 +56,8 @@ public class AutomaticProcessorControllerImplements implements AutomaticProcesso
             final String dateTime = getDateTime("dd-MM-yyyy_HH-mm-ss");
             Future<String> task;
             ExecutorService executorService;
+            String[] infos = new String[2];
+            MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(true);
             
             for (Palette palette : splitted) {
                 executorService = Executors.newSingleThreadExecutor();
@@ -61,15 +66,17 @@ public class AutomaticProcessorControllerImplements implements AutomaticProcesso
                         savingFolderPath,
                         FileExtension.CSV,
                         tabName, dateTime);
-                MainResources.getInstance().getPanelTabHelper().setIsActualTabProcessing(true);
                 task = executorService.submit(automation);
                 synchronized (task) {
                     result = task.get();
                 }
                 executorService.awaitTermination(1, TimeUnit.MICROSECONDS);
             }
+            
             this.slotRangeControl = 0;
-            return result;
+            infos[0] = result;
+            infos[1] = wrapProcess(result);
+            return infos;
         } catch (DirectoryNotValidException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
             throw new DirectoryNotValidException(ex.getMessage());
@@ -120,6 +127,23 @@ public class AutomaticProcessorControllerImplements implements AutomaticProcesso
         DateFormat dateFormat = new SimpleDateFormat(datePattern);
         Date date = new Date();
         return dateFormat.format(date);
+    }
+
+    /**
+     * 
+     * @param result
+     * @return the sum of total Of Eggs on a Palette
+     */
+    private String wrapProcess(String result) {
+        List<String> content = reader.readContent(result + "\\" + Constants.REPORT_FILE_NAME + "." + FileExtension.CSV.getExtension());
+        int totalOfEggs = 0;
+        for (String line : content) {
+            String information[] = line.split(Constants.OBJECT_SEPARATOR);
+            String info = information[0];
+            String splittedInfo[] = info.split(Constants.SEPARATOR);
+            totalOfEggs += Integer.parseInt(splittedInfo[1]);
+        }
+        return Integer.toString(totalOfEggs);
     }
 
 }

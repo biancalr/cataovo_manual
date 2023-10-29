@@ -25,11 +25,13 @@ public class CsvFileReader implements Reader{
     private static final Logger LOG = Logger.getLogger(CsvFileReader.class.getName());
 
     @Override
-    public Optional<String> readLine(String frameName, String report) {
+    public Optional<String> readLine(String lineToFind, String report) {
         Optional<String> line = null;
         try (InputStreamReader in = new InputStreamReader(new FileInputStream(report)); BufferedReader csvReader = new BufferedReader(in)) {
 
-            line = csvReader.lines().filter((l) -> l.contains(frameName)).findFirst();
+            line = csvReader.lines().filter((l) 
+                    -> l.contains(lineToFind))
+                    .findFirst();
 
         } catch (FileNotFoundException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
@@ -46,7 +48,6 @@ public class CsvFileReader implements Reader{
         try (InputStreamReader in = new InputStreamReader(new FileInputStream(report)); BufferedReader csvReader = new BufferedReader(in)) {
             
             content = csvReader.lines().filter((line) -> !line.contains(Constants.ROOT_FOLDER) && line.length() > 5 && !line.isBlank()).toList();
-            LOG.log(Level.INFO, report + " size {0}", csvReader.lines().count());
             
         } catch (FileNotFoundException ex) {
             LOG.log(Level.SEVERE, null, ex);

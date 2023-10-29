@@ -77,7 +77,7 @@ public class MainPageControllerImplements implements MainPageController {
                 }
             }
         } else {
-            throw new DirectoryNotValidException("The current Palette " + paletteDirectory.getName() + "couldn't be verified");
+            throw new DirectoryNotValidException("The current Palette " + paletteDirectory.getName() + " couldn't be verified");
 
         }
         return -1;
@@ -121,7 +121,7 @@ public class MainPageControllerImplements implements MainPageController {
                     throw new ArrayIndexOutOfBoundsException("Reached the end of the palette " + paletteDirectory.getName());
                 }
             } else {
-                throw new DirectoryNotValidException("The current Palette " + paletteDirectory.getName() + "couldn't be verified");
+                throw new DirectoryNotValidException("The current Palette " + paletteDirectory.getName() + " couldn't be verified");
             }
         }
     }
@@ -138,7 +138,7 @@ public class MainPageControllerImplements implements MainPageController {
         // Verificar as palavras-chave que formam o caminho de um diretório do processamento automático no projeto: (nome da paleta) e "auto". 
         if (!paletteSavingFolder.getAbsolutePath().contains(paletteName)
                 || !paletteSavingFolder.getAbsolutePath().contains("auto")) {
-            throw new DirectoryNotValidException("The current Palette " + paletteName + "couldn't be verified");
+            throw new DirectoryNotValidException("The current Palette " + paletteName + " couldn't be verified");
         } else {
             // Listando os diretórios correspondentes a cada frame
             File[] frameResults = paletteSavingFolder.listFiles((pathname) -> pathname.isDirectory());
@@ -166,7 +166,7 @@ public class MainPageControllerImplements implements MainPageController {
         // Verificar as palavras-chave que formam o caminho de um diretório do processamento automático no projeto: (nome da paleta) e "auto". 
         if (!savingFolder.getAbsolutePath().contains(paletteDirectoryName)
                 || !savingFolder.getAbsolutePath().contains("auto")) {
-            throw new DirectoryNotValidException("The current Palette " + paletteDirectoryName + "couldn't be verified");
+            throw new DirectoryNotValidException("The current Palette " + paletteDirectoryName + " couldn't be verified");
         } else {
             // Listando os diretórios correspondentes a cada frame
             File[] frameResults = savingFolder.listFiles((pathname) -> pathname.isDirectory());
@@ -298,7 +298,7 @@ public class MainPageControllerImplements implements MainPageController {
      * @throws cataovo.exceptions.DirectoryNotValidException
      */
     @Override
-    public void onFrameFinished(JLabel parentName, JLabel parent, Frame currentFrame) throws ImageNotValidException, DirectoryNotValidException {
+    public void onFrameFinishedManual(JLabel parentName, JLabel parent, Frame currentFrame) throws ImageNotValidException, DirectoryNotValidException {
         LOG.log(Level.INFO, "The frame was analysed. Charging next...");
         MainResources.getInstance().getPaletteToSave().getFrames()
                 .offer(currentFrame);
@@ -317,21 +317,19 @@ public class MainPageControllerImplements implements MainPageController {
     @Override
     public void showFramesOnSelectedTabScreen(Component tabComponent, JLabel parentNameLabel, JLabel parentLabel, Object frame) throws ImageNotValidException, DirectoryNotValidException, UnsupportedOperationException, AssertionError {
         TabbedPane pane = new TabbedPane(tabComponent);
+        this.frameCounter = -1;
         switch (pane.getTabbedPane().getSelectedIndex()) {
             case 0 -> {
                 parentLabel.setText(null);
                 parentLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                this.frameCounter = -1;
                 showFrameOnScreen(parentNameLabel, parentLabel, frame);
             }
             case 1 -> {
-                this.frameCounter = -1;
                 showFrameOnScreen(parentNameLabel, parentLabel, frame);
             }
             case 2 -> {
                 parentLabel.setText(null);
-                parentLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                this.frameCounter = -1;
+                parentLabel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
                 showFrameOnScreen(parentNameLabel, parentLabel, frame);
             }
             default ->

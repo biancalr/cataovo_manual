@@ -6,6 +6,8 @@ package cataovo.controllers;
 
 import cataovo.entities.Palette;
 import cataovo.enums.FileExtension;
+import cataovo.exceptions.DirectoryNotValidException;
+import cataovo.exceptions.ImageNotValidException;
 
 /**
  *
@@ -50,5 +52,15 @@ public interface EvaluationProcessorController {
      * @return
      */
     public String onActionComandSaveEvaluationRelatory(Palette palette, String savingDirectory, FileExtension fileExtension, String parentTabName);
+
+    /**
+     * 
+     * @param paletteDirectoryOnManual
+     * @param paletteDirectoryOnAuto
+     * @return
+     * @throws DirectoryNotValidException 
+     * @throws cataovo.exceptions.ImageNotValidException 
+     */
+    public Palette getPalettDirByReport(String paletteDirectoryOnManual, String paletteDirectoryOnAuto) throws DirectoryNotValidException, ImageNotValidException;
 
 }
