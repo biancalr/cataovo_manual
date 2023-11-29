@@ -79,13 +79,9 @@ public class AutomaticImageProcessImplements implements AutomaticImageProcess {
         Mat dstn = Mat.zeros(new Size(buffImgToBinary.getWidth(), buffImgToBinary.getHeight()), CvType.CV_8UC1);
         for (int i = 0; i < buffImgToBinary.getWidth(); i++) {
             for (int j = 0; j < buffImgToBinary.getHeight(); j++) {
-                Color color = new Color(buffImgToBinary.getRGB(i, j));
-                double blue = color.getRed();
-                double green = color.getGreen();
-                double red = color.getBlue();
-                if ((blue > (red + 25))
-                        || (red > 75 && blue > 75 && green > 75)
-                        || (blue > (green + 15))) {
+                Color colores = new Color(buffImgToBinary.getRGB(i, j));
+                double pixelColor = colores.getRed();
+                if (pixelColor > 75){
                     dstn.put(j, i, WHITE);
                 } else {
                     dstn.put(j, i, BLACK);
